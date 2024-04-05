@@ -211,21 +211,21 @@ const Sidebar = () => {
          
       <Item
               title="Categorie societe partenaire"
-              // to="/settings"
+              to="/famille"
               icon={<TrendingFlatIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Categorie societe client"
-              // to="/unite"
+              to="/unite"
               icon={<TrendingFlatIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="ticket modilateur"
-              // to="/product"
+              to="/product"
               icon={<TrendingFlatIcon />}
               selected={selected}
               setSelected={setSelected}
