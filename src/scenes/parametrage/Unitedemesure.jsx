@@ -489,7 +489,23 @@ const handlePayButtonClick = () => {
   </Select>
 </FormControl>
 </Grid> */}
-<Grid item xs={6}>
+   <Grid item xs={6}>
+
+    <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    // value={age}
+    label="Age"
+    fullWidth
+    size='small'
+    // onChange={handleChange}
+  >
+    <MenuItem value={10}>Ten</MenuItem>
+    <MenuItem value={20}>Twenty</MenuItem>
+    <MenuItem value={30}>Thirty</MenuItem>
+  </Select>
+   </Grid> 
+<Grid item xs={3}>
 
     <TextField
       name="designation"
@@ -499,7 +515,7 @@ const handlePayButtonClick = () => {
       size='small'
     />
     </Grid>
-<Grid item xs={6}>
+<Grid item xs={3}>
 
     <TextField
       name="code"
@@ -509,38 +525,35 @@ const handlePayButtonClick = () => {
       size='small'
     />
     </Grid>
-{/* <Grid item xs={6}>
+<Grid item xs={4}>
     <TextField
       name="Quantite"
-      label="Quantite"
+      label="Valeur Piece"
       // onChange={(e)=>setquantite(e.target.value)}
       onKeyUp={(e)=>{alert(e.target.value)
     console.log(e.target.value)}}
       fullWidth
       size='small'
     />
-    </Grid> */}
-    {/* <Grid item xs={6}>
-
+    </Grid>
+   <Grid item xs={4}>
    <TextField
       name="prix"
-      label="prix"
+      label="Valuer rapport"
       onChange={(e)=>setprice(e.target.value)}
       fullWidth
       size='small'
     />
-   </Grid> */}
-   {/* <Grid item xs={6}>
-   <input type='date' value={selectedDate}
-      onChange={(e)=> setSelectedDate(e.target.value)}  style={{
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-    width:'100%'
-    // Add more styles as needed
-  }}/>
-    </Grid> */}
+    </Grid>
+    <Grid item xs={4}>
+   <TextField
+      name="prix"
+      label="Valeur prix vente"
+      onChange={(e)=>setprice(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
      </Grid>
 
 {/* {Category === "comprime" && <TextField

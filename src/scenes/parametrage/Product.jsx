@@ -548,21 +548,24 @@ const handlePayButtonClick = () => {
 </FormControl>
 </Grid>
 <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
+  
+
+<FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Categorie</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
+    // value={age}
     label="Age"
-    value={genre}
-    onChange={(e)=>{setgenre(e.target.value);}}
+    size='small'
+    // onChange={handleChange}
   >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
+    <MenuItem value={10}>Bar</MenuItem>
+    <MenuItem value={20}>Cuisine</MenuItem>
+    {/* <MenuItem value={30}>Thirty</MenuItem> */}
   </Select>
 </FormControl>
-</Grid>
+   </Grid> 
 <Grid item xs={6}>
 
     <TextField
@@ -596,17 +599,7 @@ const handlePayButtonClick = () => {
       size='small'
     />
     </Grid>
-    <Grid item xs={6}>
-
-<TextField
-  name="Nom"
-  label="Prix de vente"
-  onChange={(e)=>setprice(e.target.value)}
-  fullWidth
-  size='small'
-/>
-</Grid>
-<Grid item xs={6}>
+<Grid item xs={12}>
     <TextField
       name="DeScription"
       label="Description"
