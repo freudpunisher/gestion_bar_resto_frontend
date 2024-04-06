@@ -1,20 +1,6 @@
 import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
 
-
-
-// white: {
-//     100: "#ffffcc",
-//     200: "#ffff99",
-//     300: "#ffff66",
-//     400: "#ffff33",
-//     500: "#ffff00",
-//     600: "#cccc00",
-//     700: "#999900",
-//     800: "#666600",
-//     900: "#333300"
-// },
-
 // color design tokens export
 export const tokens = (mode) => ({
   ...(mode === "dark"
@@ -91,7 +77,7 @@ export const tokens = (mode) => ({
           100: "#040509",
           200: "#080b12",
           300: "#0c101b",
-          400: "#f2f0f1", // manually changed
+          400: "#f2f0f0", // manually changed
           500: "#141b2d",
           600: "#1F2A40",
           700: "#727681",
@@ -99,7 +85,7 @@ export const tokens = (mode) => ({
           900: "#d0d1d5",
         },
         greenAccent: {
-          100: "#1B4242",
+          100: "#0f2922",
           200: "#1e5245",
           300: "#2e7c67",
           400: "#3da58a",
@@ -178,7 +164,7 @@ export const themeSettings = (mode) => {
     },
     typography: {
       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-      fontSize: 12,
+      fontSize: 15,
       h1: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 40,
@@ -213,7 +199,7 @@ export const ColorModeContext = createContext({
 });
 
 export const useMode = () => {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState("dark");
 
   const colorMode = useMemo(
     () => ({
