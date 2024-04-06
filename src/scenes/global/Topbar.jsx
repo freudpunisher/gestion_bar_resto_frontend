@@ -30,13 +30,13 @@ const Topbar = () => {
 
       {/* ICONS */}
       <Box display="flex">
-        {/* <IconButton onClick={colorMode.toggleColorMode}>
+        <IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
           ) : (
             <LightModeOutlinedIcon />
           )}
-        </IconButton> */}
+        </IconButton>
         {/* <IconButton>
           <NotificationsOutlinedIcon />
         </IconButton>
@@ -44,10 +44,10 @@ const Topbar = () => {
           <SettingsOutlinedIcon />
         </IconButton> */}
         <IconButton>
-          <Avatar sx={{ width: 50, height: 50 }}>
+          
 
           <PersonOutlinedIcon  sx={{color:'black', width: 35, height: 35}}/>
-          </Avatar>
+        
           <Typography color='black' sx={{fontSize:20}}>freud</Typography>
         </IconButton>
       </Box>

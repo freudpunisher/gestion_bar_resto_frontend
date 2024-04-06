@@ -371,7 +371,7 @@ const handlePayButtonClick = () => {
         )}
         content={() => dataGridRef.current}
       /> */}
-      <Button variant="contained" color="primary"  sx={{ marginRight:'auto'}} onClick={()=> setopenModal(true)}>Ajouter famille</Button>
+      <Button variant="contained" color="secondary"  sx={{ marginRight:'auto'}} onClick={()=> setopenModal(true)}>Ajouter famille</Button>
       {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
         <DataGrid
