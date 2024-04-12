@@ -169,7 +169,7 @@ const Sidebar = () => {
     <Divider component="li" />
 {/* //menu avenant */}
 
-    <Accordion sx={{ backgroundColor: 'inherit',paddingLeft: '12px', width: '100%', '&:before': {
+   {/*  <Accordion sx={{ backgroundColor: 'inherit',paddingLeft: '12px', width: '100%', '&:before': {
       backgroundColor: 'transparent !important',
     }, }}>
       <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon sx={{color:'white'}}/>}>
@@ -191,12 +191,9 @@ const Sidebar = () => {
               icon={<TrendingFlatIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
-           
-            {/* <MenuItem value="option3">Option 3</MenuItem> */}
-          
+            />  
       </AccordionDetails>
-    </Accordion>
+    </Accordion> */}
     <Divider component="li" />
  {/* menu parametrage */}
 
