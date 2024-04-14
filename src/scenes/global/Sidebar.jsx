@@ -5,6 +5,14 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import StoreIcon from '@mui/icons-material/Store';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
@@ -101,7 +109,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <HomeOutlinedIcon sx={{ marginRight: '14px'}}/>
+                <DashboardIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Tableau de bord</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -145,7 +153,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <StoreIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Stock Initial</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -175,7 +183,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <InventoryIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Inventaire</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -205,7 +213,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <AddBusinessIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Approvisionner</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -235,7 +243,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <ShoppingCartIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Commande</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -265,7 +273,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px' }}/>
+                <UnarchiveIcon sx={{ marginRight: '14px' }}/>
                 <Typography variant="subtitle1">Sortie Stock</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -288,7 +296,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <AssessmentIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Rapport</Typography>
               </AccordionSummary>
               <Divider component="li" />
@@ -311,7 +319,7 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+                <SettingsSuggestIcon sx={{ marginRight: '14px'}}/>
                 <Typography variant="subtitle1">Parametrage</Typography>
               </AccordionSummary>
               <Divider component="li" />
