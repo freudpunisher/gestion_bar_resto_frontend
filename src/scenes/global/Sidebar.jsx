@@ -212,7 +212,7 @@ const Sidebar = () => {
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
                   title="Bar"
-                  to="/famille"
+                  to="/entre/bar"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}

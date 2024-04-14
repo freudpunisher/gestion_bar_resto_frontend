@@ -26,6 +26,8 @@ import StockInitial from "./scenes/stock/StockInitial.jsx";
 // import InventaireCuisine from "./scenes/stock/inventiare_cuisine.jsx";
 import InventaireBar from "./scenes/stock/inventiare_bar.jsx";
 import ListAvenant from "./scenes/avenant/ListeAvenant.jsx";
+import LisCommandeBar from "./scenes/Approvisionnement/Bar/ListCommandeBar.jsx";
+import CommandeBarEntre from "./scenes/Approvisionnement/Bar/CommandeBar.jsx";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -51,6 +53,8 @@ function App() {
               <Route path="/produit" element={<Product />} />
               <Route path="/cuisinemenu" element={<MenuCuisine />} />
               <Route path="/Fournisseur" element={<Fournisseur />} />
+              <Route path="/entre/bar" element={<LisCommandeBar />} />
+              <Route path="/entre/bar/commande" element={<CommandeBarEntre />} />
               <Route path="/client" element={<Client />} />
               <Route path="/stockinitial" element={<StockInitial />} />
               <Route path="/inventiarebar" element={<InventaireBar />} />
