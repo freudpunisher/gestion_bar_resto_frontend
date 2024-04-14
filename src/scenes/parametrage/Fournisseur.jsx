@@ -4,22 +4,19 @@ import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme, Grid } from "@mui/material";
-import { Input } from '@mui/material';
 // import { API_Url } from "../../data/API";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 // import { motion } from 'framer-motion';
 import { API_URL } from '../../data/Api';
-import { useNavigate } from 'react-router-dom';
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const MenuCuisine = () => {
-  const navigate = useNavigate();
+const Fournisseur = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [data, setData] = useState([])
@@ -27,18 +24,17 @@ const MenuCuisine = () => {
   const [openModalu, setopenModalu] = useState(false)
   const [Category, setCategory] = useState()
   const [type, settype] = useState()
-  function generateRandomCode() {
+  function generateRandomCode(length) {
     const characters = '0123456789'
     const charactersLength = characters.length
     let result = ''
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
     return result
   }
   // Example usage:
-  const code= generateRandomCode()
-  const [codeu, setcodeu] = useState()
+  const code = generateRandomCode(4)
   const [generatedCode, setGeneratedCode] = useState(`PR${code}`)
   const [Categoryu, setCategoryu] = useState()
   const [typeu, settypeu] = useState()
@@ -46,9 +42,7 @@ const MenuCuisine = () => {
   const [quantiteu, setquantiteu] = useState()
   const [genre, setgenre] = useState()
   const [genreu, setgenreu] = useState()
-  const [image, setImage] = useState(null);
   const [barcode, setbarcode] = useState()
-  const [barcodeu, setbarcodeu] = useState()
   const [dataforupdate, setdataForupdate] = useState([])
   const [name, setname] = useState()
   const [nameu, setnameu] = useState()
@@ -68,31 +62,53 @@ const MenuCuisine = () => {
   const [prixpillule, setprixpillule] = useState()
   const [isPrinting, setIsPrinting] = useState(false);
   const [rows, setRows] = useState([]);
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-};
+  const [firstName, setFirstName] = useState('');
+  const [firstNameu, setFirstNameu] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [lastNameu, setLastNameu] = useState('');
+  const [address, setAddress] = useState('');
+  const [addressu, setAddressu] = useState('');
+  const [contactPerson, setContactPerson] = useState('');
+  const [contactPersonu, setContactPersonu] = useState('');
+  const [fournisseur, setFournissuer] = useState([]);
+  const [email, setEmail] = useState('');
+  const [emailu, setEmailu] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumberu, setPhoneNumberu] = useState('');
+  function printCard() {
+    const cardWidth = 53.98; // Largeur en millimètres
+    const cardHeight = 85.60; // Hauteur en millimètres
+  
+    const printWindow = window.open('', '_blank');
+    printWindow.document.open();
+  
+    // Injecter le contenu de votre carte dans la fenêtre d'impression
+    printWindow.document.write('<html><head><title>Impression de la carte</title></head><body>');
+  
+    // Ajouter le contenu de votre carte ici
+    printWindow.document.write('<div style="width: ' + cardWidth + 'mm; height: ' + cardHeight + 'mm; border: 1px solid black;">');
+    // Contenu de la carte
+    printWindow.document.write('</div>');
+  
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+  
+    printWindow.onload = function() {
+      printWindow.print();
+      printWindow.close();
+    };
+  }
   var productdata = Product.map((obj) => ({
     id: obj.id,
     famille: obj.famille_info.famille,
-    unite_mesure: obj.unite_mesure_info.unite_mesure,
     code: obj.code,
     nom: obj.nom,
-    barcode: obj.barcode,
     description: obj.description,
-    prix_vente: obj.prix_vente
-    // barcode: obj.barcode,
+    barcode: obj.barcode,
   }));
   const dataGridRef = useRef();
   const handleClose = ()=>{
     setopenModal(false);
-    setImage(null);
   }
    const handleCloseforupdate = ()=>{
     setopenModalu(false);
@@ -105,46 +121,41 @@ setProduct(response.data);
   }
 
   const createUnite = ()=>{
-    const newCode = generateRandomCode();
-//  const [generatedCode, setGeneratedCode] = useState(`PR${newCode}`);
-
-    axios.post(API_URL+'produit/',{
-        nom:name,
-        famille:type,
-        unite_mesure:genre,
-        description:quantite,
-        code:'PR'+newCode,
-        barcode:barcode,
-        prix_vente:price
+    axios.post(API_URL+'fournisseur/',{
+        first_name :firstName,
+        last_name :lastName,
+        address :address,
+        contact_person :contactPerson,
+        email : email,
+        phone_number :phoneNumber,
     }).then(response=>{
         handleClose();
-        fetchProduct();
-    //         Swal.fire({
-    //   icon: 'success',
-    //   title: 'operation reussi',
-    //   showConfirmButton: false,
-    //   timer: 3000,
-    // })
-    fetchBarCode();
-generateRandomCode(4)
+        fetchContact();
+            Swal.fire({
+      icon: 'success',
+      title: 'operation reussi',
+      showConfirmButton: false,
+      timer: 3000,
+    })
     });
   };
   const updateUnite = ()=>{
-    axios.patch(API_URL+`produit/${id}/`,{
-      nom:nameu,
-      famille:typeu,
-      unite_mesure:genreu,
-      description:quantiteu,
-      prix_vente:priceu
+    axios.patch(API_URL+`fournisseur/${id}/`,{
+        first_name :firstNameu,
+        last_name :lastNameu,
+        address :addressu,
+        contact_person :contactPersonu,
+        email : emailu,
+        phone_number :phoneNumberu,
     }).then(response=>{
         handleCloseforupdate();
-        fetchunite();
-    //         Swal.fire({
-    //   icon: 'success',
-    //   title: 'operation reussi',
-    //   showConfirmButton: false,
-    //   timer: 3000,
-    // })
+        fetchContact();
+            Swal.fire({
+      icon: 'success',
+      title: 'operation reussi',
+      showConfirmButton: false,
+      timer: 3000,
+    })
     });
   };
   const fetchunite =() => {
@@ -156,15 +167,18 @@ setunite(response.data);
 setbarcode(response.data.barcode);
   });}
 
+const fetchContact = () => {
+    axios.get(API_URL+'fournisseur/').then((response) => {
+        setFournissuer(response.data);
+          });
+}
+
   useEffect(() => {
     fetchunite();
     fetchBarCode();
     fetchProduct();
+    fetchContact();
   },[]);
-  useEffect(() => {
-    generateRandomCode()
-
-  },[barcode]);
   // const fetchData = () => {
   //   axios.get(API_Url+"medication/list/").then((response) => {
   //     setData(response.data);
@@ -248,49 +262,49 @@ const FetchFamille = ()=>{
     FetchFamille();
     fetchunite();
   },[])
-const sinkfamilleandunite = (item)=>{
-const result = productdata.find(item => item.id === item)
-settypeu(result.famille)
-}
-
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     // { field: "registrarId", headerName: "Registrar ID" },
     {
-      field: "code",
-      headerName: "Code",
+      field: "first_name",
+      headerName: "Nom",
       flex: 1,
     //   cellClassName: "name-column--cell",
     },
     {
-      field: "nom",
-      headerName: "Nom",
+      field: "last_name",
+      headerName: "Prenom",
       type: "number",
       headerAlign: "left",
       align: "left",
       flex: 1,
     },
-    {
-        field: "barcode",
-        headerName: "Barcode",
+    // {
+    //     field: "barcode",
+    //     headerName: "Barcode",
+    //     flex: 1,
+    //     cellClassName: "name-column--cell",
+    //   },
+      {
+        field: "phone_number",
+        headerName: "Telephone",
         flex: 1,
         cellClassName: "name-column--cell",
-        hide: true,
       },
       {
-        field: "famille",
-        headerName: "Famille",
+        field: "contact_person",
+        headerName: "contact telephone",
+        flex: 1,
+      },
+      {
+        field: "email",
+        headerName: "Email",
         flex: 1,
         cellClassName: "name-column--cell",
       },
-      {
-        field: "unite_mesure",
-        headerName: "Unite",
-        flex: 1,
-      },
     {
-      field: "prix_vente",
-      headerName: "prix de vente",
+      field: "address",
+      headerName: "Address",
       flex: 1,
       cellClassName: "name-column--cell",
     },
@@ -330,17 +344,14 @@ settypeu(result.famille)
             aria-label="edit"
             onClick={() => {console.log(params.row)
               setopenModalu(true);
-              // sinkfamilleandunite(params.row.id)
             // setdataForupdate(params.row)
-            setnameu(params.row.nom);
-            setdescriptionu(params.row.description);
-            setpriceu(params.row.prix_vente);
-setbarcodeu(params.row.barcode);
-setcodeu(params.row.code);
-            settypeu(params.row.famille);
-            // setquantiteu(params.row.quantite);
-            // setCategoryu(params.row.category);
-            setgenreu(params.row.unite_mesure);
+            setFirstNameu(params.row.first_name);
+            setLastNameu(params.row.last_name);
+            setEmailu(params.row.email);
+            setContactPersonu(params.row.contact_person);
+            setAddressu(params.row.address);
+            setPhoneNumberu(params.row.phone_number);
+            // setgenreu(params.row.genre);
             setid(params.row.id);
             }}
           >
@@ -348,39 +359,50 @@ setcodeu(params.row.code);
           </IconButton>
           <IconButton
             aria-label="delete"
-            // onClick={() => {
-            //   Swal.fire({
-            //     title: "Are you sure?",
-            //     text: "You won't be able to revert this!",
-            //     icon: "warning",
-            //     showCancelButton: true,
-            //     confirmButtonColor: "#3085d6",
-            //     cancelButtonColor: "#d33",
-            //     confirmButtonText: "Yes, delete it!"
-            //   }).then((result)=>{
-            //     if (result.isConfirmed){
-            //       axios.delete(API_URL+`produit/${params.row.id}/`)
-            //     }
-            //   }).then(response =>{
-            //     fetchunite();
-            //     fetchProduct();
-            //     Swal.fire({
-            //         title: "Deleted!",
-            //         text: "Your item has been deleted.",
-            //         icon: "success"
-            //       });
-                
-            //   })
-            // }}
+            onClick={() => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+              }).then((result)=>{
+                if (result.isConfirmed){
+                  axios.delete(API_URL+`fournisseur/${params.row.id}/`)
+                }
+              }).then(response =>{
+                fetchContact();
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your item has been deleted.",
+                    icon: "success"
+                  });
+                // if (response.status ===  200) {
+                //   Swal.fire({
+                //     title: "Deleted!",
+                //     text: "Your item has been deleted.",
+                //     icon: "success"
+                //   });
+                // }else {
+                //   Swal.fire({
+                //     title: "Error!",
+                //     text: "An error occurred while deleting the item.",
+                //     icon: "error"
+                //   });
+                // }
+              })
+            }}
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             aria-label="delete"
-            onClick={() => navigate('/barcode', {state: {barcode:params.row.barcode, id:params.row.id}})}
+            onClick={() => console.log(params.row)}
           >
             <VisibilityIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
       ),
     },
@@ -390,7 +412,7 @@ setcodeu(params.row.code);
     //   flex: 1,
     // },
   ];
-// console.log(selectedDate);
+console.log(selectedDate);
 // const handlePageChange = (params) => {
 //   setPage(params.page);
 // };
@@ -401,11 +423,10 @@ const handlePayButtonClick = () => {
     console.log(firstPageRows);
     window.print();
  };
- console.log(typeu, 'FAMILLE')
   return (
     <Box m="20px">
       <Header
-        title="Produit"
+        title="Fournisseur"
         // subtitle="Listes des produits"
       />
       <Box
@@ -449,15 +470,13 @@ const handlePayButtonClick = () => {
         )}
         content={() => dataGridRef.current}
       /> */}
-      <Button variant="contained" color="secondary"  sx={{ marginRight:'auto'}} onClick={()=> {setopenModal(true)
-      generateRandomCode(4)
-      }}>Ajouter Produit</Button>
+      <Button variant="contained" color='secondary'   sx={{ marginRight:'auto'}} onClick={()=> setopenModal(true)}>Ajouter Fournisseur</Button>
       {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
         <DataGrid
           checkboxSelection
           ref={dataGridRef}
-          rows={productdata}
+          rows={fournisseur}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
@@ -495,15 +514,7 @@ const handlePayButtonClick = () => {
     
       </>
       /**Add medication */
-      {/* <motion.div
-   initial={{ scale: 0 }}
-   animate={{ rotate: 180, scale: 1 }}
-   transition={{
-     type: "spring",
-     stiffness: 260,
-     damping: 20
-   }}
-> */}
+     
       <Modal open={openModal} onClose={handleClose}>
      <Box
  sx={{
@@ -519,28 +530,79 @@ const handlePayButtonClick = () => {
 >
  <Stack spacing={2}>
     <Typography variant="h5" mb={1}>
-     Menu cuisine
+     Produit
     </Typography>
 <Grid container spacing={2}>
-
-<Grid item xs={12}>
+{/* <Grid item xs={12}>
+<FormControl fullWidth size='small'>
+      <InputLabel id="demo-simple-select-label">Category</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={Category}
+        onChange={(e)=>{setCategory(e.target.value);}}
+      >
+        <MenuItem value="antispamedique">antispamedique</MenuItem>
+        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
+        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
+        <MenuItem value="antifongiques">antifongiques</MenuItem>
+        <MenuItem value="antigripaux">antigripaux</MenuItem>
+        <MenuItem value="antalagiques">antalagiques</MenuItem>
+        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
+        <MenuItem value="collyres">collyres</MenuItem>
+        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
+        <MenuItem value="anti_septiques">anti septiques</MenuItem>
+      </Select>
+    </FormControl>
+  </Grid> */}
+{/* <Grid item xs={6}>
+    <FormControl fullWidth size='small'>
+  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    label="Age"
+    value={type}
+    onChange={(e)=>{settype(e.target.value);}}
+  >
+    {famille.map(item =>(
+    <MenuItem value={item.id}>{item.nom}</MenuItem>))}
+    
+  </Select>
+</FormControl>
+</Grid> */}
+{/* <Grid item xs={6}>
+    <FormControl fullWidth size='small'>
+  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    label="Age"
+    value={genre}
+    onChange={(e)=>{setgenre(e.target.value);}}
+  >
+   {unite.map(item =>(
+    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
+    
+  </Select>
+</FormControl>
+</Grid> */}
+<Grid item xs={6}>
 
     <TextField
-      name="Nom"
+      name="FistName"
       label="Nom"
-      onChange={(e)=>setname(e.target.value)}
+      onChange={(e)=>setFirstName(e.target.value)}
       fullWidth
       size='small'
     />
     </Grid>
-   
     <Grid item xs={6}>
 
     <TextField
-      name="reduction"
-      label="reduction"
-    //   value={barcode}
-     disabled
+      name="Prenom"
+      label="Prenom"
+      onChange={(e)=>setLastName(e.target.value)}
       fullWidth
       size='small'
     />
@@ -548,35 +610,44 @@ const handlePayButtonClick = () => {
 <Grid item xs={6}>
 
     <TextField
-      name="Amount"
-      label="Montant"
-    //   value={generatedCode}
-      disabled
+      name="code"
+      label="Adresse"
+      onChange={(e)=>setAddress(e.target.value)}
       fullWidth
       size='small'
     />
     </Grid>
-<Grid item xs={12}>
+    <Grid item xs={6}>
+
+    <TextField
+      name="Barcode"
+      label="Contact"
+      onChange={(e)=>setContactPerson(e.target.value)}
+      
+      fullWidth
+      size='small'
+    />
+    </Grid>
+<Grid item xs={6}>
     <TextField
       name="DeScription"
-      label="Description"
-      onChange={(e)=>setquantite(e.target.value)}
+      label="Email"
+      onChange={(e)=>setEmail(e.target.value)}
       fullWidth
       size='small'
     />
     </Grid>
-    
-    {/* <Grid item xs={6}>
+    <Grid item xs={6}>
 
    <TextField
       name="prix"
-      label="prix"
-      onChange={(e)=>setprice(e.target.value)}
+      label="Phone"
+      onChange={(e)=>setPhoneNumber(e.target.value)}
       fullWidth
       size='small'
     />
    </Grid>
-   <Grid item xs={6}>
+   {/* <Grid item xs={6}>
    <input type='date' value={selectedDate}
       onChange={(e)=> setSelectedDate(e.target.value)}  style={{
     padding: '8px',
@@ -629,10 +700,9 @@ const handlePayButtonClick = () => {
  </Stack>
 </Box>
     </Modal>
-    {/* </motion.div> */}
      /**update medication */
 
-      <Modal open={openModalu} onClose={handleCloseforupdate}>
+     <Modal open={openModalu} onClose={handleCloseforupdate}>
      <Box
  sx={{
     position: "absolute",
@@ -646,99 +716,141 @@ const handlePayButtonClick = () => {
  }}
 >
  <Stack spacing={2}>
-    <Typography variant="h5" mb={2}>
-     update produit
+    <Typography variant="h5" mb={1}>
+     Fournisseur
     </Typography>
 <Grid container spacing={2}>
-<Grid item xs={6}>
+{/* <Grid item xs={12}>
+<FormControl fullWidth size='small'>
+      <InputLabel id="demo-simple-select-label">Category</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={Category}
+        onChange={(e)=>{setCategory(e.target.value);}}
+      >
+        <MenuItem value="antispamedique">antispamedique</MenuItem>
+        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
+        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
+        <MenuItem value="antifongiques">antifongiques</MenuItem>
+        <MenuItem value="antigripaux">antigripaux</MenuItem>
+        <MenuItem value="antalagiques">antalagiques</MenuItem>
+        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
+        <MenuItem value="collyres">collyres</MenuItem>
+        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
+        <MenuItem value="anti_septiques">anti septiques</MenuItem>
+      </Select>
+    </FormControl>
+  </Grid> */}
+{/* <Grid item xs={6}>
     <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">{typeu}</InputLabel>
+  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    label={typeu}
-    value={typeu}
-    onChange={(e)=>{settypeu(e.target.value);}}
+    label="Age"
+    value={type}
+    onChange={(e)=>{settype(e.target.value);}}
   >
-    {/* <MenuItem>{typeu}</MenuItem> */}
     {famille.map(item =>(
     <MenuItem value={item.id}>{item.nom}</MenuItem>))}
     
   </Select>
 </FormControl>
-</Grid>
-<Grid item xs={6}>
+</Grid> */}
+{/* <Grid item xs={6}>
     <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">{genreu}</InputLabel>
+  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
     label="Age"
-    value={genreu}
-    onChange={(e)=>{setgenreu(e.target.value);}}
+    value={genre}
+    onChange={(e)=>{setgenre(e.target.value);}}
   >
    {unite.map(item =>(
     <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
     
   </Select>
 </FormControl>
-</Grid>
+</Grid> */}
 <Grid item xs={6}>
 
     <TextField
-      name="Nom"
+      name="FistName"
       label="Nom"
-      value={nameu}
-      onChange={(e)=>setnameu(e.target.value)}
-      fullWidth
-      size='small'
-    />
-    </Grid>
-   
-<Grid item xs={3}>
-
-    <TextField
-      name="code"
-      label="Code"
-      value={codeu}
-      disabled
-      fullWidth
-      size='small'
-    />
-    </Grid>
-    <Grid item xs={3}>
-
-    <TextField
-      name="Barcode"
-      label="Barcode"
-      value={barcodeu}
-     disabled
+      value={firstNameu}
+      onChange={(e)=>setFirstNameu(e.target.value)}
       fullWidth
       size='small'
     />
     </Grid>
     <Grid item xs={6}>
 
-<TextField
-  name="Nom"
-  label="Prix de vente"
-  value={priceu}
-  onChange={(e)=>setpriceu(e.target.value)}
-  fullWidth
-  size='small'
-/>
-</Grid>
-<Grid item xs={6}>
     <TextField
-      name="DeScription"
-      label="Description"
-      value={descriptionu}
-      onChange={(e)=>setdescriptionu(e.target.value)}
+      name="Prenom"
+      label="Prenom"
+      value={lastNameu}
+      onChange={(e)=>setLastNameu(e.target.value)}
       fullWidth
       size='small'
     />
     </Grid>
-   
+<Grid item xs={6}>
+
+    <TextField
+      name="code"
+      label="Adresse"
+      value={addressu}
+      onChange={(e)=>setAddressu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
+    <Grid item xs={6}>
+
+    <TextField
+      name="Barcode"
+      label="Contact"
+      value={contactPersonu}
+      onChange={(e)=>setContactPersonu(e.target.value)}
+      
+      fullWidth
+      size='small'
+    />
+    </Grid>
+<Grid item xs={6}>
+    <TextField
+      name="DeScription"
+      label="Email"
+      value={emailu}
+      onChange={(e)=>setEmailu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
+    <Grid item xs={6}>
+
+   <TextField
+      name="prix"
+      label="Phone"
+      value={phoneNumberu}
+      onChange={(e)=>setPhoneNumberu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+   </Grid>
+   {/* <Grid item xs={6}>
+   <input type='date' value={selectedDate}
+      onChange={(e)=> setSelectedDate(e.target.value)}  style={{
+    padding: '8px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    fontSize: '16px',
+    width:'100%'
+    // Add more styles as needed
+  }}/>
+    </Grid> */}
      </Grid>
 
 {/* {Category === "comprime" && <TextField
@@ -762,14 +874,14 @@ const handlePayButtonClick = () => {
       onChange={(e)=>setprixpillule(e.target.value)}
     />} */}
 
-    <Box mt={2}>
+    <Box mt={2} paddingLeft={2}>
       <Button
         style={{ marginRight: "10px" }}
         variant="contained"
         color="info"
         onClick={()=>{
             updateUnite();
-          // updatecreatDrug();
+          // creatDrug();
         }}
       >
         Save
@@ -785,4 +897,4 @@ const handlePayButtonClick = () => {
   );
 };
 
-export default MenuCuisine;
+export default Fournisseur;

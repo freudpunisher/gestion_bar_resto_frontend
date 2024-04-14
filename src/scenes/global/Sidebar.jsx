@@ -339,7 +339,7 @@ const Sidebar = () => {
                 />
                 <Item
                   title="Fournisseurs"
-                  // to="/product"
+                  to="/Fournisseur"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}

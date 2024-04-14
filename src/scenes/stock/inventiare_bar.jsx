@@ -1,10 +1,9 @@
-import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel  } from '@mui/material'
+import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel, Autocomplete  } from '@mui/material'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme, Grid } from "@mui/material";
-import { Input } from '@mui/material';
 // import { API_Url } from "../../data/API";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
@@ -18,7 +17,7 @@ import { API_URL } from '../../data/Api';
 import { useNavigate } from 'react-router-dom';
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const MenuCuisine = () => {
+const InventaireBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -46,7 +45,6 @@ const MenuCuisine = () => {
   const [quantiteu, setquantiteu] = useState()
   const [genre, setgenre] = useState()
   const [genreu, setgenreu] = useState()
-  const [image, setImage] = useState(null);
   const [barcode, setbarcode] = useState()
   const [barcodeu, setbarcodeu] = useState()
   const [dataforupdate, setdataForupdate] = useState([])
@@ -68,20 +66,10 @@ const MenuCuisine = () => {
   const [prixpillule, setprixpillule] = useState()
   const [isPrinting, setIsPrinting] = useState(false);
   const [rows, setRows] = useState([]);
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-};
   var productdata = Product.map((obj) => ({
     id: obj.id,
     famille: obj.famille_info.famille,
-    unite_mesure: obj.unite_mesure_info.unite_mesure,
+    // unite_mesure: obj.unite_mesure_info.unite_mesure,
     code: obj.code,
     nom: obj.nom,
     barcode: obj.barcode,
@@ -92,7 +80,6 @@ const MenuCuisine = () => {
   const dataGridRef = useRef();
   const handleClose = ()=>{
     setopenModal(false);
-    setImage(null);
   }
    const handleCloseforupdate = ()=>{
     setopenModalu(false);
@@ -283,11 +270,6 @@ settypeu(result.famille)
         flex: 1,
         cellClassName: "name-column--cell",
       },
-      {
-        field: "unite_mesure",
-        headerName: "Unite",
-        flex: 1,
-      },
     {
       field: "prix_vente",
       headerName: "prix de vente",
@@ -405,7 +387,7 @@ const handlePayButtonClick = () => {
   return (
     <Box m="20px">
       <Header
-        title="Produit"
+        title="Inventaire stock Bar"
         // subtitle="Listes des produits"
       />
       <Box
@@ -451,7 +433,7 @@ const handlePayButtonClick = () => {
       /> */}
       <Button variant="contained" color="secondary"  sx={{ marginRight:'auto'}} onClick={()=> {setopenModal(true)
       generateRandomCode(4)
-      }}>Ajouter Produit</Button>
+      }}>Aj</Button>
       {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
         <DataGrid
@@ -519,11 +501,52 @@ const handlePayButtonClick = () => {
 >
  <Stack spacing={2}>
     <Typography variant="h5" mb={1}>
-     Menu cuisine
+     inventaire 
     </Typography>
 <Grid container spacing={2}>
+{/* <Grid item xs={12}>
+<FormControl fullWidth size='small'>
+      <InputLabel id="demo-simple-select-label">Category</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={Category}
+        onChange={(e)=>{setCategory(e.target.value);}}
+      >
+        <MenuItem value="antispamedique">antispamedique</MenuItem>
+        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
+        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
+        <MenuItem value="antifongiques">antifongiques</MenuItem>
+        <MenuItem value="antigripaux">antigripaux</MenuItem>
+        <MenuItem value="antalagiques">antalagiques</MenuItem>
+        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
+        <MenuItem value="collyres">collyres</MenuItem>
+        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
+        <MenuItem value="anti_septiques">anti septiques</MenuItem>
+      </Select>
+    </FormControl>
+  </Grid> */}
+<Grid item xs={6}>
+<Autocomplete
+                // sx={{marginTop:3}}
+      // options={items}
+      // getOptionLabel={(items) => items.nom}
+      // inputValue={search}
+      // onChange={(event, newValue) => {
+      //   setproduit_id(newValue.id);
+      //   console.log(newValue.id, 'id from search');
+      // }}
+      // onInputChange={(event, newInputValue) => {
+      //   setSearch(newInputValue);
+      //   console.log(newInputValue, 'select from autocomplete')
+      // }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search products" variant="outlined" size='small' fullWidth/>
+      )}
+    />
+</Grid>
 
-<Grid item xs={12}>
+<Grid item xs={6}>
 
     <TextField
       name="Nom"
@@ -534,24 +557,24 @@ const handlePayButtonClick = () => {
     />
     </Grid>
    
-    <Grid item xs={6}>
+{/* <Grid item xs={3}>
 
     <TextField
-      name="reduction"
-      label="reduction"
-    //   value={barcode}
-     disabled
+      name="code"
+      label="Code"
+      value={generatedCode}
+      disabled
       fullWidth
       size='small'
     />
     </Grid>
-<Grid item xs={6}>
+    <Grid item xs={3}>
 
     <TextField
-      name="Amount"
-      label="Montant"
-    //   value={generatedCode}
-      disabled
+      name="Barcode"
+      label="Barcode"
+      value={barcode}
+     disabled
       fullWidth
       size='small'
     />
@@ -564,7 +587,7 @@ const handlePayButtonClick = () => {
       fullWidth
       size='small'
     />
-    </Grid>
+    </Grid> */}
     
     {/* <Grid item xs={6}>
 
@@ -785,4 +808,4 @@ const handlePayButtonClick = () => {
   );
 };
 
-export default MenuCuisine;
+export default InventaireBar;
