@@ -28,6 +28,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
 
+// logo image
+import logo from '../../assets/logo-bar-resto-light.png';
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -80,8 +83,10 @@ const Sidebar = () => {
                 justifyContent="space-between"
                 alignItems="center"
                 ml="15px">
+                
+                {/* <img width={50} height={50} src={logo} alt="Bugarama Logo" /> */}
 
-                <Typography variant="h3">
+                <Typography variant="h2" sx={{fontWeight:"bold"}}>
                   BUGARAMA
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -110,14 +115,14 @@ const Sidebar = () => {
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
                 <DashboardIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Tableau de bord</Typography>
+                { !isCollapsed ? <Typography variant="subtitle1">Tableau de bord</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Tableau Boss"
+                  title={!isCollapsed ? "Tableau Boss" : "T.BS"}
                   to="/doshbord/boss"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
