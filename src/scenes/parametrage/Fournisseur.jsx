@@ -101,7 +101,6 @@ const Fournisseur = () => {
   var productdata = Product.map((obj) => ({
     id: obj.id,
     famille: obj.famille_info.famille,
-    unite_mesure: obj.unite_mesure_info.unite_mesure,
     code: obj.code,
     nom: obj.nom,
     description: obj.description,

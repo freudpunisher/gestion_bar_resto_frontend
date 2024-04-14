@@ -1,4 +1,4 @@
-import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel  } from '@mui/material'
+import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel, Autocomplete  } from '@mui/material'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -47,6 +47,22 @@ const Unite = () => {
   const [prixpillule, setprixpillule] = useState()
   const [isPrinting, setIsPrinting] = useState(false);
   const [rows, setRows] = useState([]);
+  const [search, setSearch] = useState();
+  const [items, setitems] = useState([]);
+  const [produit_id, setproduit_id]= useState();
+  const [produit_idu, setproduit_idu]= useState();
+  const [piece, setpiece]= useState();
+  const [pieceu, setpieceu]= useState();
+  const [rapport, setrapport]= useState();
+  const [rapportu, setrapportu]= useState();
+  const [prix_vente, setprix_vente]= useState();
+  const [prix_venteu, setprix_venteu]= useState();
+
+  const fetchProduct = ()=>{
+    axios.get(API_URL + 'produit/').then((response)=>{
+      setitems(response.data);
+    })
+  }
   const dataGridRef = useRef();
   const handleClose = ()=>{
     setopenModal(false);
@@ -57,8 +73,12 @@ const Unite = () => {
 
   const createUnite = ()=>{
     axios.post(API_URL+'unite/',{
+      produit:produit_id,
         desigantion:name,
         code:description,
+        value_piece:piece,
+        value_rapport:rapport,
+        value_prix_vente:prix_vente,
     }).then(response=>{
         handleClose();
         fetchunite();
@@ -72,8 +92,12 @@ const Unite = () => {
   };
   const updateUnite = ()=>{
     axios.patch(API_URL+`unite/${id}/`,{
-        desigantion:nameu,
-        code:descriptionu,
+      produit:produit_idu,
+      desigantion:nameu,
+      code:descriptionu,
+      value_piece:pieceu,
+      value_rapport:rapportu,
+      value_prix_vente:prix_venteu,
     }).then(response=>{
         handleCloseforupdate();
         fetchunite();
@@ -92,6 +116,8 @@ setunite(response.data);
 
   useEffect(() => {
     fetchunite();
+  fetchProduct(); 
+
   },[]);
   // const fetchData = () => {
   //   axios.get(API_Url+"medication/list/").then((response) => {
@@ -184,18 +210,18 @@ setunite(response.data);
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    // {
-    //   field: "packaging_type",
-    //   headerName: "type",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    // },
-    // {
-    //   field: "genre",
-    //   headerName: "genre",
-    //   flex: 1,
-    //   cellClassName: "name-column--cell",
-    // },
+    {
+      field: "value_piece",
+      headerName: "Valeur piece",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "value_rapport",
+      headerName: "Valeur Rapport",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
     // {
     //   field: "price",
     //   headerName: "Prix",
@@ -239,10 +265,10 @@ setunite(response.data);
             // setdataForupdate(params.row)
             setnameu(params.row.desigantion);
             setdescriptionu(params.row.code);
-            // setpriceu(params.row.price);
-            // settypeu(params.row.packaging_type);
-            // setquantiteu(params.row.quantite);
-            // setCategoryu(params.row.category);
+            setpieceu(params.row.value_piece);
+            setrapportu(params.row.value_rapport);
+            setprix_venteu(params.row.value_prix_vente);
+            setproduit_idu(params.row.produit);
             // setgenreu(params.row.genre);
             setid(params.row.id);
             }}
@@ -262,27 +288,14 @@ setunite(response.data);
                 confirmButtonText: "Yes, delete it!"
               }).then((result)=>{
                 if (result.isConfirmed){
-                  axios.delete(API_URL+`unite/${params.row.id}/`)
-                }
-              }).then(response =>{
-                fetchunite();
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success"
-                  });
-                if (response.status ===  200) {
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success"
-                  });
-                }else {
-                  Swal.fire({
-                    title: "Error!",
-                    text: "An error occurred while deleting the item.",
-                    icon: "error"
-                  });
+                  axios.delete(API_URL+`unite/${params.row.id}/`).then(response =>{
+                    fetchunite();
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success"
+                      });
+                  })
                 }
               })
             }}
@@ -433,77 +446,25 @@ const handlePayButtonClick = () => {
      unite de mesure
     </Typography>
 <Grid container spacing={2}>
-{/* <Grid item xs={12}>
-<FormControl fullWidth size='small'>
-      <InputLabel id="demo-simple-select-label">Category</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={Category}
-        onChange={(e)=>{setCategory(e.target.value);}}
-      >
-        <MenuItem value="antispamedique">antispamedique</MenuItem>
-        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
-        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
-        <MenuItem value="antifongiques">antifongiques</MenuItem>
-        <MenuItem value="antigripaux">antigripaux</MenuItem>
-        <MenuItem value="antalagiques">antalagiques</MenuItem>
-        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
-        <MenuItem value="collyres">collyres</MenuItem>
-        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
-        <MenuItem value="anti_septiques">anti septiques</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid> */}
-{/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">type</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settype(e.target.value);}}
-  >
-    <MenuItem value="Single">flacon</MenuItem>
-    <MenuItem value="comprime">comprime</MenuItem>
-    <MenuItem value="piece">piece</MenuItem>
-    <MenuItem value="plaquette">plaquette</MenuItem>
-    <MenuItem value="boite">boite</MenuItem>
-    <MenuItem value="tube">tube</MenuItem>
-  </Select>
-</FormControl>
-</Grid> */}
-{/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">type</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genre}
-    onChange={(e)=>{setgenre(e.target.value);}}
-  >
-    <MenuItem value="specialite">specialite</MenuItem>
-    <MenuItem value="generique">generique</MenuItem>
-  </Select>
-</FormControl>
-</Grid> */}
    <Grid item xs={6}>
 
-    <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    // value={age}
-    label="Age"
-    fullWidth
-    size='small'
-    // onChange={handleChange}
-  >
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
-  </Select>
+   <Autocomplete
+                sx={{marginTop:3}}
+      options={items}
+      getOptionLabel={(items) => items.nom}
+      inputValue={search}
+      onChange={(event, newValue) => {
+        setproduit_id(newValue.id);
+        console.log(newValue.id, 'id from search');
+      }}
+      onInputChange={(event, newInputValue) => {
+        setSearch(newInputValue);
+        console.log(newInputValue, 'select from autocomplete')
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search products" variant="outlined" size='small'  sx={{marginTop:-3}} fullWidth/>
+      )}
+    />
    </Grid> 
 <Grid item xs={3}>
 
@@ -529,9 +490,7 @@ const handlePayButtonClick = () => {
     <TextField
       name="Quantite"
       label="Valeur Piece"
-      // onChange={(e)=>setquantite(e.target.value)}
-      onKeyUp={(e)=>{alert(e.target.value)
-    console.log(e.target.value)}}
+      onChange={(e)=>setpiece(e.target.value)}
       fullWidth
       size='small'
     />
@@ -540,7 +499,7 @@ const handlePayButtonClick = () => {
    <TextField
       name="prix"
       label="Valuer rapport"
-      onChange={(e)=>setprice(e.target.value)}
+      onChange={(e)=>setrapport(e.target.value)}
       fullWidth
       size='small'
     />
@@ -549,7 +508,7 @@ const handlePayButtonClick = () => {
    <TextField
       name="prix"
       label="Valeur prix vente"
-      onChange={(e)=>setprice(e.target.value)}
+      onChange={(e)=>setprix_vente(e.target.value)}
       fullWidth
       size='small'
     />
@@ -617,80 +576,82 @@ const handlePayButtonClick = () => {
      update unite de mesure
     </Typography>
 <Grid container spacing={2}>
-{/* <Grid item xs={6}>
-<FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">{Categoryu}</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={Categoryu}
-        onChange={(e)=>{setCategoryu(e.target.value);}}
-      >
-        <MenuItem value="antispamedique">antispamedique</MenuItem>
-        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
-        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
-        <MenuItem value="antifongiques">antifongiques</MenuItem>
-        <MenuItem value="antigripaux">antigripaux</MenuItem>
-        <MenuItem value="antalagiques">antalagiques</MenuItem>
-        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
-        <MenuItem value="collyres">collyres</MenuItem>
-        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
-        <MenuItem value="anti_septiques">anti septiques</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid> */}
-  {/* <Grid item xs={6}>
-    <FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">type</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genreu}
-    onChange={(e)=>{setgenreu(e.target.value);}}
-  >
-    <MenuItem value="specialite">specialite</MenuItem>
-    <MenuItem value="generique">generique</MenuItem>
-  </Select>
-</FormControl>
-</Grid> */}
-{/* <Grid item xs={6}>
-    <FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">{typeu}</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settypeu(e.target.value);}}
-  >
-    <MenuItem value="Single">flacon</MenuItem>
-    <MenuItem value="comprime">comprime</MenuItem>
-    <MenuItem value="piece">piece</MenuItem>
-    <MenuItem value="plaquette">plaquette</MenuItem>
-    <MenuItem value="boite">boite</MenuItem>
-    <MenuItem value="tube">tube</MenuItem>
-  </Select>
-</FormControl>
-</Grid> */}
-  <Grid item xs={6}>
+
+ 
+<Grid container spacing={2}>
+   <Grid item xs={6}>
+
+   <Autocomplete
+                sx={{marginTop:3}}
+      options={items}
+      getOptionLabel={(items) => items.nom}
+      inputValue={search}
+      onChange={(event, newValue) => {
+        setproduit_idu(newValue.id);
+        console.log(newValue.id, 'id from search');
+      }}
+      onInputChange={(event, newInputValue) => {
+        setSearch(newInputValue);
+        console.log(newInputValue, 'select from autocomplete')
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search products" variant="outlined" size='small'  sx={{marginTop:-3}} fullWidth/>
+      )}
+    />
+   </Grid> 
+<Grid item xs={3}>
+
     <TextField
-      name="name"
-      label="Name"
+      name="designation"
+      label="Designation"
       value={nameu}
-      onChange={(e) => setnameu(e.target.value)}
+      onChange={(e)=>setnameu(e.target.value)}
       fullWidth
+      size='small'
     />
-  </Grid>
-  <Grid item xs={6}>
+    </Grid>
+<Grid item xs={3}>
+
     <TextField
-      name="Description"
-      label="Description"
+      name="code"
+      label="Code"
       value={descriptionu}
-      onChange={(e) => setdescriptionu(e.target.value)}
+      onChange={(e)=>setdescriptionu(e.target.value)}
       fullWidth
+      size='small'
     />
-  </Grid>
+    </Grid>
+<Grid item xs={4}>
+    <TextField
+      name="Quantite"
+      label="Valeur Piece"
+      value={pieceu}
+      onChange={(e)=>setpieceu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
+   <Grid item xs={4}>
+   <TextField
+      name="prix"
+      label="Valuer rapport"
+      value={rapportu}
+      onChange={(e)=>setrapportu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
+    <Grid item xs={4}>
+   <TextField
+      name="prix"
+      label="Valeur prix vente"
+      value={prix_venteu}
+      onChange={(e)=>setprix_venteu(e.target.value)}
+      fullWidth
+      size='small'
+    />
+    </Grid>
+     </Grid>
   {/* <Grid item xs={6}>
     <TextField
       name="Quantite"
