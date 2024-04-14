@@ -7,7 +7,7 @@ import { useTheme, Grid } from "@mui/material";
 // import { API_Url } from "../../data/API";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -54,6 +54,7 @@ const Product = () => {
   const [price, setprice] = useState()
   const [boite, setboite] = useState()
   const [id, setid] = useState()
+  const [Categorie, setCategorie] = useState()
   const [unite, setunite] = useState([])
   const [famille, setFamille] = useState([])
   const [Product, setProduct] = useState([])
@@ -69,13 +70,14 @@ const Product = () => {
   var productdata = Product.map((obj) => ({
     id: obj.id,
     famille: obj.famille_info.famille,
-    unite_mesure: obj.unite_mesure_info.unite_mesure,
+    famille_id: obj.famille,
+  
     code: obj.code,
     nom: obj.nom,
     barcode: obj.barcode,
     description: obj.description,
-    prix_vente: obj.prix_vente
-    // barcode: obj.barcode,
+    prix_vente: obj.prix_vente,
+    type_produit: obj.type_produit,
   }));
   const dataGridRef = useRef();
   const handleClose = ()=>{
@@ -101,6 +103,7 @@ setProduct(response.data);
         unite_mesure:genre,
         description:quantite,
         code:'PR'+newCode,
+        type_produit:Categorie,
         barcode:barcode,
         prix_vente:price
     }).then(response=>{
@@ -122,10 +125,11 @@ generateRandomCode(4)
       famille:typeu,
       unite_mesure:genreu,
       description:quantiteu,
+      type_produit:Categoryu,
       prix_vente:priceu
     }).then(response=>{
         handleCloseforupdate();
-        fetchunite();
+        fetchProduct();
     //         Swal.fire({
     //   icon: 'success',
     //   title: 'operation reussi',
@@ -270,11 +274,6 @@ settypeu(result.famille)
         flex: 1,
         cellClassName: "name-column--cell",
       },
-      {
-        field: "unite_mesure",
-        headerName: "Unite",
-        flex: 1,
-      },
     {
       field: "prix_vente",
       headerName: "prix de vente",
@@ -282,11 +281,14 @@ settypeu(result.famille)
       cellClassName: "name-column--cell",
     },
    
-    // // {
-    // //   field: "email",
-    // //   headerName: "Email",
-    // //   flex: 1,
-    // // },
+    {
+      field: "type_produit",
+      headerName: "Categorie",
+      flex: 1,
+      renderCell:(params)=>{
+return params.row.type_produit === 1 ? "Bar" : "Cuisine"
+      }
+    },
     // {
     //   field: "quantite",
     //   headerName: "Quantite",
@@ -324,9 +326,9 @@ settypeu(result.famille)
             setpriceu(params.row.prix_vente);
 setbarcodeu(params.row.barcode);
 setcodeu(params.row.code);
-            settypeu(params.row.famille);
+            settypeu(params.row.famille_id);
             // setquantiteu(params.row.quantite);
-            // setCategoryu(params.row.category);
+            setCategoryu(params.row.type_produit);
             setgenreu(params.row.unite_mesure);
             setid(params.row.id);
             }}
@@ -335,39 +337,39 @@ setcodeu(params.row.code);
           </IconButton>
           <IconButton
             aria-label="delete"
-            // onClick={() => {
-            //   Swal.fire({
-            //     title: "Are you sure?",
-            //     text: "You won't be able to revert this!",
-            //     icon: "warning",
-            //     showCancelButton: true,
-            //     confirmButtonColor: "#3085d6",
-            //     cancelButtonColor: "#d33",
-            //     confirmButtonText: "Yes, delete it!"
-            //   }).then((result)=>{
-            //     if (result.isConfirmed){
-            //       axios.delete(API_URL+`produit/${params.row.id}/`)
-            //     }
-            //   }).then(response =>{
-            //     fetchunite();
-            //     fetchProduct();
-            //     Swal.fire({
-            //         title: "Deleted!",
-            //         text: "Your item has been deleted.",
-            //         icon: "success"
-            //       });
-                
-            //   })
-            // }}
+            onClick={() => {
+              Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+              }).then((result)=>{
+                if (result.isConfirmed){
+                  axios.delete(API_URL+`produit/${params.row.id}/`).then(response =>{
+                    fetchunite();
+                    fetchProduct();
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success"
+                      });
+                    
+                  })
+                }
+              })
+            }}
           >
             <DeleteIcon />
           </IconButton>
-          <IconButton
+          {/* <IconButton
             aria-label="delete"
             onClick={() => navigate('/barcode', {state: {barcode:params.row.barcode, id:params.row.id}})}
           >
             <VisibilityIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
       ),
     },
@@ -555,13 +557,13 @@ const handlePayButtonClick = () => {
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    // value={age}
+    value={Categorie}
     label="Age"
     size='small'
-    // onChange={handleChange}
+    onChange={(e)=> setCategorie(e.target.value)}
   >
-    <MenuItem value={10}>Bar</MenuItem>
-    <MenuItem value={20}>Cuisine</MenuItem>
+    <MenuItem value={1}>Bar</MenuItem>
+    <MenuItem value={2}>Cuisine</MenuItem>
     {/* <MenuItem value={30}>Thirty</MenuItem> */}
   </Select>
 </FormControl>
@@ -695,11 +697,10 @@ const handlePayButtonClick = () => {
 <Grid container spacing={2}>
 <Grid item xs={6}>
     <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">{typeu}</InputLabel>
+  <InputLabel id="demo-simple-select-label">Selectionnez famille</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    label={typeu}
     value={typeu}
     onChange={(e)=>{settypeu(e.target.value);}}
   >
@@ -711,21 +712,24 @@ const handlePayButtonClick = () => {
 </FormControl>
 </Grid>
 <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">{genreu}</InputLabel>
+  
+
+<FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Categorie</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
+    value={Categoryu}
     label="Age"
-    value={genreu}
-    onChange={(e)=>{setgenreu(e.target.value);}}
+    size='small'
+    onChange={(e)=> setCategoryu(e.target.value)}
   >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
+    <MenuItem value={1}>Bar</MenuItem>
+    <MenuItem value={2}>Cuisine</MenuItem>
+    {/* <MenuItem value={30}>Thirty</MenuItem> */}
   </Select>
 </FormControl>
-</Grid>
+   </Grid> 
 <Grid item xs={6}>
 
     <TextField
