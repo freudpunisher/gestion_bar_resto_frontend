@@ -14,6 +14,9 @@ import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
+import Unite from "./scenes/parametrage/Unitedemesure.jsx"
+import Settings from "./scenes/parametrage/famille.jsx"
+import Product from "./scenes/parametrage/Product.jsx"
 // import Calendar from "./scenes/calendar/calendar";
 import Example from "./scenes/test table";
 function App() {
@@ -35,6 +38,10 @@ function App() {
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />
+              <Route path="/unite" element={<Unite />} />
+              <Route path="/famille" element={<Settings />} />
+              <Route path="/produit" element={<Product />} />
+
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
               <Route path="/faq" element={<FAQ />} />
