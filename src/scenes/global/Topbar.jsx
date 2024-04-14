@@ -19,13 +19,16 @@ const Topbar = () => {
       {/* SEARCH BAR */}
       <Box
         display="flex"
-        backgroundColor={colors.primary[400]}
-        borderRadius="3px"
+        // backgroundColor={colors.primary[400]}
+        // borderRadius="3px"
       >
         {/* <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton> */}
+        <Typography variant="h2" sx={{ padding: '4px'}}>
+          SYSTME DE GESTION BAR-RESTO
+        </Typography>
       </Box>
 
       {/* ICONS */}
@@ -37,18 +40,11 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        {/* <IconButton>
+        <IconButton>
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton>
           <SettingsOutlinedIcon />
-        </IconButton> */}
-        <IconButton>
-          
-
-          <PersonOutlinedIcon  sx={{color:'black', width: 35, height: 35}}/>
-        
-          <Typography color='black' sx={{fontSize:20}}>freud</Typography>
         </IconButton>
       </Box>
     </Box>
