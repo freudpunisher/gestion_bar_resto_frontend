@@ -1,4 +1,4 @@
-import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel  } from '@mui/material'
+import { Box, Modal,Typography, Button, TextField, Select, MenuItem, Stack, FormControl,InputLabel, Autocomplete  } from '@mui/material'
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -17,7 +17,7 @@ import { API_URL } from '../../data/Api';
 import { useNavigate } from 'react-router-dom';
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const Product = () => {
+const InventaireBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -54,7 +54,6 @@ const Product = () => {
   const [price, setprice] = useState()
   const [boite, setboite] = useState()
   const [id, setid] = useState()
-  const [Categorie, setCategorie] = useState()
   const [unite, setunite] = useState([])
   const [famille, setFamille] = useState([])
   const [Product, setProduct] = useState([])
@@ -70,7 +69,7 @@ const Product = () => {
   var productdata = Product.map((obj) => ({
     id: obj.id,
     famille: obj.famille_info.famille,
-  
+    // unite_mesure: obj.unite_mesure_info.unite_mesure,
     code: obj.code,
     nom: obj.nom,
     barcode: obj.barcode,
@@ -102,7 +101,6 @@ setProduct(response.data);
         unite_mesure:genre,
         description:quantite,
         code:'PR'+newCode,
-        type_produit:Categorie,
         barcode:barcode,
         prix_vente:price
     }).then(response=>{
@@ -389,7 +387,7 @@ const handlePayButtonClick = () => {
   return (
     <Box m="20px">
       <Header
-        title="Produit"
+        title="Inventaire stock Bar"
         // subtitle="Listes des produits"
       />
       <Box
@@ -435,7 +433,7 @@ const handlePayButtonClick = () => {
       /> */}
       <Button variant="contained" color="secondary"  sx={{ marginRight:'auto'}} onClick={()=> {setopenModal(true)
       generateRandomCode(4)
-      }}>Ajouter Produit</Button>
+      }}>Aj</Button>
       {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
         <DataGrid
@@ -503,7 +501,7 @@ const handlePayButtonClick = () => {
 >
  <Stack spacing={2}>
     <Typography variant="h5" mb={1}>
-     Produit
+     inventaire 
     </Typography>
 <Grid container spacing={2}>
 {/* <Grid item xs={12}>
@@ -529,40 +527,25 @@ const handlePayButtonClick = () => {
     </FormControl>
   </Grid> */}
 <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settype(e.target.value);}}
-  >
-    {famille.map(item =>(
-    <MenuItem value={item.id}>{item.nom}</MenuItem>))}
-    
-  </Select>
-</FormControl>
+<Autocomplete
+                // sx={{marginTop:3}}
+      // options={items}
+      // getOptionLabel={(items) => items.nom}
+      // inputValue={search}
+      // onChange={(event, newValue) => {
+      //   setproduit_id(newValue.id);
+      //   console.log(newValue.id, 'id from search');
+      // }}
+      // onInputChange={(event, newInputValue) => {
+      //   setSearch(newInputValue);
+      //   console.log(newInputValue, 'select from autocomplete')
+      // }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search products" variant="outlined" size='small' fullWidth/>
+      )}
+    />
 </Grid>
-<Grid item xs={6}>
-  
 
-<FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">Categorie</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    value={Categorie}
-    label="Age"
-    size='small'
-    onChange={(e)=> setCategorie(e.target.value)}
-  >
-    <MenuItem value={1}>Bar</MenuItem>
-    <MenuItem value={2}>Cuisine</MenuItem>
-    {/* <MenuItem value={30}>Thirty</MenuItem> */}
-  </Select>
-</FormControl>
-   </Grid> 
 <Grid item xs={6}>
 
     <TextField
@@ -574,7 +557,7 @@ const handlePayButtonClick = () => {
     />
     </Grid>
    
-<Grid item xs={3}>
+{/* <Grid item xs={3}>
 
     <TextField
       name="code"
@@ -604,7 +587,7 @@ const handlePayButtonClick = () => {
       fullWidth
       size='small'
     />
-    </Grid>
+    </Grid> */}
     
     {/* <Grid item xs={6}>
 
@@ -825,4 +808,4 @@ const handlePayButtonClick = () => {
   );
 };
 
-export default Product;
+export default InventaireBar;
