@@ -394,8 +394,8 @@ const handlePayButtonClick = () => {
   return (
     <Box m="20px">
       <Header
-        title="Produit"
-        // subtitle="Listes des produits"
+        title="Produits"
+        subtitle="Listes des produits"
       />
       <Box
         m="40px 0 0 0"
