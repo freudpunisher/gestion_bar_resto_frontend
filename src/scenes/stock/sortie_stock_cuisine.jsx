@@ -8,21 +8,17 @@ import {
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-// import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme, Grid } from "@mui/material";
-// import { API_Url } from "../../data/API";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-// import VisibilityIcon from '@mui/icons-material/Visibility';
-// import { motion } from 'framer-motion';
 import { API_URL } from "../../data/Api";
 
-const Settings = () => {
+const SortieStockCuisine = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [openModal, setopenModal] = useState(false);
@@ -109,8 +105,20 @@ const Settings = () => {
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     {
-      field: "nom",
-      headerName: "Nom",
+      field: "produit",
+      headerName: "Produit",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "unite_mesure",
+      headerName: "Unite de mesure",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "unite_mesure",
+      headerName: "Unite de mesure",
       flex: 1,
       cellClassName: "name-column--cell",
     },    
@@ -251,7 +259,8 @@ const Settings = () => {
           ))}
         </tbody>
       </table>
-
+      
+      {/* form create sortie stock cuisine  ----------------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -304,6 +313,7 @@ const Settings = () => {
         </Box>
       </Modal>
       
+      {/* form update sortie stock cuisine -------------------------------------------- */}
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
           sx={{
@@ -361,4 +371,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SortieStockCuisine;

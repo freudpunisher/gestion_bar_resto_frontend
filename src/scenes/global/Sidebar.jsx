@@ -160,14 +160,14 @@ const Sidebar = () => {
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
                   title= {!isCollapsed ? "Stock Bar" : "SIB"}
-                  to="/famille"
+                  to="/stockinitial/bar"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
                   title= {!isCollapsed ? "Stok Cuisine" : "SIC"}
-                  to="/unite"
+                  to="/stockinitial/cuisine"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
@@ -176,7 +176,7 @@ const Sidebar = () => {
             </Accordion>
 
             {/* menu inventaire */}
-            <Accordion sx={{ 
+            {/* <Accordion sx={{ 
               backgroundColor: 'inherit',
               padding: '0px 8px 0px 8px',
               width: '100%', '&:before': {backgroundColor: 'transparent !important',},
@@ -190,20 +190,20 @@ const Sidebar = () => {
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
                   title= {!isCollapsed ? "Bar" : "BR"}
-                  to="/famille"
+                  to="/invantaire/bar"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
                   title= {!isCollapsed ? "Cuisine" : "CN"}
-                  to="/unite"
+                  to="/invantaire/cuisine"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />          
               </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
 
             {/* menu approvisionnement */}
             <Accordion sx={{ 
@@ -280,7 +280,7 @@ const Sidebar = () => {
               <AccordionDetails  sx={{ width: '250px', paddingLeft:'1px' }}>         
                 <Item
                   title= {!isCollapsed ? "Stock Cuisine" : "SCN"}
-                  to="/famille"
+                  to="/sortie/cuisine"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
