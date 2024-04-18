@@ -125,58 +125,65 @@ function StockInitialBar() {
 
   // column table liste famille
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    { id: "id", field: "id", headerName: "ID", flex: 0.5 },
     {
+      id: "code",
       field: "code",
       headerName: "Code Produit",
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
     {
+      id: "nom",
       field: "nom",
       headerName: "Nom Produit",
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
     {
+      id: "stock_qte",
       field: "stock_qte",
       headerName: "Etat Stock",
       flex: 1,
       cellClassName: "name-column--cell",
-    },    
+    },
     {
+      id: "entres_nbr",
       field: "entres_nbr",
       headerName: "Nombre entre",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
+      id: "entres_qte",
       field: "entres_qte",
       headerName: "Quantite entre",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
+      id: "sorties_nbr",
       field: "sorties_nbr",
       headerName: "Nombre sortie",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
+      id: "sorties_qte",
       field: "sorties_qte",
       headerName: "Quantite sortie",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
+      id: "inventaires_qte",
       field: "inventaires_qte",
       headerName: "Perte",
       flex: 1,
       cellClassName: "name-column--cell",
     },
     {
+      id: "actions",
       field: "actions",
       headerName: "Actions",
       width: 150,
@@ -199,7 +206,7 @@ function StockInitialBar() {
                     timer: 3000,
                   });
               }                                
-              setproduit_data_id(params.Buttonrow.id);
+              setproduit_data_id(params.row.id);
               setproduit_data_name(params.row.code +' '+params.row.nom);
               setproduit_data_qte(params.row.stock_qte);
             }}
@@ -210,6 +217,7 @@ function StockInitialBar() {
       ),
     },
   ];
+  
 
   const handleExportRows = (rows) => {
     const doc = new jsPDF();
@@ -383,14 +391,14 @@ function StockInitialBar() {
                  },
                }}
             >
-              <MaterialReactTable table={table} />
-              {/* <DataGrid
+              {/* <MaterialReactTable table={table} /> */}
+              <DataGrid
                 checkboxSelection
                 ref={dataGridRef}
                 rows={data}
                 columns={columns}
                 components={{ Toolbar: GridToolbar }}
-              /> */}
+              />
               {/* <TableContainer
                 component={Paper}
                 sx={{ backgroundColor: "inherit" }}
@@ -489,7 +497,7 @@ function StockInitialBar() {
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-              </TableContainer>*/}
+              </TableContainer> */}
             </Box> 
           </Grid>
         </Grid>

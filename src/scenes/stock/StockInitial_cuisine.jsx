@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -15,13 +15,19 @@ import {
   TableHead,
   TableRow,
   Paper,
-  // Autocomplete,
   InputLabel,
-  // CardHeader,
-  // Typography,
   TablePagination,
+  
 } from "@mui/material";
+
+import {
+  MaterialReactTable,
+  createMRTColumnHelper,
+  useMaterialReactTable,
+} from 'material-react-table';
+
 import { tokens } from "../../theme";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { API_URL } from "../../data/Api";
@@ -29,16 +35,17 @@ import Header from "../../components/Header";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import Swal from 'sweetalert2';
+import IconButton from "@mui/material/IconButton";
+import { jsPDF } from 'jspdf'; //or use your library of choice here
+import autoTable from 'jspdf-autotable';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const rowsPerPageOptions = [5, 10, 25];
 
 function StockInitialCuisine() {
   const [data, setData] = useState([]);
-  // const [search, setSearch] = useState();
-  // const [isdate, setisdate] = useState(false);
-  // const [items, setitems] = useState([]);
   const [openModal, setopenModal] = useState(false);
-
+  const dataGridRef = useRef();
   // variable de recherche
   const [date, setdate] = useState();
   const [produit, setproduit] = useState();
@@ -48,13 +55,12 @@ function StockInitialCuisine() {
   const [produit_data_name, setproduit_data_name] = useState();
   const [produit_data_qte, setproduit_data_qte] = useState();
   const [produit_post_qte, setproduit_post_qte] = useState();
-  // const [du, setdu] = useState();
-  // const [au, setau] = useState();
-  // const [produit_id, setproduit_id] = useState();
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -68,7 +74,8 @@ function StockInitialCuisine() {
   const handleClose = () => {
     setopenModal(false);
   };
-
+  
+  // liste etat stock
   const fetchdata = () => {
     axios.get(API_URL + "etat/stock/2/").then((response) => {
       setData(response.data);
@@ -86,6 +93,7 @@ function StockInitialCuisine() {
       params: data,
       headers: { "Content-Type": "application/json" },
     };
+
     axios.get(API_URL + "etat/stock/2/", options).then((response) => {
       setData(response.data);
       
@@ -95,6 +103,7 @@ function StockInitialCuisine() {
   // cqlcul perte
   const perte = produit_data_qte - produit_post_qte
   const id_user = sessionStorage.getItem("user_id");
+  
 
   // creation invantaire
   const createInvantaire = () => {
@@ -113,14 +122,171 @@ function StockInitialCuisine() {
   useEffect(() => {
     fetchdata();
   }, []);
+
+  // column table liste famille
+  const columns = [
+    { id: "id", field: "id", headerName: "ID", flex: 0.5 },
+    {
+      id: "code",
+      field: "code",
+      headerName: "Code Produit",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "nom",
+      field: "nom",
+      headerName: "Nom Produit",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "stock_qte",
+      field: "stock_qte",
+      headerName: "Etat Stock",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "entres_nbr",
+      field: "entres_nbr",
+      headerName: "Nombre entre",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "entres_qte",
+      field: "entres_qte",
+      headerName: "Quantite entre",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "sorties_nbr",
+      field: "sorties_nbr",
+      headerName: "Nombre sortie",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "sorties_qte",
+      field: "sorties_qte",
+      headerName: "Quantite sortie",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "inventaires_qte",
+      field: "inventaires_qte",
+      headerName: "Perte",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      id: "actions",
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <div>
+          <IconButton
+            title="Effectue une inventaire"
+            sx={{
+              color: colors.grey[100],
+              fontSize: "14px",
+            }}
+            onClick={() => {
+              if(params.row.stock_qte !== 0){
+                setopenModal(true);
+              }else{
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Veuillez ajouter les produits dans le stock',
+                    showConfirmButton: false,
+                    timer: 3000,
+                  });
+              }                                
+              setproduit_data_id(params.row.id);
+              setproduit_data_name(params.row.code +' '+params.row.nom);
+              setproduit_data_qte(params.row.stock_qte);
+            }}
+          >
+            <AssignmentReturnedIcon/>
+          </IconButton>
+        </div>
+      ),
+    },
+  ];
   
+
+  const handleExportRows = (rows) => {
+    const doc = new jsPDF();
+    const tableData = rows.map((row) => Object.values(row.original));
+    const tableHeaders = columns.map((c) => c.header);
+
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
+    });
+
+    doc.save('mrt-pdf-example.pdf');
+  };
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableRowSelection: true,
+    columnFilterDisplayMode: 'popover',
+    paginationDisplayMode: 'pages',
+    positionToolbarAlertBanner: 'bottom',
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          //export all rows, including from the next page, (still respects filtering and sorting)
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+          startIcon={<FileDownloadIcon />}
+        >
+          Export All Rows
+        </Button>
+        <Button
+          disabled={table.getRowModel().rows.length === 0}
+          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+          onClick={() => handleExportRows(table.getRowModel().rows)}
+          startIcon={<FileDownloadIcon />}
+        >
+          Export Page Rows
+        </Button>
+        <Button
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          //only export selected rows
+          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          startIcon={<FileDownloadIcon />}
+        >
+          Export Selected Rows
+        </Button>
+      </Box>
+    ),
+  });
+
+    
   return (
     <Box m="20px">
       <Header
         title="Stock Initial" 
         subtitle="Stock Initial Cuisine"
       />
-      
       <Box p={2}>
         <Grid container spacing={2}>
           {/* input date recherche */}
@@ -192,43 +358,55 @@ function StockInitialCuisine() {
             </Button>
           </Grid>
           {/*etat stock liste */}
-          <Grid item xs={12}>
+          <Grid item xs={12}>            
             <Box
-              height="75vh"
-              width="100%"
-              sx={{
-                overflow: "auto",
-                "& .MuiTable-root": {
-                  border: "none",
-                },
-                "& .MuiTableCell-root": {
-                  borderBottom: "none",
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiTableHead-root": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiTablePagination-root": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiButton-text": {
-                  color: `${colors.grey[100]} !important`,
-                },
-              }}
+               m="40px 0 0 0"
+              //  height="75vh"
+               sx={{
+                 "& .MuiDataGrid-root": {
+                   border: "none",
+                 },
+                 "& .MuiDataGrid-cell": {
+                   borderBottom: "none",
+                 },
+                 "& .name-column--cell": {
+                   color: colors.greenAccent[300],
+                 },
+                 "& .MuiDataGrid-columnHeaders": {
+                   backgroundColor: colors.blueAccent[700],
+                   borderBottom: "none",
+                 },
+                 "& .MuiDataGrid-virtualScroller": {
+                   backgroundColor: colors.primary[400],
+                 },
+                 "& .MuiDataGrid-footerContainer": {
+                   borderTop: "none",
+                   backgroundColor: colors.blueAccent[700],
+                 },
+                 "& .MuiCheckbox-root": {
+                   color: `${colors.greenAccent[200]} !important`,
+                 },
+                 "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                   color: `${colors.grey[100]} !important`,
+                 },
+               }}
             >
-              <TableContainer
+              {/* <MaterialReactTable table={table} /> */}
+              <DataGrid
+                checkboxSelection
+                ref={dataGridRef}
+                rows={data}
+                columns={columns}
+                components={{ Toolbar: GridToolbar }}
+              />
+              {/* <TableContainer
                 component={Paper}
                 sx={{ backgroundColor: "inherit" }}
               >
-                <Table aria-label="simple table">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>ID</TableCell>
+                      <TableCell >ID</TableCell>
                       <TableCell align="center">Code Produit</TableCell>
                       <TableCell align="center">Nom Produit</TableCell>
                       <TableCell align="center">Etat Stock</TableCell>
@@ -243,11 +421,9 @@ function StockInitialCuisine() {
                   <TableBody>
                     {data.length !== 0 ? (
                       data.map((row) => (
-                        <TableRow
+                        <TableRow 
                           key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                           <TableCell>{row.id}</TableCell>
                           <TableCell align="center">{row.code}</TableCell>
@@ -285,6 +461,7 @@ function StockInitialCuisine() {
                               <AssignmentReturnedIcon/>
                             </Button>
                           </TableCell>
+
                         </TableRow>
                       ))
                     ) : (
@@ -320,13 +497,13 @@ function StockInitialCuisine() {
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-              </TableContainer>
-            </Box>
+              </TableContainer> */}
+            </Box> 
           </Grid>
         </Grid>
       </Box>
 
-      {/* from nouveau invantaire cuisine --------------------------------------- */}
+      {/* from nouveau invantaire bar --------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
