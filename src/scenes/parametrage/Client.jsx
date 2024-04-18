@@ -25,7 +25,7 @@ const Client = () => {
 
   // Example usage:
   const [id, setid] = useState();
-  const [Product, setProduct] = useState([]);
+  // const [Product, setProduct] = useState([]);
   const [rows, setRows] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [firstNameu, setFirstNameu] = useState("");
@@ -33,7 +33,7 @@ const Client = () => {
   const [lastNameu, setLastNameu] = useState("");
   const [address, setAddress] = useState("");
   const [addressu, setAddressu] = useState("");
-  const [contactPerson, setContactPerson] = useState("");
+  // const [contactPerson, setContactPerson] = useState("");
   const [contactPersonu, setContactPersonu] = useState("");
   const [fournisseur, setFournissuer] = useState([]);
   const [email, setEmail] = useState("");
@@ -41,49 +41,49 @@ const Client = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberu, setPhoneNumberu] = useState("");
 
-  // print carte
-  function printCard() {
-    const cardWidth = 53.98; // Largeur en millimètres
-    const cardHeight = 85.6; // Hauteur en millimètres
+  // // print carte
+  // function printCard() {
+  //   const cardWidth = 53.98; // Largeur en millimètres
+  //   const cardHeight = 85.6; // Hauteur en millimètres
 
-    const printWindow = window.open("", "_blank");
-    printWindow.document.open();
+  //   const printWindow = window.open("", "_blank");
+  //   printWindow.document.open();
 
-    // Injecter le contenu de votre carte dans la fenêtre d'impression
-    printWindow.document.write(
-      "<html><head><title>Impression de la carte</title></head><body>"
-    );
+  //   // Injecter le contenu de votre carte dans la fenêtre d'impression
+  //   printWindow.document.write(
+  //     "<html><head><title>Impression de la carte</title></head><body>"
+  //   );
 
-    // Ajouter le contenu de votre carte ici
-    printWindow.document.write(
-      '<div style="width: ' +
-        cardWidth +
-        "mm; height: " +
-        cardHeight +
-        'mm; border: 1px solid black;">'
-    );
+  //   // Ajouter le contenu de votre carte ici
+  //   printWindow.document.write(
+  //     '<div style="width: ' +
+  //       cardWidth +
+  //       "mm; height: " +
+  //       cardHeight +
+  //       'mm; border: 1px solid black;">'
+  //   );
 
-    // Contenu de la carte
-    printWindow.document.write("</div>");
+  //   // Contenu de la carte
+  //   printWindow.document.write("</div>");
 
-    printWindow.document.write("</body></html>");
-    printWindow.document.close();
+  //   printWindow.document.write("</body></html>");
+  //   printWindow.document.close();
 
-    printWindow.onload = function () {
-      printWindow.print();
-      printWindow.close();
-    };
-  }
+  //   printWindow.onload = function () {
+  //     printWindow.print();
+  //     printWindow.close();
+  //   };
+  // }
 
-  // data liste
-  var productdata = Product.map((obj) => ({
-    id: obj.id,
-    famille: obj.famille_info.famille,
-    code: obj.code,
-    nom: obj.nom,
-    description: obj.description,
-    barcode: obj.barcode,
-  }));
+  // // data liste
+  // var productdata = Product.map((obj) => ({
+  //   id: obj.id,
+  //   famille: obj.famille_info.famille,
+  //   code: obj.code,
+  //   nom: obj.nom,
+  //   description: obj.description,
+  //   barcode: obj.barcode,
+  // }));
 
   // data drid
   const dataGridRef = useRef();
@@ -97,13 +97,13 @@ const Client = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-  
+
   //liste client
-  const fetchProduct = () => {
-    axios.get(API_URL + "produit/").then((response) => {
-      setProduct(response.data);
-    });
-  };
+  // const fetchProduct = () => {
+  //   axios.get(API_URL + "produit/").then((response) => {
+  //     setProduct(response.data);
+  //   });
+  // };
 
   // create client
   const createUnite = () => {
@@ -112,7 +112,7 @@ const Client = () => {
         first_name: firstName,
         last_name: lastName,
         address: address,
-        contact_person: contactPerson,
+        // contact_person: contactPerson,
         email: email,
         phone_number: phoneNumber,
       })
@@ -127,7 +127,7 @@ const Client = () => {
         });
       });
   };
-  
+
   // update client
   const updateUnite = () => {
     axios
@@ -150,19 +150,19 @@ const Client = () => {
         });
       });
   };
-  
+
   // liste select option
   const fetchContact = () => {
     axios.get(API_URL + "client/").then((response) => {
       setFournissuer(response.data);
     });
   };
-  
-  // refresh liste
-  useEffect(() => {
-    fetchProduct();
-    fetchContact();
-  }, []);
+
+  // // refresh liste
+  // useEffect(() => {
+  //   fetchProduct();
+  //   fetchContact();
+  // }, []);
 
   // columns table
   const columns = [
@@ -185,7 +185,7 @@ const Client = () => {
       headerName: "Telephone",
       flex: 1,
       cellClassName: "name-column--cell",
-    }, 
+    },
     {
       field: "email",
       headerName: "Email",
@@ -256,9 +256,7 @@ const Client = () => {
 
   return (
     <Box m="20px">
-      <Header
-        title="Client"
-      />
+      <Header title="Client" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -309,42 +307,29 @@ const Client = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      
-      <>
-        <style media="print">
-          {`
-          @page {
-            size: auto; /* auto is the initial value */
-            margin:   0mm; /* this affects the margin in the printer settings */
-          }
-          body {
-            margin:   1cm; /* this affects the margin on the content before sending to printer */
-          }
-        `}
-        </style>
-        <table
-          id="printableArea"
-          className="hiddenOnScreen"
-          style={{ display: "none" }}
-        >
-          <thead>
-            <tr>
+
+      <table
+        id="printableArea"
+        className="hiddenOnScreen"
+        style={{ display: "none" }}
+      >
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.field}>{column.headerName}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id}>
               {columns.map((column) => (
-                <th key={column.field}>{column.headerName}</th>
+                <td key={column.field}>{row[column.field]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                {columns.map((column) => (
-                  <td key={column.field}>{row[column.field]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
+          ))}
+        </tbody>
+      </table>
 
       {/* form creation client --------------------------------------------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
@@ -653,11 +638,11 @@ const Client = () => {
                   name="DeScription"
                   label="Email"
                   value={emailu}
-                  onChange={(e)=>setEmailu(e.target.value)}
+                  onChange={(e) => setEmailu(e.target.value)}
                   fullWidth
-                  size='small'
+                  size="small"
                 />
-            </Grid>
+              </Grid>
               {/* <Grid item xs={6}>
    <input type='date' value={selectedDate}
       onChange={(e)=> setSelectedDate(e.target.value)}  style={{

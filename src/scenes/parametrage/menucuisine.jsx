@@ -236,41 +236,28 @@ const MenuCuisine = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      <>
-        <style media="print">
-          {`
-          @page {
-            size: auto; /* auto is the initial value */
-            margin:   0mm; /* this affects the margin in the printer settings */
-          }
-          body {
-            margin:   1cm; /* this affects the margin on the content before sending to printer */
-          }
-        `}
-        </style>
-        <table
-          id="printableArea"
-          className="hiddenOnScreen"
-          style={{ display: "none" }}
-        >
-          <thead>
-            <tr>
+      <table
+        id="printableArea"
+        className="hiddenOnScreen"
+        style={{ display: "none" }}
+      >
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.field}>{column.headerName}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id}>
               {columns.map((column) => (
-                <th key={column.field}>{column.headerName}</th>
+                <td key={column.field}>{row[column.field]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                {columns.map((column) => (
-                  <td key={column.field}>{row[column.field]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
+          ))}
+        </tbody>
+      </table>
     
       {/* from nouveau menu cuisine --------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>

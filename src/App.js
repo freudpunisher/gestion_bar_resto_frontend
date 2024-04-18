@@ -37,6 +37,10 @@ import InvantaireCuisine from "./scenes/stock/invantaire_cuisine.jsx";
 
 // importation sortie stock cuisine
 import SortieStockCuisine from "./scenes/stock/sortie_stock_cuisine.jsx";
+import SortieProduitCuisine from "./scenes/stock/sortie_produit_cuisine.jsx"
+
+// importation rapport
+import Rapport from "./scenes/rapport/index.jsx";
 
 
 function App() {
@@ -83,6 +87,10 @@ function App() {
 
               {/* sortie stock cuisine */}
               <Route path="/sortie/cuisine" element={<SortieStockCuisine />} />
+              <Route path="/sortie/produit" element={<SortieProduitCuisine />} />
+
+              {/* rapport bar-resto*/}
+              <Route path="/rapport" element={<Rapport />} />
 
             </Routes>
           </main>

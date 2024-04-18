@@ -303,7 +303,7 @@ const Sidebar = () => {
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
                   title= {!isCollapsed ? "Finance" : "RFN"}
-                  to="/famille"
+                  to="/rapport"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}

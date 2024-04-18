@@ -39,7 +39,7 @@ const Settings = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-  
+
   // liste data famille
   const FetchFamille = () => {
     axios.get(API_URL + "famille/").then((response) => {
@@ -56,30 +56,10 @@ const Settings = () => {
   const updateFamille = () => {
     axios.patch(API_URL + `famille/${id}/`, { nom: nameu }).then((response) => {
       handleCloseforupdate();
-      //     Swal.fire({
-      //       icon: 'success',
-      //       title: 'operation reussi',
-      //       showConfirmButton: false,
-      //       timer: 3000,
-      // })
       FetchFamille();
     });
   };
 
-  // delete famille
-  const DeleteFamille = () => {
-    axios.delete(API_URL + `famille/${id}/`).then((response) => {
-      handleCloseforupdate();
-      //     Swal.fire({
-      //       icon: 'success',
-      //       title: 'operation reussi',
-      //       showConfirmButton: false,
-      //       timer: 3000,
-      // })
-      FetchFamille();
-    });
-  };
-  
   // create famille
   const createFamille = () => {
     axios
@@ -95,16 +75,10 @@ const Settings = () => {
       .then((response) => {
         console.log(response);
         handleClose();
-        // Swal.fire({
-        //         icon: 'success',
-        //         title: 'operation reussi',
-        //         showConfirmButton: false,
-        //         timer: 3000,
-        //   })
         FetchFamille();
       });
   };
-  
+
   // column table liste famille
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -113,7 +87,7 @@ const Settings = () => {
       headerName: "Nom",
       flex: 1,
       cellClassName: "name-column--cell",
-    },    
+    },
     {
       field: "actions",
       headerName: "Actions",
@@ -135,32 +109,33 @@ const Settings = () => {
             aria-label="delete"
             onClick={() => {
               Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
+                title: "Etez-vous sur de vouloir supprimer cette famille ?",
+                text: "Après validation vous ne pouvez pas recupere l'information supprimer.",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
+                confirmButtonText: "OUi, supprimer le!",
+                cancelButtonText: "Annuler",
               }).then((result) => {
                 if (result.isConfirmed) {
                   axios.delete(API_URL + `famille/${id}/`).then((response) => {
                     Swal.fire({
-                      title: "Deleted!",
-                      text: "Your item has been deleted.",
+                      title: "Suppression!",
+                      text: "La fimille a été supprimer avec succés",
                       icon: "success",
                     });
                     FetchFamille();
                     if (response.status === 204) {
                       Swal.fire({
-                        title: "Deleted!",
-                        text: "Your item has been deleted.",
+                        title: "Suppression!",
+                        text: "La fimille a été supprimer avec succés",
                         icon: "success",
                       });
                     } else {
                       Swal.fire({
-                        title: "Error!",
-                        text: "An error occurred while deleting the item.",
+                        title: "Erreur!",
+                        text: "Une erreur est survenue lors de la suppression .",
                         icon: "error",
                       });
                     }
@@ -173,9 +148,9 @@ const Settings = () => {
           </IconButton>
         </div>
       ),
-    },    
+    },
   ];
-  
+
   return (
     <Box m="20px">
       <Header title="Famille" subtitle="Listes des familles des produits" />
@@ -211,7 +186,7 @@ const Settings = () => {
           },
         }}
       >
-        <Box>          
+        <Box>
           <Button
             variant="contained"
             color="secondary"
@@ -229,7 +204,7 @@ const Settings = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      <table
+      {/* <table
         id="printableArea"
         className="hiddenOnScreen"
         style={{ display: "none" }}
@@ -250,8 +225,9 @@ const Settings = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
 
+      {/* formcreate famille produit ++++++++++++++++++++++++++++++++++ */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -269,7 +245,7 @@ const Settings = () => {
             <Typography variant="h5" mb={1}>
               Ajouter nouvelle Famille
             </Typography>
-            <Grid container spacing={2}>             
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   name="prix"
@@ -278,8 +254,8 @@ const Settings = () => {
                   fullWidth
                   size="small"
                 />
-              </Grid>              
-            </Grid>     
+              </Grid>
+            </Grid>
 
             <Box mt={2} paddingLeft={2}>
               <Button
@@ -303,7 +279,8 @@ const Settings = () => {
           </Stack>
         </Box>
       </Modal>
-      
+
+      {/* form update famille produit +++++++++++++++++++++++++++++++++ */}
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
           sx={{
@@ -322,7 +299,7 @@ const Settings = () => {
               Modifier famille
             </Typography>
 
-            <Grid container spacing={2}>             
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   name="name"
@@ -332,7 +309,7 @@ const Settings = () => {
                   fullWidth
                   size="medium"
                 />
-              </Grid>              
+              </Grid>
             </Grid>
 
             <Box mt={2}>
