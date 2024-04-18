@@ -17,7 +17,15 @@ import {
   Paper,
   InputLabel,
   TablePagination,
+  
 } from "@mui/material";
+
+import {
+  MaterialReactTable,
+  createMRTColumnHelper,
+  useMaterialReactTable,
+} from 'material-react-table';
+
 import { tokens } from "../../theme";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
@@ -28,6 +36,9 @@ import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 import Swal from 'sweetalert2';
 import IconButton from "@mui/material/IconButton";
+import { jsPDF } from 'jspdf'; //or use your library of choice here
+import autoTable from 'jspdf-autotable';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const rowsPerPageOptions = [5, 10, 25];
 
@@ -128,6 +139,7 @@ function StockInitialBar() {
       flex: 1,
       cellClassName: "name-column--cell",
     },
+    
     {
       field: "stock_qte",
       headerName: "Etat Stock",
@@ -198,6 +210,68 @@ function StockInitialBar() {
       ),
     },
   ];
+
+  const handleExportRows = (rows) => {
+    const doc = new jsPDF();
+    const tableData = rows.map((row) => Object.values(row.original));
+    const tableHeaders = columns.map((c) => c.header);
+
+    autoTable(doc, {
+      head: [tableHeaders],
+      body: tableData,
+    });
+
+    doc.save('mrt-pdf-example.pdf');
+  };
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableRowSelection: true,
+    columnFilterDisplayMode: 'popover',
+    paginationDisplayMode: 'pages',
+    positionToolbarAlertBanner: 'bottom',
+    renderTopToolbarCustomActions: ({ table }) => (
+      <Box
+        sx={{
+          display: 'flex',
+          gap: '16px',
+          padding: '8px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Button
+          disabled={table.getPrePaginationRowModel().rows.length === 0}
+          //export all rows, including from the next page, (still respects filtering and sorting)
+          onClick={() =>
+            handleExportRows(table.getPrePaginationRowModel().rows)
+          }
+          startIcon={<FileDownloadIcon />}
+        >
+          Export All Rows
+        </Button>
+        <Button
+          disabled={table.getRowModel().rows.length === 0}
+          //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+          onClick={() => handleExportRows(table.getRowModel().rows)}
+          startIcon={<FileDownloadIcon />}
+        >
+          Export Page Rows
+        </Button>
+        <Button
+          disabled={
+            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+          }
+          //only export selected rows
+          onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
+          startIcon={<FileDownloadIcon />}
+        >
+          Export Selected Rows
+        </Button>
+      </Box>
+    ),
+  });
+
     
   return (
     <Box m="20px">
@@ -276,7 +350,7 @@ function StockInitialBar() {
             </Button>
           </Grid>
           {/*etat stock liste */}
-          <Grid item xs={12}>
+          <Grid item xs={12}>            
             <Box
                m="40px 0 0 0"
               //  height="75vh"
@@ -309,13 +383,14 @@ function StockInitialBar() {
                  },
                }}
             >
-              <DataGrid
+              <MaterialReactTable table={table} />
+              {/* <DataGrid
                 checkboxSelection
                 ref={dataGridRef}
                 rows={data}
                 columns={columns}
                 components={{ Toolbar: GridToolbar }}
-              />
+              /> */}
               {/* <TableContainer
                 component={Paper}
                 sx={{ backgroundColor: "inherit" }}
