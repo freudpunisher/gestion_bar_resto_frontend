@@ -8,10 +8,18 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
+import LineChartCommande from "../../components/LineChartCommande";
 import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
+// icone
+import QrCode2Icon from '@mui/icons-material/QrCode2'; // icone produit
+import PeopleIcon from '@mui/icons-material/People'; // icone fornisseur et client
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'; // user
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'; // approvisinnement
+import ReceiptIcon from '@mui/icons-material/Receipt'; // commande
+import PaidIcon from '@mui/icons-material/Paid'; // montant
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -23,7 +31,7 @@ const Dashboard = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="TABLEAU DE BORD" subtitle="Bienvenu sur le Tableau de bord" />
 
-        <Box>
+        {/* <Box>
           <Button
             sx={{
               backgroundColor: colors.blueAccent[700],
@@ -36,7 +44,7 @@ const Dashboard = () => {
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Télécharger le Rapport
           </Button>
-        </Box>
+        </Box> */}
       </Box>
 
       {/* GRID & CHARTS */}
@@ -47,6 +55,7 @@ const Dashboard = () => {
         gap="20px"
       >
         {/* ROW 1 */}
+        {/* Produits */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -58,15 +67,15 @@ const Dashboard = () => {
             title="3"
             subtitle="Produits"
             progress="0.80"
-            increase="+43%"
+            increase="+80%"
             icon={
-              <TrafficIcon
+              <QrCode2Icon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
-        
+        {/* Fournisseurs */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -80,12 +89,13 @@ const Dashboard = () => {
             progress="0.50"
             increase="+21%"
             icon={
-              <PointOfSaleIcon
+              <PeopleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Clients */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -99,12 +109,13 @@ const Dashboard = () => {
             progress="0.30"
             increase="+5%"
             icon={
-              <PersonAddIcon
+              <PeopleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Utilisateurs */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -118,7 +129,7 @@ const Dashboard = () => {
             progress="0.75"
             increase="+14%"
             icon={
-              <EmailIcon
+              <ManageAccountsIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -126,6 +137,7 @@ const Dashboard = () => {
         </Box>
 
         {/* ROW 2 */}
+        {/* Nombre approvisionnement Bar */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -139,12 +151,13 @@ const Dashboard = () => {
             progress="0.75"
             increase="+14%"
             icon={
-              <EmailIcon
+              <PrecisionManufacturingIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* nombre approvisionnement Cuisine */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -158,12 +171,13 @@ const Dashboard = () => {
             progress="0.50"
             increase="+21%"
             icon={
-              <PointOfSaleIcon
+              <PrecisionManufacturingIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Nombre commande bar */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -177,12 +191,13 @@ const Dashboard = () => {
             progress="0.30"
             increase="+5%"
             icon={
-              <PersonAddIcon
+              <PointOfSaleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Nombre commande cuisine */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -196,7 +211,7 @@ const Dashboard = () => {
             progress="0.80"
             increase="+43%"
             icon={
-              <TrafficIcon
+              <PointOfSaleIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -204,6 +219,7 @@ const Dashboard = () => {
         </Box>
 
         {/* ROW 3 */}
+        {/* Montant approvisionnement bar */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -217,12 +233,13 @@ const Dashboard = () => {
             progress="0.75"
             increase="+14%"
             icon={
-              <EmailIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Montant approvisionnement cuisine */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -236,12 +253,13 @@ const Dashboard = () => {
             progress="0.50"
             increase="+21%"
             icon={
-              <PointOfSaleIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Montant commande bar */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -255,12 +273,13 @@ const Dashboard = () => {
             progress="0.30"
             increase="+5%"
             icon={
-              <PersonAddIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
           />
         </Box>
+        {/* Montant commande cuisine */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -274,7 +293,7 @@ const Dashboard = () => {
             progress="0.80"
             increase="+43%"
             icon={
-              <TrafficIcon
+              <PaidIcon
                 sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
               />
             }
@@ -282,6 +301,7 @@ const Dashboard = () => {
         </Box>
 
         {/* ROW 4 */}
+        {/* graphique approvisitionnement */}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -322,6 +342,7 @@ const Dashboard = () => {
             <LineChart isDashboard={true} />
           </Box>
         </Box>
+        {/* graphique commande */}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -359,7 +380,7 @@ const Dashboard = () => {
             </Box> */}
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            <LineChartCommande isDashboard={true} />
           </Box>
         </Box>
         {/* <Box
@@ -380,6 +401,7 @@ const Dashboard = () => {
         </Box> */}
 
         {/* ROW 5 */}
+        {/* graphique montant */}
         <Box
           gridColumn="span 8"
           gridRow="span 2"
@@ -396,6 +418,7 @@ const Dashboard = () => {
             <BarChart isDashboard={true} />
           </Box>
         </Box>
+        {/* Liste message niveau alert quantite */}
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -435,19 +458,20 @@ const Dashboard = () => {
                   {transaction.user}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                {transaction.cost}
               </Box>
             </Box>
           ))}
         </Box>
 
         {/* ROW 6 */}
+        {/* Stock Produit */}
         <Box
           gridColumn="span 6"
           gridRow="span 2"
@@ -487,17 +511,18 @@ const Dashboard = () => {
                   {transaction.user}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                {transaction.cost}
               </Box>
             </Box>
           ))}
         </Box>
+        {/* Produits les plus commander */}
         <Box
           gridColumn="span 3"
           gridRow="span 2"
@@ -537,17 +562,18 @@ const Dashboard = () => {
                   {transaction.user}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                {transaction.cost}
               </Box>
             </Box>
           ))}
         </Box>
+        {/* Produits les plus approvisinner */}
         <Box
           gridColumn="span 3"
           gridRow="span 2"
@@ -587,13 +613,13 @@ const Dashboard = () => {
                   {transaction.user}
                 </Typography>
               </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
+              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                ${transaction.cost}
+                {transaction.cost}
               </Box>
             </Box>
           ))}

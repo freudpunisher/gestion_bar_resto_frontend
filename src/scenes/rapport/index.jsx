@@ -33,8 +33,7 @@ const rows = [
 
 const Rapport = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  
+  const colors = tokens(theme.palette.mode);  
 
   return (
     <Box m="20px">

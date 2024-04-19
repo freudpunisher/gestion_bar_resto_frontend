@@ -115,13 +115,13 @@ const Sidebar = () => {
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title={!isCollapsed ? "Tableau Boss" : "T.BS"}
-                  to="/doshbord/boss"
+                  title={!isCollapsed ? "Tableau" : "T.B"}
+                  to="/"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
-                <Item
+                {/* <Item
                   title={!isCollapsed ? "Tableau Gerent" : "T.GT"}
                   to="/doshbord/gerent"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
@@ -141,7 +141,7 @@ const Sidebar = () => {
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />           */}
               </AccordionDetails>
             </Accordion>
 
