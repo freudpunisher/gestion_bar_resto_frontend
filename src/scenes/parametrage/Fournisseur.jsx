@@ -68,6 +68,7 @@ const Fournisseur = () => {
         });
       });
   };
+
   const updateUnite = () => {
     axios
       .patch(API_URL + `fournisseur/${id}/`, {
@@ -89,6 +90,7 @@ const Fournisseur = () => {
         });
       });
   };
+  
   // liste fournisseur
   const fetchContact = () => {
     axios.get(API_URL + "fournisseur/").then((response) => {
@@ -354,14 +356,14 @@ const Fournisseur = () => {
                   createUnite();
                 }}
               >
-                Save
+                Enregistrer
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleClose}
               >
-                close
+                Fermer
               </Button>
             </Box>
           </Stack>

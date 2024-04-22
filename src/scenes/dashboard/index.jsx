@@ -20,10 +20,28 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'; // user
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'; // approvisinnement
 import ReceiptIcon from '@mui/icons-material/Receipt'; // commande
 import PaidIcon from '@mui/icons-material/Paid'; // montant
+import React, {isValidElement, useEffect,useState, } from "react";
+import { API_URL } from "../../data/Api";
+import axios from "axios";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [dataDashbord, setdataDashbord] = useState("");
+  const [dataPordEnter, setdataPordEnter] = useState();
+
+  const fetchDashbordData = () => {
+    axios.get(API_URL + "dashbord/data/").then((response) => {
+      setdataDashbord(response.data);
+      console.log();
+    });
+  };
+
+  
+  // refresh liste
+  useEffect(() => {
+    fetchDashbordData(); 
+  }, []);
 
   return (
     <Box m="20px">
@@ -55,7 +73,7 @@ const Dashboard = () => {
         gap="20px"
       >
         {/* ROW 1 */}
-        {/* Produits */}
+        {/* Produits nb_produit */}
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -64,7 +82,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="3"
+            title={isValidElement ? dataDashbord.nb_produit : '0'}
             subtitle="Produits"
             progress="0.80"
             increase="+80%"
@@ -84,7 +102,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="8"
+            title={dataDashbord.nb_fournisseur}
             subtitle="Fournisseurs"
             progress="0.50"
             increase="+21%"
@@ -104,7 +122,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="4"
+            title={dataDashbord.nb_client}
             subtitle="Clients"
             progress="0.30"
             increase="+5%"
@@ -124,7 +142,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12"
+            title={dataDashbord.nb_user}
             subtitle="Utilisateurs"
             progress="0.75"
             increase="+14%"
@@ -146,7 +164,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="12"
+            title={dataDashbord.mv_entre_br}
             subtitle="Nombre approvisionnement Bar"
             progress="0.75"
             increase="+14%"
@@ -166,7 +184,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="8"
+            title={dataDashbord.mv_entre_cs}
             subtitle="nombre approvisionnement Cuisine"
             progress="0.50"
             increase="+21%"
@@ -186,7 +204,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="4"
+            title={dataDashbord.mv_sortie_br}
             subtitle="Nombre commande bar"
             progress="0.30"
             increase="+5%"
@@ -206,7 +224,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="3"
+            title={dataDashbord.mv_sortie_cs}
             subtitle="Nombre commande cuisine"
             progress="0.80"
             increase="+43%"
@@ -228,7 +246,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="3 000 000 BIF"
+            title={dataDashbord.mnt_app_br+" BIF"}
             subtitle="Montant approvisionnement bar"
             progress="0.75"
             increase="+14%"
@@ -248,7 +266,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="500 000 BIF"
+            title={dataDashbord.mnt_app_cs+" BIF"}
             subtitle="Montant approvisionnement cuisine"
             progress="0.50"
             increase="+21%"
@@ -268,7 +286,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="3 500 000 BIF"
+            title={dataDashbord.mnt_comm_br+" BIF"}
             subtitle="Montant commande bar"
             progress="0.30"
             increase="+5%"
@@ -288,7 +306,7 @@ const Dashboard = () => {
           justifyContent="center"
         >
           <StatBox
-            title="700 000 BIF"
+            title={dataDashbord.mnt_comm_cs+" BIF"}
             subtitle="Montant commande cuisine"
             progress="0.80"
             increase="+43%"
@@ -437,9 +455,9 @@ const Dashboard = () => {
               Liste message niveau alert quantite
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {dataDashbord.produit_plus_cs_br && dataDashbord.produit_niveau_alerts.map((transaction) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={transaction.id}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -452,28 +470,28 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction.code}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.nom}
                 </Typography>
               </Box>
-              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
+              <Box color={colors.grey[100]}>{transaction.niveau_alert}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                {transaction.cost}
+                {transaction.stock_qte}
               </Box>
             </Box>
           ))}
         </Box>
 
         {/* ROW 6 */}
-        {/* Stock Produit */}
+        {/* Produits les plus commander bar */}
         <Box
-          gridColumn="span 6"
+          gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -487,12 +505,13 @@ const Dashboard = () => {
             p="15px"
           >
             <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Stock Produit
+            Produits les plus commander au bar
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          
+          {dataDashbord.produit_plus_cs_br && dataDashbord.produit_plus_cs_br.map((transaction) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={transaction.produit_id}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -505,26 +524,26 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction.produit__code}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.produit__nom}
                 </Typography>
               </Box>
-              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
+              <Box color={colors.grey[100]}>{transaction.nbr_prod}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                {transaction.cost}
+                {transaction.tl_quantite}
               </Box>
             </Box>
           ))}
         </Box>
-        {/* Produits les plus commander */}
+        {/* Produits les plus commander cuisine  */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -538,12 +557,12 @@ const Dashboard = () => {
             p="15px"
           >
             <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
-              Produits les plus commander
+              Produits les plus commander au cuisine
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {dataDashbord.produit_plus_cs && dataDashbord.produit_plus_cs.map((transaction, i) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={transaction.recette_id}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -556,26 +575,26 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction.recette__name}
                 </Typography>
-                <Typography color={colors.grey[100]}>
-                  {transaction.user}
-                </Typography>
+                {/* <Typography color={colors.grey[100]}>
+                  {transaction.produit__nom}
+                </Typography> */}
               </Box>
-              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
+              <Box color={colors.grey[100]}>{transaction.nbr_prod}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                {transaction.cost}
+                {transaction.tl_quantite}
               </Box>
             </Box>
           ))}
-        </Box>
+        </Box> 
         {/* Produits les plus approvisinner */}
         <Box
-          gridColumn="span 3"
+          gridColumn="span 4"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
           overflow="auto"
@@ -592,9 +611,10 @@ const Dashboard = () => {
               Produits les plus approvisinner
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          
+          {dataDashbord.produit_plus_et && dataDashbord.produit_plus_et.map((transaction) => (
             <Box
-              key={`${transaction.txId}-${i}`}
+              key={transaction.produit_id}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
@@ -607,19 +627,19 @@ const Dashboard = () => {
                   variant="h5"
                   fontWeight="600"
                 >
-                  {transaction.txId}
+                  {transaction.produit__code}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {transaction.user}
+                  {transaction.produit__nom}
                 </Typography>
               </Box>
-              {/* <Box color={colors.grey[100]}>{transaction.date}</Box> */}
+              <Box color={colors.grey[100]}>{transaction.nbr_prod}</Box>
               <Box
                 backgroundColor={colors.greenAccent[500]}
                 p="5px 10px"
                 borderRadius="4px"
               >
-                {transaction.cost}
+                {transaction.tl_quantite}
               </Box>
             </Box>
           ))}
