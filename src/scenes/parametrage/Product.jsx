@@ -266,7 +266,6 @@ const Product = () => {
       ),
     },
   ];
-
   return (
     <Box m="20px">
       <Header title="Produits" subtitle="Listes des produits" />
@@ -339,7 +338,7 @@ const Product = () => {
           {rows.map((row) => (
             <tr key={row.id}>
               {columns.map((column) => (
-                <td key={column.field}>{row[column.field]}</td>
+                <th key={column.field}>{column.headerName}</th>
               ))}
             </tr>
           ))}
