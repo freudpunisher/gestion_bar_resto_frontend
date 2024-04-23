@@ -14,9 +14,9 @@ import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
-import Unite from "./scenes/parametrage/Unitedemesure.jsx"
-import Settings from "./scenes/parametrage/famille.jsx"
-import Product from "./scenes/parametrage/Product.jsx"
+import Unite from "./scenes/parametrage/Unitedemesure.jsx";
+import Settings from "./scenes/parametrage/famille.jsx";
+import Product from "./scenes/parametrage/Product.jsx";
 // import Calendar from "./scenes/calendar/calendar";
 import Example from "./scenes/test table";
 import MenuCuisine from "./scenes/parametrage/menucuisine.jsx";
@@ -28,6 +28,11 @@ import InventaireBar from "./scenes/stock/inventiare_bar.jsx";
 import ListAvenant from "./scenes/avenant/ListeAvenant.jsx";
 import LisCommandeBar from "./scenes/Approvisionnement/Bar/ListCommandeBar.jsx";
 import CommandeBarEntre from "./scenes/Approvisionnement/Bar/CommandeBar.jsx";
+import LisEntreCuisine from "./scenes/Approvisionnement/cuisine/ListEntreCuisine.jsx";
+import EntreCuisine from "./scenes/Approvisionnement/cuisine/EntreCuisine.jsx";
+import CommandeBar from "./scenes/commande/CommandeBar.jsx";
+import ListSortieBar from "./scenes/Sortie/Bar/ListSortieBar.jsx";
+import ListFactureBar from "./scenes/Facture/ListFactureBar.jsx";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -54,7 +59,18 @@ function App() {
               <Route path="/cuisinemenu" element={<MenuCuisine />} />
               <Route path="/Fournisseur" element={<Fournisseur />} />
               <Route path="/entre/bar" element={<LisCommandeBar />} />
-              <Route path="/entre/bar/commande" element={<CommandeBarEntre />} />
+              <Route path="/entre/cuisine" element={<LisEntreCuisine />} />
+              <Route
+                path="/entre/bar/commande"
+                element={<CommandeBarEntre />}
+              />
+              <Route
+                path="/entre/cuisine/commande"
+                element={<EntreCuisine />}
+              />
+              <Route path="/entre/commande/bar" element={<CommandeBar />} />
+              <Route path="/sortie/bar" element={<ListSortieBar />} />
+              <Route path="/facture/bar" element={<ListFactureBar />} />
               <Route path="/client" element={<Client />} />
               <Route path="/stockinitial" element={<StockInitial />} />
               <Route path="/inventiarebar" element={<InventaireBar />} />

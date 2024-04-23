@@ -1,6 +1,18 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography,Divider, useTheme, Select, FormControl, InputLabel,Accordion, AccordionSummary,AccordionDetails } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Divider,
+  useTheme,
+  Select,
+  FormControl,
+  InputLabel,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -16,10 +28,9 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import SettingsIcon from '@mui/icons-material/Settings';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
-
+import SettingsIcon from "@mui/icons-material/Settings";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -33,8 +44,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       onClick={() => setSelected(title)}
       icon={icon}
     >
-              
-      <Typography color='white'>{title}</Typography>
+      <Typography color="white">{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
@@ -47,12 +57,15 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
 
   return (
-    <Box sx={{
-        "& .pro-sidebar-inner": {background: `${colors.primary[400]} !important`,},
-        "& .pro-icon-wrapper": {backgroundColor: "transparent !important",},
-        "& .pro-inner-item": {padding: "5px 35px 5px 20px !important",},
-        "& .pro-inner-item:hover": {color: "#4d8d9e !important",},
-        "& .pro-menu-item.active": {color: "#4d8d9e !important",},
+    <Box
+      sx={{
+        "& .pro-sidebar-inner": {
+          background: `${colors.primary[400]} !important`,
+        },
+        "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
+        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
+        "& .pro-inner-item:hover": { color: "#4d8d9e !important" },
+        "& .pro-menu-item.active": { color: "#4d8d9e !important" },
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
@@ -64,26 +77,26 @@ const Sidebar = () => {
             style={{
               margin: "10px 0px 20px 0px",
               color: colors.grey[200],
-            }}>
-
+            }}
+          >
             {!isCollapsed && (
               <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                ml="15px">
-
-                <Typography variant="h3">
-                  BUGARAMA
-                </Typography>
+                ml="15px"
+              >
+                <Typography variant="h3">BUGARAMA</Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                  <MenuOutlinedIcon  color='white'/>
+                  <MenuOutlinedIcon color="white" />
                 </IconButton>
               </Box>
             )}
           </MenuItem>
-          <Box sx={{ marginRight: '8px'}} paddingLeft={isCollapsed ? undefined : "5%"}>
-
+          <Box
+            sx={{ marginRight: "8px" }}
+            paddingLeft={isCollapsed ? undefined : "5%"}
+          >
             {/* menu Tableau de bord */}
             {/* <Item
               title="Tableau de bord"
@@ -94,18 +107,25 @@ const Sidebar = () => {
             /> */}
 
             {/* menu Tableau de bord */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px',
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <HomeOutlinedIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <HomeOutlinedIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Tableau de bord</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Tableau Boss"
                   to="/doshbord/boss"
@@ -126,30 +146,37 @@ const Sidebar = () => {
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                /> 
+                />
                 <Item
                   title="Tableau Cuisinié"
                   to="/doshbord/gerent"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />
               </AccordionDetails>
             </Accordion>
 
             {/* menu stock initial */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px',
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Stock Initial</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Stock Bar"
                   to="/famille"
@@ -163,23 +190,30 @@ const Sidebar = () => {
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />
               </AccordionDetails>
             </Accordion>
 
             {/* menu inventaire */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px',
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Inventaire</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Bar"
                   to="/famille"
@@ -193,23 +227,30 @@ const Sidebar = () => {
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />
               </AccordionDetails>
             </Accordion>
 
             {/* menu approvisionnement */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px',
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Approvisionner</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Bar"
                   to="/entre/bar"
@@ -219,30 +260,74 @@ const Sidebar = () => {
                 />
                 <Item
                   title="Cuisine"
-                  to="/unite"
+                  to="/entre/cuisine"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />
               </AccordionDetails>
             </Accordion>
 
+            {/* menu Sortie */}
+            {/* <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
+                <Typography variant="subtitle1">Sortie</Typography>
+              </AccordionSummary>
+              <Divider component="li" />
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
+                <Item
+                  title="Bar"
+                  to="/sortie/bar"
+                  icon={<TrendingFlatIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Cuisine"
+                  to="/entre/cuisine"
+                  icon={<TrendingFlatIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+              </AccordionDetails>
+            </Accordion> */}
+
             {/* menu commande */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px', 
-              width: '100%', '&:before': { backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Commande</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Bar"
-                  to="/famille"
+                  to="/entre/commande/bar"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
@@ -253,69 +338,126 @@ const Sidebar = () => {
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />
+              </AccordionDetails>
+            </Accordion>
+            {/* menu facture */}
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
+                <Typography variant="subtitle1">Facture</Typography>
+              </AccordionSummary>
+              <Divider component="li" />
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
+                <Item
+                  title="Bar"
+                  to="/facture/bar"
+                  icon={<TrendingFlatIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title="Cuisine"
+                  to="/entre/cuisine"
+                  icon={<TrendingFlatIcon />}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </AccordionDetails>
             </Accordion>
 
             {/* menu Sortie Stock */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px', 
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px' }}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Sortie Stock</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{ width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Stock Cuisine "
                   to="/famille"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />        
+                />
               </AccordionDetails>
             </Accordion>
-            
+
             {/* menu rapport */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px', 
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Rapport</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Finance"
                   to="/famille"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />        
+                />
               </AccordionDetails>
             </Accordion>
 
             {/* menu parametrage */}
-            <Accordion sx={{ 
-              backgroundColor: 'inherit',
-              padding: '0px 8px 0px 8px', 
-              width: '100%', '&:before': {backgroundColor: 'transparent !important',},
-              borderWidth:'0' 
-            }}>
-              <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
+            <Accordion
+              sx={{
+                backgroundColor: "inherit",
+                padding: "0px 8px 0px 8px",
+                width: "100%",
+                "&:before": { backgroundColor: "transparent !important" },
+                borderWidth: "0",
+              }}
+            >
+              <AccordionSummary
+                id="panel-header"
+                aria-controls="panel-content"
+                expandIcon={<ExpandMoreIcon />}
+              >
+                <SettingsIcon sx={{ marginRight: "14px" }} />
                 <Typography variant="subtitle1">Parametrage</Typography>
               </AccordionSummary>
               <Divider component="li" />
-              <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
+              <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
                   title="Familles"
                   to="/famille"
@@ -357,9 +499,9 @@ const Sidebar = () => {
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
-                />                          
+                />
               </AccordionDetails>
-            </Accordion>          
+            </Accordion>
           </Box>
         </Menu>
       </ProSidebar>

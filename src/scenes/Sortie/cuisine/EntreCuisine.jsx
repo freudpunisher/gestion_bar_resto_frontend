@@ -34,7 +34,7 @@ import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const CommandeBarEntre = () => {
+const EntreCuisine = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const blue = colors.blueAccent[400];
@@ -95,7 +95,7 @@ const CommandeBarEntre = () => {
         showConfirmButton: false,
         timer: 3000,
       });
-      navigate("/entre/bar");
+      navigate("/entre/cuisine");
     });
   };
 
@@ -400,4 +400,4 @@ const CommandeBarEntre = () => {
   );
 };
 
-export default CommandeBarEntre;
+export default EntreCuisine;

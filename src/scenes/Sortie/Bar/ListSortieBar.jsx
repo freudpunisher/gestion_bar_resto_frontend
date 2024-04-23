@@ -39,7 +39,7 @@ import { useNavigate } from "react-router-dom";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const LisCommandeBar = () => {
+const ListSortieBar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -76,7 +76,7 @@ const LisCommandeBar = () => {
   const [rapportu, setrapportu] = useState();
   const [prix_vente, setprix_vente] = useState();
   const [prix_venteu, setprix_venteu] = useState();
-  const [id_fournisseur, setid_fournisseur] = useState();
+  const [id_client, setid_client] = useState();
   const [listentreproduit, setlistentreproduit] = useState([]);
   const [listproduit, setlistproduit] = useState([]);
   const [openModalv, setopenModalv] = useState(false);
@@ -106,17 +106,17 @@ const LisCommandeBar = () => {
 
   //function that gonnna fetch data of fournisseur
   const fetchFournisseur = () => {
-    axios.get(API_URL + "fournisseur/").then((res) => setData(res.data));
+    axios.get(API_URL + "client/").then((res) => setData(res.data));
   };
 
   // creation mouvement entre
 
   const creationMouvement = () => {
-    console.log(id_fournisseur);
-    axios.post(API_URL + "mouvement/entre/", {
+    // console.log(id_fournisseur);
+    axios.post(API_URL + "mouvement/sortie/", {
       reference: generatedCode,
       description: description,
-      fournisseur: id_fournisseur,
+      client: id_client,
       created_by: 1,
     });
   };
@@ -163,9 +163,6 @@ const LisCommandeBar = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-
-
-  
 
   const createUnite = () => {
     axios
@@ -485,7 +482,7 @@ const LisCommandeBar = () => {
   return (
     <Box m="20px">
       <Header
-        title="listes des commandes"
+        title="listes des Sorties"
         // subtitle="Listes des produits"
       />
       <Box
@@ -535,7 +532,7 @@ const LisCommandeBar = () => {
             sx={{ marginRight: "auto" }}
             onClick={() => setopenModal(true)}
           >
-            Ajouter un commande
+            Ajouter une sortie
           </Button>
           {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
@@ -633,7 +630,7 @@ const LisCommandeBar = () => {
                     size="small"
                     color="secondary"
                     onChange={(e) => {
-                      setid_fournisseur(e.target.value);
+                      setid_client(e.target.value);
                       console.log(e.target.value);
                     }}
                   >
@@ -941,4 +938,4 @@ const LisCommandeBar = () => {
   );
 };
 
-export default LisCommandeBar;
+export default ListSortieBar;

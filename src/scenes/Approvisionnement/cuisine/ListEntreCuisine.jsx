@@ -39,7 +39,7 @@ import { useNavigate } from "react-router-dom";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const LisCommandeBar = () => {
+const LisEntreCuisine = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -113,12 +113,23 @@ const LisCommandeBar = () => {
 
   const creationMouvement = () => {
     console.log(id_fournisseur);
-    axios.post(API_URL + "mouvement/entre/", {
-      reference: generatedCode,
-      description: description,
-      fournisseur: id_fournisseur,
-      created_by: 1,
-    });
+    axios
+      .post(API_URL + "mouvement/entre/", {
+        reference: generatedCode,
+        description: description,
+        fournisseur: id_fournisseur,
+        created_by: 1,
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "operation  réussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        setopenModal(false);
+        fetchentreproduit();
+      });
   };
 
   // listes des mouvement entre
@@ -149,7 +160,7 @@ const LisCommandeBar = () => {
   // Example usage:
   const code = generateRandomCode(4);
   const [generatedCode, setGeneratedCode] = useState(
-    `AP${currentYear}${currentMonth}${code}BR`
+    `AP${currentYear}${currentMonth}${code}CS`
   );
   const fetchProduct = () => {
     axios.get(API_URL + "produit/").then((response) => {
@@ -163,9 +174,6 @@ const LisCommandeBar = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-
-
-  
 
   const createUnite = () => {
     axios
@@ -399,7 +407,7 @@ const LisCommandeBar = () => {
             aria-label="edit"
             onClick={() => {
               console.log(params.row);
-              navigate("/entre/bar/commande", { state: params.row.id });
+              navigate("/entre/cuisine/commande", { state: params.row.id });
             }}
           >
             <FolderIcon />
@@ -485,7 +493,7 @@ const LisCommandeBar = () => {
   return (
     <Box m="20px">
       <Header
-        title="listes des commandes"
+        title="listes des Entres"
         // subtitle="Listes des produits"
       />
       <Box
@@ -535,7 +543,7 @@ const LisCommandeBar = () => {
             sx={{ marginRight: "auto" }}
             onClick={() => setopenModal(true)}
           >
-            Ajouter un commande
+            Ajouter un entre
           </Button>
           {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
@@ -891,7 +899,7 @@ const LisCommandeBar = () => {
                   <TableRow>
                     {/* <TableCell>ID</TableCell> */}
                     <TableCell>Produit</TableCell>
-                    {/* <TableCell>Mouvement Entre</TableCell> */}
+                    <TableCell>Mouvement Entre</TableCell>
                     <TableCell>Quantite</TableCell>
                     <TableCell>Prix Unitaire</TableCell>
                     <TableCell>Prix Total</TableCell>
@@ -905,7 +913,7 @@ const LisCommandeBar = () => {
                         {row.id}
                       </TableCell> */}
                       <TableCell>{row.produit}</TableCell>
-                      {/* <TableCell>{row.mouvement_entre}</TableCell> */}
+                      <TableCell>{row.mouvement_entre}</TableCell>
                       <TableCell>{row.quantite}</TableCell>
                       <TableCell>{row.prix_unitaire}</TableCell>
                       <TableCell>{row.prix_total}</TableCell>
@@ -919,7 +927,7 @@ const LisCommandeBar = () => {
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell>
+                    <TableCell sx={{ border: 0 }}>
                       {validated_by == null ? (
                         <Button variant="contained" color="secondary">
                           valide
@@ -928,8 +936,8 @@ const LisCommandeBar = () => {
                         ""
                       )}
                     </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell sx={{ border: 0 }}></TableCell>
+                    <TableCell sx={{ border: 0 }}></TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
@@ -941,4 +949,4 @@ const LisCommandeBar = () => {
   );
 };
 
-export default LisCommandeBar;
+export default LisEntreCuisine;
