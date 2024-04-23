@@ -113,19 +113,30 @@ const LisCommandeBar = () => {
 
   const creationMouvement = () => {
     console.log(id_fournisseur);
-    axios.post(API_URL + "mouvement/entre/", {
-      reference: generatedCode,
-      description: description,
-      fournisseur: id_fournisseur,
-      created_by: 1,
-    });
+    axios
+      .post(API_URL + "mouvement/entre/", {
+        reference: generatedCode,
+        description: description,
+        fournisseur: id_fournisseur,
+        created_by: 1,
+      })
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: "operation  réussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        setopenModal(false);
+        fetchentreproduit();
+      });
   };
 
   // listes des mouvement entre
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/").then((response) => {
-      setlistentreproduit(response.data);
+    axios.get(API_URL + "mouvement/entre/type/2/").then((response) => {
+      setlistentreproduit([response.data]);
     });
   };
 
@@ -163,9 +174,6 @@ const LisCommandeBar = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-
-
-  
 
   const createUnite = () => {
     axios
@@ -919,7 +927,7 @@ const LisCommandeBar = () => {
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell>
+                    <TableCell sx={{ border: 0 }}>
                       {validated_by == null ? (
                         <Button variant="contained" color="secondary">
                           valide
@@ -928,8 +936,8 @@ const LisCommandeBar = () => {
                         ""
                       )}
                     </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell></TableCell>
+                    <TableCell sx={{ border: 0 }}></TableCell>
+                    <TableCell sx={{ border: 0 }}></TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
