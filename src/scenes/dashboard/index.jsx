@@ -8,6 +8,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
+import LineChartApp from "../../components/LineChartApp";
 import LineChartCommande from "../../components/LineChartCommande";
 import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
@@ -42,6 +43,32 @@ const Dashboard = () => {
   useEffect(() => {
     fetchDashbordData(); 
   }, []);
+
+  const DataApprovionnement = [
+    {
+      id: "Cuisine",
+      color: tokens("dark").greenAccent[500],
+      data: dataDashbord.mouvement_entre_csn ,
+    },
+    {
+      id: "Bar",
+      color: tokens("dark").blueAccent[300],
+      data: dataDashbord.mouvement_entre_bar,
+    },
+  ];
+
+  const DataCommande = [
+    {
+      id: "Cuisine",
+      color: tokens("dark").greenAccent[500],
+      data: dataDashbord.mouvement_sortie_csn ,
+    },
+    {
+      id: "Bar",
+      color: tokens("dark").blueAccent[300],
+      data: dataDashbord.mouvement_sortie_bar,
+    },
+  ];
 
   return (
     <Box m="20px">
@@ -357,7 +384,7 @@ const Dashboard = () => {
             </Box> */}
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+            <LineChart isDashboard={true}/>
           </Box>
         </Box>
         {/* graphique commande */}
