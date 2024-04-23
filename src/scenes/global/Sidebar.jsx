@@ -5,6 +5,14 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import StoreIcon from '@mui/icons-material/Store';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
@@ -34,7 +42,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       icon={icon}
     >
               
-      <Typography color='white'>{title}</Typography>
+      <Typography>{title}</Typography>
       <Link to={to} />
     </MenuItem>
   );
@@ -45,7 +53,7 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
-
+  
   return (
     <Box sx={{
         "& .pro-sidebar-inner": {background: `${colors.primary[400]} !important`,},
@@ -73,7 +81,7 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px">
 
-                <Typography variant="h3">
+                <Typography variant="h2" sx={{fontWeight:"bold"}}>
                   BUGARAMA
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
@@ -101,39 +109,39 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <HomeOutlinedIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Tableau de bord</Typography>
+                <DashboardIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Tableau de bord</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Tableau Boss"
-                  to="/doshbord/boss"
-                  icon={<TrendingFlatIcon />}
+                  title={!isCollapsed ? "Tableau" : "T.B"}
+                  to="/"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                {/* <Item
+                  title={!isCollapsed ? "Tableau Gerent" : "T.GT"}
+                  to="/doshbord/gerent"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Tableau Gerent"
-                  to="/doshbord/gerent"
-                  icon={<TrendingFlatIcon />}
-                  selected={selected}
-                  setSelected={setSelected}
-                />
-                <Item
-                  title="Tableau Bar-Main"
-                  to="/doshbord/gerent"
-                  icon={<TrendingFlatIcon />}
+                  title={!isCollapsed ? "Tableau Bar-Main" : "T.BM"}
+                  to="/doshbord/barmain"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 /> 
                 <Item
-                  title="Tableau Cuisinié"
-                  to="/doshbord/gerent"
-                  icon={<TrendingFlatIcon />}
+                  title={!isCollapsed ? "Tableau Cuisinié" : "T.CN"}
+                  to="/doshbord/cuisinie"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
-                />          
+                />           */}
               </AccordionDetails>
             </Accordion>
 
@@ -145,22 +153,22 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Stock Initial</Typography>
+                <StoreIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Stock Initial</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Stock Bar"
-                  to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Stock Bar" : "SIB"}
+                  to="/stockinitial/bar"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Stok Cuisine"
-                  to="/unite"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Stok Cuisine" : "SIC"}
+                  to="/stockinitial/cuisine"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />          
@@ -168,34 +176,34 @@ const Sidebar = () => {
             </Accordion>
 
             {/* menu inventaire */}
-            <Accordion sx={{ 
+            {/* <Accordion sx={{ 
               backgroundColor: 'inherit',
               padding: '0px 8px 0px 8px',
               width: '100%', '&:before': {backgroundColor: 'transparent !important',},
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Inventaire</Typography>
+                <InventoryIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Inventaire</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Bar"
-                  to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Bar" : "BR"}
+                  to="/invantaire/bar"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Cuisine"
-                  to="/unite"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Cuisine" : "CN"}
+                  to="/invantaire/cuisine"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />          
               </AccordionDetails>
-            </Accordion>
+            </Accordion> */}
 
             {/* menu approvisionnement */}
             <Accordion sx={{ 
@@ -205,22 +213,22 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Approvisionner</Typography>
+                <AddBusinessIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Approvisionner</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Bar"
+                  title= {!isCollapsed ? "Bar" : "ABR"}
                   to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Cuisine"
+                  title= {!isCollapsed ? "Cuisine" : "ACN"}
                   to="/unite"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />          
@@ -235,22 +243,22 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Commande</Typography>
+                <ShoppingCartIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Commande</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Bar"
+                  title= {!isCollapsed ? "Bar" : "CBR"}
                   to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Cuisine"
+                  title= {!isCollapsed ? "Cuisine" : "CCN"}
                   to="/unite"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />          
@@ -265,15 +273,15 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px' }}/>
-                <Typography variant="subtitle1">Sortie Stock</Typography>
+                <UnarchiveIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Sortie Stock</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{ width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Stock Cuisine "
-                  to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Stock Cuisine" : "SCN"}
+                  to="/sortie/cuisine"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />        
@@ -288,15 +296,15 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Rapport</Typography>
+                <AssessmentIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Rapport</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Finance"
-                  to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Finance" : "RFN"}
+                  to="/rapport"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />        
@@ -311,50 +319,50 @@ const Sidebar = () => {
               borderWidth:'0' 
             }}>
               <AccordionSummary id="panel-header" aria-controls="panel-content"  expandIcon={<ExpandMoreIcon />}>
-                <SettingsIcon sx={{ marginRight: '14px'}}/>
-                <Typography variant="subtitle1">Parametrage</Typography>
+                <SettingsSuggestIcon sx={{ marginRight: '14px'}}/>
+                { !isCollapsed ? <Typography variant="subtitle1">Parametrage</Typography>: null }
               </AccordionSummary>
               <Divider component="li" />
               <AccordionDetails  sx={{width: '250px', paddingLeft:'1px' }}>         
                 <Item
-                  title="Familles"
+                  title= {!isCollapsed ? "Familles" : "PFM"}
                   to="/famille"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Produits"
+                  title= {!isCollapsed ? "Produits" : "PPD"}
                   to="/produit"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Unites de mesure"
+                  title= {!isCollapsed ? "Unites de mesure" : "PUM"}
                   to="/unite"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Fournisseurs"
+                  title= {!isCollapsed ? "Fournisseurs" : "PFS"}
                   to="/Fournisseur"
-                  icon={<TrendingFlatIcon />}
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Clients"
-                  // to="/product"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Clients" : "PCL"}
+                  to="/Client"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />
                 <Item
-                  title="Menus cuisine"
-                  // to="/product"
-                  icon={<TrendingFlatIcon />}
+                  title= {!isCollapsed ? "Menu cuisine" : "PMC"}
+                  to="/cuisinemenu"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
                 />                          

@@ -26,6 +26,23 @@ import StockInitial from "./scenes/stock/StockInitial.jsx";
 // import InventaireCuisine from "./scenes/stock/inventiare_cuisine.jsx";
 import InventaireBar from "./scenes/stock/inventiare_bar.jsx";
 import ListAvenant from "./scenes/avenant/ListeAvenant.jsx";
+
+// importation stock initial
+import StockInitialBar from "./scenes/stock/StockInitial_bar.jsx";
+import StockInitialCuisne from "./scenes/stock/StockInitial_cuisine.jsx";
+
+// importation invantaire produit
+import InvantaireBar from "./scenes/stock/invantaire_bar.jsx";
+import InvantaireCuisine from "./scenes/stock/invantaire_cuisine.jsx";
+
+// importation sortie stock cuisine
+import SortieStockCuisine from "./scenes/stock/sortie_stock_cuisine.jsx";
+import SortieProduitCuisine from "./scenes/stock/sortie_produit_cuisine.jsx"
+
+// importation rapport
+import Rapport from "./scenes/rapport/index.jsx";
+
+
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -59,6 +76,22 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               {/* <Route path="/calendar" element={<Calendar />} /> */}
               <Route path="/geography" element={<Geography />} />
+
+              {/* stock initial route */}
+              <Route path="/stockinitial/bar" element={<StockInitialBar />} />
+              <Route path="/stockinitial/cuisine" element={<StockInitialCuisne />} />
+
+              {/* Invantaires produits */}
+              <Route path="/invantaire/bar" element={<InvantaireBar />} />
+              <Route path="/invantaire/cuisine" element={<InvantaireCuisine />} />
+
+              {/* sortie stock cuisine */}
+              <Route path="/sortie/cuisine" element={<SortieStockCuisine />} />
+              <Route path="/sortie/produit" element={<SortieProduitCuisine />} />
+
+              {/* rapport bar-resto*/}
+              <Route path="/rapport" element={<Rapport />} />
+
             </Routes>
           </main>
         </div>

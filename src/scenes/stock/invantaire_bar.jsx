@@ -8,21 +8,17 @@ import {
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-// import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
 import { useTheme, Grid } from "@mui/material";
-// import { API_Url } from "../../data/API";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-// import VisibilityIcon from '@mui/icons-material/Visibility';
-// import { motion } from 'framer-motion';
 import { API_URL } from "../../data/Api";
 
-const Settings = () => {
+const InvantaireBar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [openModal, setopenModal] = useState(false);
@@ -39,7 +35,7 @@ const Settings = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-
+  
   // liste data famille
   const FetchFamille = () => {
     axios.get(API_URL + "famille/").then((response) => {
@@ -56,10 +52,30 @@ const Settings = () => {
   const updateFamille = () => {
     axios.patch(API_URL + `famille/${id}/`, { nom: nameu }).then((response) => {
       handleCloseforupdate();
+      //     Swal.fire({
+      //       icon: 'success',
+      //       title: 'operation reussi',
+      //       showConfirmButton: false,
+      //       timer: 3000,
+      // })
       FetchFamille();
     });
   };
 
+  // delete famille
+  const DeleteFamille = () => {
+    axios.delete(API_URL + `famille/${id}/`).then((response) => {
+      handleCloseforupdate();
+      //     Swal.fire({
+      //       icon: 'success',
+      //       title: 'operation reussi',
+      //       showConfirmButton: false,
+      //       timer: 3000,
+      // })
+      FetchFamille();
+    });
+  };
+  
   // create famille
   const createFamille = () => {
     axios
@@ -75,19 +91,37 @@ const Settings = () => {
       .then((response) => {
         console.log(response);
         handleClose();
+        // Swal.fire({
+        //         icon: 'success',
+        //         title: 'operation reussi',
+        //         showConfirmButton: false,
+        //         timer: 3000,
+        //   })
         FetchFamille();
       });
   };
-
+  
   // column table liste famille
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     {
-      field: "nom",
-      headerName: "Nom",
+      field: "produit",
+      headerName: "Produit",
       flex: 1,
       cellClassName: "name-column--cell",
     },
+    {
+      field: "unite_mesure",
+      headerName: "Unite de mesure",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
+      field: "unite_mesure",
+      headerName: "Unite de mesure",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },    
     {
       field: "actions",
       headerName: "Actions",
@@ -109,33 +143,32 @@ const Settings = () => {
             aria-label="delete"
             onClick={() => {
               Swal.fire({
-                title: "Etez-vous sur de vouloir supprimer cette famille ?",
-                text: "Après validation vous ne pouvez pas recupere l'information supprimer.",
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "OUi, supprimer le!",
-                cancelButtonText: "Annuler",
+                confirmButtonText: "Yes, delete it!",
               }).then((result) => {
                 if (result.isConfirmed) {
                   axios.delete(API_URL + `famille/${id}/`).then((response) => {
                     Swal.fire({
-                      title: "Suppression!",
-                      text: "La fimille a été supprimer avec succés",
+                      title: "Deleted!",
+                      text: "Your item has been deleted.",
                       icon: "success",
                     });
                     FetchFamille();
                     if (response.status === 204) {
                       Swal.fire({
-                        title: "Suppression!",
-                        text: "La fimille a été supprimer avec succés",
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
                         icon: "success",
                       });
                     } else {
                       Swal.fire({
-                        title: "Erreur!",
-                        text: "Une erreur est survenue lors de la suppression .",
+                        title: "Error!",
+                        text: "An error occurred while deleting the item.",
                         icon: "error",
                       });
                     }
@@ -148,9 +181,9 @@ const Settings = () => {
           </IconButton>
         </div>
       ),
-    },
+    },    
   ];
-
+  
   return (
     <Box m="20px">
       <Header title="Famille" subtitle="Listes des familles des produits" />
@@ -186,7 +219,7 @@ const Settings = () => {
           },
         }}
       >
-        <Box>
+        <Box>          
           <Button
             variant="contained"
             color="secondary"
@@ -204,7 +237,7 @@ const Settings = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      {/* <table
+      <table
         id="printableArea"
         className="hiddenOnScreen"
         style={{ display: "none" }}
@@ -225,9 +258,9 @@ const Settings = () => {
             </tr>
           ))}
         </tbody>
-      </table> */}
-
-      {/* formcreate famille produit ++++++++++++++++++++++++++++++++++ */}
+      </table>
+      
+      {/* form create invantaire bar  ----------------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -245,7 +278,7 @@ const Settings = () => {
             <Typography variant="h5" mb={1}>
               Ajouter nouvelle Famille
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={2}>             
               <Grid item xs={12}>
                 <TextField
                   name="prix"
@@ -254,8 +287,8 @@ const Settings = () => {
                   fullWidth
                   size="small"
                 />
-              </Grid>
-            </Grid>
+              </Grid>              
+            </Grid>     
 
             <Box mt={2} paddingLeft={2}>
               <Button
@@ -279,8 +312,8 @@ const Settings = () => {
           </Stack>
         </Box>
       </Modal>
-
-      {/* form update famille produit +++++++++++++++++++++++++++++++++ */}
+      
+      {/* form update invantaire cuisine -------------------------------------------- */}
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
           sx={{
@@ -299,7 +332,7 @@ const Settings = () => {
               Modifier famille
             </Typography>
 
-            <Grid container spacing={2}>
+            <Grid container spacing={2}>             
               <Grid item xs={12}>
                 <TextField
                   name="name"
@@ -309,7 +342,7 @@ const Settings = () => {
                   fullWidth
                   size="medium"
                 />
-              </Grid>
+              </Grid>              
             </Grid>
 
             <Box mt={2}>
@@ -338,4 +371,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default InvantaireBar;

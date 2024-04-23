@@ -476,16 +476,6 @@ const handlePayButtonClick = () => {
       </table>
     
       </>
-      /**Add medication */
-      {/* <motion.div
-   initial={{ scale: 0 }}
-   animate={{ rotate: 180, scale: 1 }}
-   transition={{
-     type: "spring",
-     stiffness: 260,
-     damping: 20
-   }}
-> */}
       <Modal open={openModal} onClose={handleClose}>
      <Box
  sx={{
@@ -692,19 +682,18 @@ const handlePayButtonClick = () => {
 </Grid>
 <Grid item xs={6}>
     <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">{genreu}</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genreu}
-    onChange={(e)=>{setgenreu(e.target.value);}}
-  >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
-  </Select>
-</FormControl>
+      <InputLabel id="demo-simple-select-label">{genreu}</InputLabel>
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        label="Age"
+        value={genreu}
+        onChange={(e)=>{setgenreu(e.target.value);}}
+      >
+       {unite.map(item =>(<MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
+        
+      </Select>
+    </FormControl>
 </Grid>
 <Grid item xs={6}>
 
