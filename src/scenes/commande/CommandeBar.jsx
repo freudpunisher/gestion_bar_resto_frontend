@@ -38,6 +38,9 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo-bar-resto-light.png"
+
+
 
 const CommandeBar = () => {
   const theme = useTheme();
@@ -131,6 +134,50 @@ const CommandeBar = () => {
     }
   };
 
+  function handlePrintTable() {
+    // Generate a print-friendly HTML table structure
+
+    const printTableHTML = `
+        <div style="width: 80mm; margin: 0 auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr><th colspan="4" ><img src=${logo} alt="Logo" style="width: 200px; height: 200px; align-items: left;"></th></tr>
+                <tr><th colspan="4">BUGARAMA</th></tr>
+                <tr><td>Seviteur : </td><td colspan="3">NDIKURIYO Claude</td></tr>
+                <tr><td>Date : </td><td colspan="3">14/04/2024</td></tr>
+                <tr><td>FACTURE No : </td><td colspan="3">FACT20240412458BAR</td></tr>
+                <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
+              </thead>
+              <tbody>
+              <table>
+              ${secondTableData.map((item) => `
+                <tr>
+                  <td>${item.nom}</td>
+                  <td>${item.unite}</td>
+                  <td>${item.quantity}</td>
+                  <td>${item.PU}</td>
+                  <td>${item.quantity * item.PU}</td>
+                </tr>
+              `
+              )}
+              <tr>
+                  <td colsapn="3">Total</td>
+                  <td>${totalPT}</td>
+              </tr>             
+              </tbody>
+            </table>
+        </div>
+      `;
+    const printWindow = window.open('', '', 'width=1000,height=500');
+    printWindow.document.write(printTableHTML);
+    printWindow.document.close();
+
+    printWindow.print();
+    printWindow.print();
+    printWindow.close();
+  }
+
+  
   // fetch list client
   const fetchClient = () => {
     axios.get(API_URL + "client/").then((res) => setlistclient(res.data));
@@ -477,7 +524,8 @@ const CommandeBar = () => {
                         margin: 1,
                         fontSize: 20,
                       }}
-                      onClick={() => setopenModal(true)}
+                      // onClick={() => {setopenModal(true) }}
+                      onClick={() => handlePrintTable()}
                     >
                       Add to Invoice
                     </Button>
