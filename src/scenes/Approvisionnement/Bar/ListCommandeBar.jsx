@@ -135,7 +135,7 @@ const LisCommandeBar = () => {
   // listes des mouvement entre
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/type/2/").then((response) => {
+    axios.get(API_URL + "mouvement/entre/").then((response) => {
       setlistentreproduit([response.data]);
     });
   };

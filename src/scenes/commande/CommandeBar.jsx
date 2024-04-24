@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import {
   Grid,
   Card,
@@ -39,7 +39,7 @@ import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-bar-resto-light.png"
-
+import ReactToPrint from 'react-to-print';
 
 
 const CommandeBar = () => {
@@ -76,7 +76,10 @@ const CommandeBar = () => {
   const [quantity, setQuantity] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [listclient, setlistclient] = useState([]);
+  const [client_name, setclient_name] = useState();
   const [Nomunite, setNomunite] = useState();
+  const [invoiceData, setInvoiceData] = useState(null);
+
   //   const [PU, setPU] = useState();
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -138,45 +141,50 @@ const CommandeBar = () => {
     // Generate a print-friendly HTML table structure
 
     const printTableHTML = `
-        <div style="width: 80mm; margin: 0 auto;">
-            <table style="width: 100%; border-collapse: collapse;">
-              <thead>
-                <tr><th colspan="4" ><img src=${logo} alt="Logo" style="width: 200px; height: 200px; align-items: left;"></th></tr>
-                <tr><th colspan="4">BUGARAMA</th></tr>
-                <tr><td>Seviteur : </td><td colspan="3">NDIKURIYO Claude</td></tr>
-                <tr><td>Date : </td><td colspan="3">14/04/2024</td></tr>
-                <tr><td>FACTURE No : </td><td colspan="3">FACT20240412458BAR</td></tr>
-                <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
-              </thead>
-              <tbody>
-              <table>
-              ${secondTableData.map((item) => `
-                <tr>
-                  <td>${item.nom}</td>
-                  <td>${item.unite}</td>
-                  <td>${item.quantity}</td>
-                  <td>${item.PU}</td>
-                  <td>${item.quantity * item.PU}</td>
-                </tr>
-              `
-              )}
+      <div style="width: 100%; margin: 0 auto;">
+        <table style="width: 100%;">
+          <tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>
+        </table><br>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
+          <tr><td>Serveur</td><td>: ${client_name}</td></tr>
+          <tr><td>Date</td><td>: 24/04/2024</td></tr>
+          <tr><td>FACT No</td><td>: ${generatedCode}</td></tr>   
+        </table><br>
+        <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+          <thead>                         
+            <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
+          </thead>
+          <tbody>
+            ${secondTableData.map((item) => `
               <tr>
-                  <td colsapn="3">Total</td>
-                  <td>${totalPT}</td>
-              </tr>             
-              </tbody>
-            </table>
-        </div>
-      `;
-    const printWindow = window.open('', '', 'width=1000,height=500');
-    printWindow.document.write(printTableHTML);
-    printWindow.document.close();
+                <td>${item.nom}</td>
+                <td>${item.quantity}</td>
+                <td>${item.PU} Fbu</td>
+                <td>${item.quantity * item.PU} Fbu</td>
+              </tr>
+            `)}
+            <tr>
+              <td colspan="3">Total</td>
+              <td>${totalPT} Fbu</td>
+            </tr>             
+          </tbody>
+        </table>
+      </div> <br>
+      <table style="width: 100%;">
+        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+      </table><hr><br><br>
+      
+    `;
+      const printWindow = window.open('', '', 'width=1000,height=1000');
+      printWindow.document.write(printTableHTML);
+      printWindow.document.close();
 
-    printWindow.print();
+       printWindow.onload = function() {
     printWindow.print();
     printWindow.close();
+  };
   }
-
   
   // fetch list client
   const fetchClient = () => {
@@ -225,6 +233,45 @@ const CommandeBar = () => {
         setSecondTableData([]);
       });
   };
+  // creation entre
+
+  const valideEntre = () => {
+    axios
+      .post(API_URL + "mouvement/sortie/", {
+        reference: generatedCode,
+        client: id_client,
+        description: "facture",
+        created_by: 1,
+      })
+      .then((response) => {
+        axios
+          .post(API_URL + "sortie/data/", itemEntre, {
+            transformRequest: [
+              (data, headers) => {
+                // Assuming itemEntre is an array of objects
+                // Modify each item in the array to include the new property
+                const modifiedData = data.map((item) => ({
+                  ...item,
+                  mouvement_sortie: response.data.id, // Add your new property here
+                }));
+
+                // Return the modified data as a JSON string
+                return JSON.stringify(modifiedData);
+              },
+            ],
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            setopenModal(false);
+          });        
+    });
+    
+    handlePrintTable();
+    setSecondTableData([]);
+
+  };
 
   const handleRemoveButtonClick = (rowId) => {
     setSecondTableData((prevData) =>
@@ -266,11 +313,12 @@ const CommandeBar = () => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    if (searchTerm !== undefined) {
-      searchProduct();
-    }
-  }, [searchTerm]);
+
+  // useEffect(() => {
+  //   if (searchTerm !== undefined) {
+  //     searchProduct();
+  //   }
+  // }, [searchTerm]);
 
   useEffect(() => {
     fetchProduct();
@@ -298,6 +346,7 @@ const CommandeBar = () => {
     (acc, item) => acc + item.quantity * item.PU,
     0
   );
+
 
   return (
     <Box>
@@ -524,8 +573,8 @@ const CommandeBar = () => {
                         margin: 1,
                         fontSize: 20,
                       }}
-                      // onClick={() => {setopenModal(true) }}
-                      onClick={() => handlePrintTable()}
+                      onClick={() => {setopenModal(true) }}
+                      // onClick={() => handlePrintTable()}
                     >
                       Add to Invoice
                     </Button>
@@ -575,6 +624,9 @@ const CommandeBar = () => {
                     onChange={(e) => {
                       setid_client(e.target.value);
                       console.log(e.target.value);
+                      const nameClient = listclient.find(item => item.id === e.target.value)
+                     setclient_name(nameClient.first_name)
+                      
                     }}
                   >
                     {listclient.map((item) => (
@@ -588,6 +640,18 @@ const CommandeBar = () => {
             </Grid>
 
             <Box mt={2}>
+            <Button
+                style={{ marginRight: "10px" }}
+                variant="contained"
+                color="info"
+                onClick={() => {
+                  valideEntre()
+                  setopenModal(false)
+                  handlePrintTable()
+                }}
+              >
+                Valider
+              </Button>
               <Button
                 style={{ marginRight: "10px" }}
                 variant="contained"
