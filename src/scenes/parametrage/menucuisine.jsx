@@ -17,6 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { API_URL } from "../../data/Api";
+import Swal from "sweetalert2";
 const MenuCuisine = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -43,36 +44,36 @@ const MenuCuisine = () => {
   const [description, setdescription] = useState();
   const [descriptionupt, setdescriptionupt] = useState();
   const [rows, setRows] = useState([]);
-  
+
   // data liste menu cuisine
   var productdata = Product.map((obj) => ({
     id: obj.id,
     name: obj.name,
     description: obj.description,
-    amount: obj.amount+ ' BIF',
-    reduction: obj.reduction+ ' %',
+    amount: obj.amount,
+    reduction: obj.reduction,
   }));
 
   //data grid
   const dataGridRef = useRef();
-  
+
   // close popup
   const handleClose = () => {
     setopenModal(false);
   };
-  
+
   // close popup
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-  
+
   // liste menu cuisine
   const fetchProduct = () => {
     axios.get(API_URL + "ciusine/tarif/").then((response) => {
       setProduct(response.data);
     });
   };
-  
+
   // creation menu cuisine
   const createUnite = () => {
     axios
@@ -87,7 +88,7 @@ const MenuCuisine = () => {
         fetchProduct();
       });
   };
-  
+
   // update menu cuisine
   const updateUnite = () => {
     axios
@@ -109,12 +110,12 @@ const MenuCuisine = () => {
         // })
       });
   };
-  
+
   // refresh liste
   useEffect(() => {
     fetchProduct();
   }, []);
-  
+
   // colunm table
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
@@ -129,12 +130,14 @@ const MenuCuisine = () => {
       type: "number",
       headerAlign: "left",
       align: "left",
+      renderCell: (params) => params.row.amount + "BIF",
       flex: 1,
     },
     {
       field: "reduction",
       headerName: "Reduction",
       type: "number",
+      renderCell: (params) => params.row.reduction + "%",
       headerAlign: "left",
       align: "left",
       flex: 1,
@@ -169,6 +172,31 @@ const MenuCuisine = () => {
           </IconButton>
           <IconButton
             aria-label="delete"
+            onClick={() => {
+              Swal.fire({
+                title: "Etez-vous sur de vouloire supprimer cet fournisseur ?",
+                text: "Après validation vous ne pouvez pas recuperer cette infomation supprimer !",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui, Supprimer le!",
+                cancelButtonText: "Annuler",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios
+                    .delete(API_URL + `ciusine/tarif/${params.row.id}/`)
+                    .then((response) => {
+                      fetchProduct();
+                      Swal.fire({
+                        title: "Suppression!",
+                        text: "Le fournisseur a été supprimer avec succès",
+                        icon: "success",
+                      });
+                    });
+                }
+              });
+            }}
           >
             <DeleteIcon />
           </IconButton>
@@ -176,13 +204,10 @@ const MenuCuisine = () => {
       ),
     },
   ];
-  
+
   return (
     <Box m="20px">
-      <Header
-        title="Menu Cuisine" 
-        subtitle="Listes des menus cuisines"
-      />
+      <Header title="Menu Cuisine" subtitle="Listes des menus cuisines" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -258,7 +283,7 @@ const MenuCuisine = () => {
           ))}
         </tbody>
       </table>
-    
+
       {/* from nouveau menu cuisine --------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
@@ -363,7 +388,6 @@ const MenuCuisine = () => {
               Modification Menu cuisine
             </Typography>
             <Grid container spacing={2}>
-
               <Grid item xs={12}>
                 <TextField
                   name="Nom"
@@ -428,7 +452,6 @@ const MenuCuisine = () => {
                 Fermer
               </Button>
             </Box>
-
           </Stack>
         </Box>
       </Modal>

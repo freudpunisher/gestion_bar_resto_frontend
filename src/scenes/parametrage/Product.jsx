@@ -139,15 +139,15 @@ const Product = () => {
       setunite(response.data);
     });
   };
-  // const fetchBarCode = () => {
-  //   axios.get(API_URL + "barcode/").then((response) => {
-  //     setbarcode(response.data.barcode);
-  //   });
-  // };
+  const fetchBarCode = () => {
+    axios.get(API_URL + "barcode/").then((response) => {
+      setbarcode(response.data.barcode);
+    });
+  };
 
   useEffect(() => {
     fetchunite();
-    // fetchBarCode();
+    fetchBarCode();
     fetchProduct();
   }, []);
   useEffect(() => {

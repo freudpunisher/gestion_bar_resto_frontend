@@ -117,6 +117,7 @@ const LisCommandeBar = () => {
       .post(API_URL + "mouvement/entre/", {
         reference: generatedCode,
         description: description,
+        type_entre: 1,
         fournisseur: id_fournisseur,
         created_by: 1,
       })
@@ -135,8 +136,8 @@ const LisCommandeBar = () => {
   // listes des mouvement entre
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/type/2/").then((response) => {
-      setlistentreproduit([response.data]);
+    axios.get(API_URL + "mouvement/entre/type/1/").then((response) => {
+      setlistentreproduit(response.data);
     });
   };
 
@@ -493,7 +494,7 @@ const LisCommandeBar = () => {
   return (
     <Box m="20px">
       <Header
-        title="listes des commandes"
+        title="Approvisionnement Bar"
         // subtitle="Listes des produits"
       />
       <Box
@@ -590,7 +591,6 @@ const LisCommandeBar = () => {
           </tbody>
         </table>
       </>
-      /**Add medication */
       {/* <motion.div
    initial={{ scale: 0 }}
    animate={{ rotate: 180, scale: 1 }}
@@ -631,7 +631,11 @@ const LisCommandeBar = () => {
               </Grid>
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ margin: -1 }}
+                    color="secondary"
+                  >
                     Selectionnez fournisseur
                   </InputLabel>
                   <Select

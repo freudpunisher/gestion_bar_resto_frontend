@@ -60,7 +60,7 @@ const Unite = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-  
+
   // create unite
   const createUnite = () => {
     axios
@@ -83,7 +83,7 @@ const Unite = () => {
         });
       });
   };
-  
+
   // update unite
   const updateUnite = () => {
     axios
@@ -106,32 +106,45 @@ const Unite = () => {
         });
       });
   };
-  
+
   // liste unite
   const fetchunite = () => {
     axios.get(API_URL + "unite/").then((response) => {
       setunite(response.data);
     });
   };
-  
+
   // refresh liste
   useEffect(() => {
     fetchunite();
     fetchProduct();
   }, []);
-  
+
+  var uniteData = unite.map((obj) => ({
+    id: obj.id,
+    produit: obj.produit_info.produit,
+    produit_id: obj.produit,
+    desigantion: obj.desigantion,
+    code: obj.code,
+
+    value_piece: obj.value_piece,
+    value_rapport: obj.value_rapport,
+    value_prix_vente: obj.value_prix_vente,
+    // barcode: obj.barcode,
+  }));
 
   //columns table
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    
+    { field: "produit", headerName: "Produit", flex: 0.5 },
+
     {
       field: "desigantion",
       headerName: "Designation",
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
+
     {
       field: "code",
       headerName: "Code",
@@ -150,7 +163,7 @@ const Unite = () => {
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
+
     {
       field: "actions",
       headerName: "Actions",
@@ -167,7 +180,7 @@ const Unite = () => {
               setpieceu(params.row.value_piece);
               setrapportu(params.row.value_rapport);
               setprix_venteu(params.row.value_prix_vente);
-              setproduit_idu(params.row.produit);
+              setproduit_idu(params.row.produit_id);
               setid(params.row.id);
             }}
           >
@@ -201,7 +214,7 @@ const Unite = () => {
             }}
           >
             <DeleteIcon />
-          </IconButton>          
+          </IconButton>
         </div>
       ),
     },
@@ -258,7 +271,7 @@ const Unite = () => {
         <DataGrid
           checkboxSelection
           ref={dataGridRef}
-          rows={unite}
+          rows={uniteData}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
@@ -285,7 +298,7 @@ const Unite = () => {
           ))}
         </tbody>
       </table>
-      
+
       {/* form create unite mesure ------------------------------------------------------------- */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
@@ -400,7 +413,7 @@ const Unite = () => {
           </Stack>
         </Box>
       </Modal>
-      
+
       {/* form update unite mesure ----------------------------------------------------------------- */}
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
@@ -497,7 +510,7 @@ const Unite = () => {
                     size="small"
                   />
                 </Grid>
-              </Grid>              
+              </Grid>
             </Grid>
             <Box mt={2}>
               <Button
