@@ -46,6 +46,7 @@ const CommandeBarEntre = () => {
   const [pu, setpu] = useState();
   const [openModal, setopenModal] = useState(false);
   const [product, setproduct] = useState([]);
+  const [productsearch, setproductsearch] = useState([]);
   const [secondTableData, setSecondTableData] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -116,7 +117,7 @@ const CommandeBarEntre = () => {
 
   //fetch of product
   const fetchProduct = () => {
-    axios.get(API_URL + "produit/").then((response) => {
+    axios.get(API_URL + "produit/type/1/").then((response) => {
       setproduct(response.data);
     });
   };
@@ -125,10 +126,12 @@ const CommandeBarEntre = () => {
 
   const searchProduct = async () => {
     try {
-      const response = await axios.get(API_URL + "produits/search/", {
-        params: { search: searchTerm },
+      const response = await axios.get(API_URL + "produits/searched/1/", {
+        params: {
+          product: searchTerm,
+        },
       });
-      setproduct(response.data);
+      setproductsearch(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -195,43 +198,81 @@ const CommandeBarEntre = () => {
               <CardContent>
                 <div>
                   <Grid container xs={12} spacing={2}>
-                    {product.map((item) => (
-                      <Grid item sm={12} md={12} lg={3} key={item.nom}>
-                        <Card
-                          variant="outlined"
-                          sx={{
-                            backgroundColor: colors.greenAccent[700],
-                            maxWidth: 200,
-                            height: 100,
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                          onClick={() => {
-                            handleAddButtonClick(item);
-                            console.log(item);
-                          }}
-                        >
-                          {/* <CardMedia
+                    {searchTerm !== undefined
+                      ? productsearch.map((item) => (
+                          <Grid item sm={12} md={12} lg={3} key={item.nom}>
+                            <Card
+                              variant="outlined"
+                              sx={{
+                                backgroundColor: colors.greenAccent[700],
+                                maxWidth: 200,
+                                height: 100,
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onClick={() => {
+                                handleAddButtonClick(item);
+                                console.log(item);
+                              }}
+                            >
+                              {/* <CardMedia
                            component="img"
                            height="140"
                            image={item.imageUrl}
                            alt={item.nom}
                          /> */}
-                          <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold" }}
+                              <CardContent>
+                                <Typography
+                                  gutterBottom
+                                  variant="h5"
+                                  component="div"
+                                  sx={{ fontSize: 16, fontWeight: "bold" }}
+                                >
+                                  {item.nom}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                        ))
+                      : product.map((item) => (
+                          <Grid item sm={12} md={12} lg={3} key={item.nom}>
+                            <Card
+                              variant="outlined"
+                              sx={{
+                                backgroundColor: colors.greenAccent[700],
+                                maxWidth: 200,
+                                height: 100,
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onClick={() => {
+                                handleAddButtonClick(item);
+                                console.log(item);
+                              }}
                             >
-                              {item.nom}
-                            </Typography>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    ))}
+                              {/* <CardMedia
+                           component="img"
+                           height="140"
+                           image={item.imageUrl}
+                           alt={item.nom}
+                         /> */}
+                              <CardContent>
+                                <Typography
+                                  gutterBottom
+                                  variant="h5"
+                                  component="div"
+                                  sx={{ fontSize: 16, fontWeight: "bold" }}
+                                >
+                                  {item.nom}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          </Grid>
+                        ))}
                   </Grid>
                 </div>
               </CardContent>
