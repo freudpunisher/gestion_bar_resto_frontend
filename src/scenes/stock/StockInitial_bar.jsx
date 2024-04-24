@@ -410,6 +410,7 @@ function StockInitialBar() {
                 color: "white",
                 backgroundColor: "inherit",
               }}
+              placeholder="code ou nom produit"
               onChange={(e) => {
                 setproduit(e.target.value);
                 console.log(e.target.value, "change");
@@ -461,7 +462,7 @@ function StockInitialBar() {
           {/*etat stock liste */}
           <Grid item xs={12}>            
             <Box
-               m="40px 0 0 0"
+               m="10px 0 0 0"
                id="data_liste"
               //  height="75vh"
                sx={{
@@ -493,6 +494,9 @@ function StockInitialBar() {
                  },
                }}
             >
+              <Typography variant="h3" sx={{ padding: '4px',}}>
+                Liste etat stock Produits
+              </Typography>
               {/* <MaterialReactTable table={table} /> */}
               <DataGrid
                 checkboxSelection

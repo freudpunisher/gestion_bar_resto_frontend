@@ -353,7 +353,7 @@ const CommandeBar = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
               <Typography
                 padding={2}
                 sx={{
@@ -390,7 +390,7 @@ const CommandeBar = () => {
                           sx={{
                             backgroundColor: colors.greenAccent[700],
                             maxWidth: 200,
-                            height: 100,
+                            // height: 100,
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
@@ -401,12 +401,6 @@ const CommandeBar = () => {
                             console.log(item);
                           }}
                         >
-                          {/* <CardMedia
-                           component="img"
-                           height="140"
-                           image={item.imageUrl}
-                           alt={item.nom}
-                         /> */}
                           <CardContent>
                             <Typography
                               gutterBottom
@@ -428,17 +422,17 @@ const CommandeBar = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
               <CardHeader
-                title="Facturation"
+                title="Liste produits commande"
                 sx={{
                   backgroundColor: colors.blueAccent[700],
                   padding: 1,
                 }}
                 titleTypographyProps={{
-                  variant: "h1", // Adjust the variant to change the font size
+                  variant: "h3", // Adjust the variant to change the font size
                   sx: {
-                    // fontSize: 20, // Directly set the font size
+                    fontSize: 20, // Directly set the font size
                     color: "white",
                     fontWeight: "bold", // Set the color of the title
                   },
@@ -446,8 +440,8 @@ const CommandeBar = () => {
               />
               <CardContent>
                 {secondTableData.length === 0 ? (
-                  <Typography variant="h3" align="center">
-                    No product added
+                  <Typography variant="h4" align="center">
+                    Aucun produit ajouter
                   </Typography>
                 ) : (
                   // Only display invoice details if a product is selected

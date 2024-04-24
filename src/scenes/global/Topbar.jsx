@@ -26,8 +26,8 @@ const Topbar = () => {
         <IconButton type="button" sx={{ p: 1 }}>
           <SearchIcon />
         </IconButton> */}
-        <Typography variant="h2" sx={{ padding: '4px'}}>
-          SYSTME DE GESTION BAR-RESTO
+        <Typography variant="h2" sx={{ padding: '4px',fontWeight: "bold"}}>
+          DODOMA PARK BUGARAMA
         </Typography>
       </Box>
 
