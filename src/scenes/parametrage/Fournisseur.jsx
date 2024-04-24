@@ -21,7 +21,7 @@ const Fournisseur = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [openModal, setopenModal] = useState(false);
-  const [openModalu, setopenModalu] = useState(false);  
+  const [openModalu, setopenModalu] = useState(false);
   const [id, setid] = useState();
   const [rows, setRows] = useState([]);
   const [firstName, setFirstName] = useState("");
@@ -37,12 +37,12 @@ const Fournisseur = () => {
   const [emailu, setEmailu] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberu, setPhoneNumberu] = useState("");
-  
+
   const dataGridRef = useRef();
   const handleClose = () => {
     setopenModal(false);
   };
-  
+
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
@@ -90,7 +90,7 @@ const Fournisseur = () => {
         });
       });
   };
-  
+
   // liste fournisseur
   const fetchContact = () => {
     axios.get(API_URL + "fournisseur/").then((response) => {
@@ -174,20 +174,20 @@ const Fournisseur = () => {
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Oui, Supprimer le!",
                 cancelButtonText: "Annuler",
-              })
-                .then((result) => {
-                  if (result.isConfirmed) {
-                    axios.delete(API_URL + `fournisseur/${params.row.id}/`);
-                  }
-                })
-                .then((response) => {
-                  fetchContact();
-                  Swal.fire({
-                    title: "Suppression!",
-                    text: "Le fournisseur a été supprimer avec succès",
-                    icon: "success",
-                  });
-                });
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios
+                    .delete(API_URL + `fournisseur/${params.row.id}/`)
+                    .then((response) => {
+                      fetchContact();
+                      Swal.fire({
+                        title: "Suppression!",
+                        text: "Le fournisseur a été supprimer avec succès",
+                        icon: "success",
+                      });
+                    });
+                }
+              });
             }}
           >
             <DeleteIcon />
@@ -272,7 +272,7 @@ const Fournisseur = () => {
           ))}
         </tbody>
       </table>
-      
+
       {/* form create fournisseur +++++++++++++++++++++++++++++++++++++++++++++++++++ */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
@@ -291,7 +291,7 @@ const Fournisseur = () => {
             <Typography variant="h5" mb={1}>
               Ajouter un nouveau fournisseur
             </Typography>
-            <Grid container spacing={2}>              
+            <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField
                   name="FistName"

@@ -40,6 +40,8 @@ const Client = () => {
   const [email, setEmail] = useState("");
   const [emailu, setEmailu] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [contact_person, setcontact_person] = useState("");
+  const [contact_personu, setcontact_personu] = useState("");
   const [phoneNumberu, setPhoneNumberu] = useState("");
 
   // // print carte
@@ -109,11 +111,11 @@ const Client = () => {
   // create client
   const createUnite = () => {
     axios
-      .post(API_URL + "fournisseur/", {
+      .post(API_URL + "client/", {
         first_name: firstName,
         last_name: lastName,
         address: address,
-        // contact_person: contactPerson,
+        contact_person: phoneNumber,
         email: email,
         phone_number: phoneNumber,
       })
@@ -132,7 +134,7 @@ const Client = () => {
   // update client
   const updateUnite = () => {
     axios
-      .patch(API_URL + `fournisseur/${id}/`, {
+      .patch(API_URL + `client/${id}/`, {
         first_name: firstNameu,
         last_name: lastNameu,
         address: addressu,
@@ -159,11 +161,11 @@ const Client = () => {
     });
   };
 
-  // // refresh liste
-  // useEffect(() => {
-  //   fetchProduct();
-  //   fetchContact();
-  // }, []);
+  // refresh liste
+  useEffect(() => {
+    // fetchProduct();
+    fetchContact();
+  }, []);
 
   // columns table
   const columns = [
@@ -232,20 +234,20 @@ const Client = () => {
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
                 confirmButtonText: "Yes, delete it!",
-              })
-                .then((result) => {
-                  if (result.isConfirmed) {
-                    axios.delete(API_URL + `fournisseur/${params.row.id}/`);
-                  }
-                })
-                .then((response) => {
-                  fetchContact();
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success",
-                  });
-                });
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios
+                    .delete(API_URL + `client/${params.row.id}/`)
+                    .then((response) => {
+                      fetchContact();
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success",
+                      });
+                    });
+                }
+              });
             }}
           >
             <DeleteIcon />
