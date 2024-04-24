@@ -493,7 +493,7 @@ const LisCommandeBar = () => {
   return (
     <Box m="20px">
       <Header
-        title="listes des commandes"
+        title="Approvisionnement Bar"
         // subtitle="Listes des produits"
       />
       <Box
@@ -590,7 +590,6 @@ const LisCommandeBar = () => {
           </tbody>
         </table>
       </>
-      /**Add medication */
       {/* <motion.div
    initial={{ scale: 0 }}
    animate={{ rotate: 180, scale: 1 }}

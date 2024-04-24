@@ -119,27 +119,29 @@ const Settings = () => {
                 cancelButtonText: "Annuler",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  axios.delete(API_URL + `famille/${id}/`).then((response) => {
-                    Swal.fire({
-                      title: "Suppression!",
-                      text: "La fimille a été supprimer avec succés",
-                      icon: "success",
-                    });
-                    FetchFamille();
-                    if (response.status === 204) {
+                  axios
+                    .delete(API_URL + `famille/${params.row.id}/`)
+                    .then((response) => {
                       Swal.fire({
                         title: "Suppression!",
                         text: "La fimille a été supprimer avec succés",
                         icon: "success",
                       });
-                    } else {
-                      Swal.fire({
-                        title: "Erreur!",
-                        text: "Une erreur est survenue lors de la suppression .",
-                        icon: "error",
-                      });
-                    }
-                  });
+                      FetchFamille();
+                      if (response.status === 204) {
+                        Swal.fire({
+                          title: "Suppression!",
+                          text: "La fimille a été supprimer avec succés",
+                          icon: "success",
+                        });
+                      } else {
+                        Swal.fire({
+                          title: "Erreur!",
+                          text: "Une erreur est survenue lors de la suppression .",
+                          icon: "error",
+                        });
+                      }
+                    });
                 }
               });
             }}

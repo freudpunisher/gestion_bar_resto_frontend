@@ -52,6 +52,7 @@ const CommandeBarEntre = () => {
   const handleProductClick = (product) => {
     setSelectedProduct(product);
   };
+
   const handleClose = () => {
     setopenModal(false);
   };
