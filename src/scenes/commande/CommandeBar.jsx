@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Grid,
   Card,
@@ -38,9 +38,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo-bar-resto-light.png"
-import ReactToPrint from 'react-to-print';
-
+import logo from "../../assets/logo-bar-resto-light.png";
+import ReactToPrint from "react-to-print";
 
 const CommandeBar = () => {
   const theme = useTheme();
@@ -156,14 +155,16 @@ const CommandeBar = () => {
             <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
           </thead>
           <tbody>
-            ${secondTableData.map((item) => `
+            ${secondTableData.map(
+              (item) => `
               <tr>
                 <td>${item.nom}</td>
                 <td>${item.quantity}</td>
                 <td>${item.PU} Fbu</td>
                 <td>${item.quantity * item.PU} Fbu</td>
               </tr>
-            `)}
+            `
+            )}
             <tr>
               <td colspan="3">Total</td>
               <td>${totalPT} Fbu</td>
@@ -176,16 +177,16 @@ const CommandeBar = () => {
       </table><hr><br><br>
       
     `;
-      const printWindow = window.open('', '', 'width=1000,height=1000');
-      printWindow.document.write(printTableHTML);
-      printWindow.document.close();
+    const printWindow = window.open("", "", "width=1000,height=1000");
+    printWindow.document.write(printTableHTML);
+    printWindow.document.close();
 
-       printWindow.onload = function() {
-    printWindow.print();
-    printWindow.close();
-  };
+    printWindow.onload = function () {
+      printWindow.print();
+      printWindow.close();
+    };
   }
-  
+
   // fetch list client
   const fetchClient = () => {
     axios.get(API_URL + "client/").then((res) => setlistclient(res.data));
@@ -233,8 +234,8 @@ const CommandeBar = () => {
         setSecondTableData([]);
       });
   };
-  // creation entre
 
+  // creation entre
   const valideEntre = () => {
     axios
       .post(API_URL + "mouvement/sortie/", {
@@ -265,12 +266,11 @@ const CommandeBar = () => {
           })
           .then((response) => {
             setopenModal(false);
-          });        
-    });
-    
+          });
+      });
+
     handlePrintTable();
     setSecondTableData([]);
-
   };
 
   const handleRemoveButtonClick = (rowId) => {
@@ -286,6 +286,7 @@ const CommandeBar = () => {
       )
     );
   };
+
   const decreaseQuantity = (id, newQuantity) => {
     setSecondTableData(
       secondTableData.map((item) =>
@@ -302,7 +303,6 @@ const CommandeBar = () => {
   };
 
   // search for products
-
   const searchProduct = async () => {
     try {
       const response = await axios.get(API_URL + "unite/search/", {
@@ -313,12 +313,6 @@ const CommandeBar = () => {
       console.error(error);
     }
   };
-
-  // useEffect(() => {
-  //   if (searchTerm !== undefined) {
-  //     searchProduct();
-  //   }
-  // }, [searchTerm]);
 
   useEffect(() => {
     fetchProduct();
@@ -347,7 +341,6 @@ const CommandeBar = () => {
     0
   );
 
-
   return (
     <Box>
       <Grid container spacing={3}>
@@ -356,10 +349,7 @@ const CommandeBar = () => {
             <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
               <Typography
                 padding={2}
-                sx={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                }}
+                sx={{ fontSize: 20, fontWeight: "bold", }}
               >
                 Listes des produits
               </Typography>
@@ -382,7 +372,7 @@ const CommandeBar = () => {
               </IconButton>
               <CardContent>
                 <div>
-                  <Grid container xs={12} spacing={2}>
+                  <Grid container xs={12} spacing={1}>
                     {product.map((item) => (
                       <Grid item sm={12} md={12} lg={3} key={item.nom}>
                         <Card
@@ -398,7 +388,7 @@ const CommandeBar = () => {
                           }}
                           onClick={() => {
                             handleAddButtonClick(item);
-                            console.log(item);
+                            // console.log(item);
                           }}
                         >
                           <CardContent>
@@ -406,7 +396,7 @@ const CommandeBar = () => {
                               gutterBottom
                               variant="h5"
                               component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold" }}
+                              sx={{ fontSize: 16, fontWeight: "bold",paddingTop:"10px" }}
                             >
                               {item.produit_info.produit}
                             </Typography>
@@ -422,12 +412,12 @@ const CommandeBar = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
+            <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
                 title="Liste produits commande"
                 sx={{
                   backgroundColor: colors.blueAccent[700],
-                  padding: 1,
+                  padding: 2,
                 }}
                 titleTypographyProps={{
                   variant: "h3", // Adjust the variant to change the font size
@@ -565,12 +555,15 @@ const CommandeBar = () => {
                       color="secondary"
                       sx={{
                         margin: 1,
-                        fontSize: 20,
+                        // fontSize: 10,
+                        marginTop: 5,
+                        color: "white",
                       }}
-                      onClick={() => {setopenModal(true) }}
-                      // onClick={() => handlePrintTable()}
+                      onClick={() => {
+                        setopenModal(true);
+                      }}
                     >
-                      Add to Invoice
+                      Valider la commande
                     </Button>
                   </>
                 )}
@@ -618,9 +611,10 @@ const CommandeBar = () => {
                     onChange={(e) => {
                       setid_client(e.target.value);
                       console.log(e.target.value);
-                      const nameClient = listclient.find(item => item.id === e.target.value)
-                     setclient_name(nameClient.first_name)
-                      
+                      const nameClient = listclient.find(
+                        (item) => item.id === e.target.value
+                      );
+                      setclient_name(nameClient.first_name);
                     }}
                   >
                     {listclient.map((item) => (
@@ -634,14 +628,14 @@ const CommandeBar = () => {
             </Grid>
 
             <Box mt={2}>
-            <Button
+              <Button
                 style={{ marginRight: "10px" }}
                 variant="contained"
                 color="info"
                 onClick={() => {
-                  valideEntre()
-                  setopenModal(false)
-                  handlePrintTable()
+                  valideEntre();
+                  setopenModal(false);
+                  handlePrintTable();
                 }}
               >
                 Valider
