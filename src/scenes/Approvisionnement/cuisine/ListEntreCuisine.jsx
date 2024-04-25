@@ -109,6 +109,23 @@ const LisEntreCuisine = () => {
     axios.get(API_URL + "fournisseur/").then((res) => setData(res.data));
   };
 
+  //valide l'approvisionnement
+  const updatevalidated_by = () => {
+    axios
+      .patch(API_URL + `mouvement/entre/${id}/`, {
+        validated_by: 1,
+      })
+      .then((response) => {
+        handleCloseforView();
+        Swal.fire({
+          icon: "success",
+          title: "operation reussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      });
+  };
+
   // creation mouvement entre
 
   const creationMouvement = () => {
@@ -117,6 +134,7 @@ const LisEntreCuisine = () => {
       .post(API_URL + "mouvement/entre/", {
         reference: generatedCode,
         description: description,
+        type_entre: 2,
         fournisseur: id_fournisseur,
         created_by: 1,
       })
@@ -135,8 +153,8 @@ const LisEntreCuisine = () => {
   // listes des mouvement entre
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/type/3/").then((response) => {
-      setlistentreproduit([response.data]);
+    axios.get(API_URL + "mouvement/entre/type/2/").then((response) => {
+      setlistentreproduit(response.data);
     });
   };
 
@@ -412,52 +430,54 @@ const LisEntreCuisine = () => {
           >
             <FolderIcon />
           </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-              })
-                .then((result) => {
-                  if (result.isConfirmed) {
-                    axios
-                      .delete(API_URL + `mouvement/entre/${params.row.id}/`)
-                      .then((response) => fetchentreproduit());
-                  }
+          {params.row.validated_by === null && (
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, delete it!",
                 })
-                .then((response) => {
-                  fetchentreproduit();
-                  fetchunite();
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success",
-                  });
-                  if (response.status === 200) {
+                  .then((result) => {
+                    if (result.isConfirmed) {
+                      axios
+                        .delete(API_URL + `mouvement/entre/${params.row.id}/`)
+                        .then((response) => fetchentreproduit());
+                    }
+                  })
+                  .then((response) => {
+                    fetchentreproduit();
+                    fetchunite();
                     Swal.fire({
                       title: "Deleted!",
                       text: "Your item has been deleted.",
                       icon: "success",
                     });
-                  } else {
-                    Swal.fire({
-                      title: "Error!",
-                      text: "An error occurred while deleting the item.",
-                      icon: "error",
-                    });
-                  }
-                  fetchentreproduit();
-                });
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
+                    if (response.status === 200) {
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success",
+                      });
+                    } else {
+                      Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting the item.",
+                        icon: "error",
+                      });
+                    }
+                    fetchentreproduit();
+                  });
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
           <IconButton
             aria-label="delete"
             onClick={() => {
@@ -903,7 +923,7 @@ const LisEntreCuisine = () => {
                     <TableCell>Quantite</TableCell>
                     <TableCell>Prix Unitaire</TableCell>
                     <TableCell>Prix Total</TableCell>
-                    <TableCell>Actons</TableCell>
+                    {validated_by === null && <TableCell>Actons</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -917,11 +937,15 @@ const LisEntreCuisine = () => {
                       <TableCell>{row.quantite}</TableCell>
                       <TableCell>{row.prix_unitaire}</TableCell>
                       <TableCell>{row.prix_total}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => deleteentreproduit(row.id)}>
-                          <DeleteIcon color="error" />
-                        </IconButton>
-                      </TableCell>
+                      {validated_by === null && (
+                        <TableCell>
+                          <IconButton
+                            onClick={() => deleteentreproduit(row.id)}
+                          >
+                            <DeleteIcon color="error" />
+                          </IconButton>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -929,7 +953,11 @@ const LisEntreCuisine = () => {
                   <TableRow>
                     <TableCell sx={{ border: 0 }}>
                       {validated_by == null ? (
-                        <Button variant="contained" color="secondary">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={updatevalidated_by}
+                        >
                           valide
                         </Button>
                       ) : (

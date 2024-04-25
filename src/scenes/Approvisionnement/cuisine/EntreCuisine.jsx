@@ -115,7 +115,7 @@ const EntreCuisine = () => {
 
   //fetch of product
   const fetchProduct = () => {
-    axios.get(API_URL + "produit/").then((response) => {
+    axios.get(API_URL + "produit/type/2/").then((response) => {
       setproduct(response.data);
     });
   };

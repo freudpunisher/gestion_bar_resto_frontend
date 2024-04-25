@@ -20,9 +20,9 @@ import {
   Paper,
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { tokens } from "../../../theme";
-import { mockDataContacts } from "../../../data/mockData";
-import Header from "../../../components/Header";
+import { tokens } from "../../theme";
+import { mockDataContacts } from "../../data/mockData";
+import Header from "../../components/Header";
 import { useTheme, Grid } from "@mui/material";
 // import { API_Url } from "../../data/API";
 import axios from "axios";
@@ -34,12 +34,13 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FolderIcon from "@mui/icons-material/Folder";
 // import { motion } from 'framer-motion';
-import { API_URL } from "../../../data/Api";
+import { API_URL } from "../../data/Api";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-const LisCommandeBar = () => {
+const ListFactureCuisine = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -82,11 +83,14 @@ const LisCommandeBar = () => {
   const [openModalv, setopenModalv] = useState(false);
   const [validated_by, setvalidated_by] = useState();
   const [Id_entreMouvement, setid_entreMouvement] = useState();
+  const [numero_Facture, setnumero_Facture] = useState();
+  const [serveur, setserveur] = useState();
+  const [date, setdate] = useState();
 
   var productdata = listentreproduit.map((obj) => ({
     id: obj.id,
     reference: obj.reference,
-    fournisseur: obj.fournisseur_info.fournisseur,
+    client: obj.client_info.client,
     created_by: obj.created_by_info.user,
     created_at: obj.created_at,
     validated_by: obj.validated_by,
@@ -98,7 +102,7 @@ const LisCommandeBar = () => {
     id: obj.id,
     reference: obj.reference,
     produit: obj.produit_info.produit,
-    mouvement_entre: obj.mouvement_entre_info.mouvement_entre,
+    // mouvement_entre: obj.mouvement_entre_info.mouvement_entre,
     quantite: obj.quantite,
     prix_unitaire: obj.prix_unitaire,
     prix_total: obj.prix_total,
@@ -109,59 +113,30 @@ const LisCommandeBar = () => {
     axios.get(API_URL + "fournisseur/").then((res) => setData(res.data));
   };
 
-  //valide l'approvisionnement
-  const updatevalidated_by = () => {
-    axios
-      .patch(API_URL + `mouvement/entre/${id}/`, {
-        validated_by: 1,
-      })
-      .then((response) => {
-        handleCloseforView();
-        Swal.fire({
-          icon: "success",
-          title: "operation reussi",
-          showConfirmButton: false,
-          timer: 3000,
-        });
-      });
-  };
-
   // creation mouvement entre
 
   const creationMouvement = () => {
     console.log(id_fournisseur);
-    axios
-      .post(API_URL + "mouvement/entre/", {
-        reference: generatedCode,
-        description: description,
-        type_entre: 1,
-        fournisseur: id_fournisseur,
-        created_by: 1,
-      })
-      .then((res) => {
-        Swal.fire({
-          icon: "success",
-          title: "operation  réussi",
-          showConfirmButton: false,
-          timer: 3000,
-        });
-        setopenModal(false);
-        fetchentreproduit();
-      });
+    axios.post(API_URL + "mouvement/entre/", {
+      reference: generatedCode,
+      description: description,
+      fournisseur: id_fournisseur,
+      created_by: 1,
+    });
   };
 
-  // listes des mouvement entre
+  // listes des mouvement sortie
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/type/1/").then((response) => {
+    axios.get(API_URL + "mouvement/sortie/type/2/").then((response) => {
       setlistentreproduit(response.data);
     });
   };
 
   // delete entreProduit
   const deleteentreproduit = (id) => {
-    console.log(`mouvement/entre/${id}/`, "sdssssssssssssssssssssssssss");
-    axios.delete(API_URL + `entre/${id}/`).then((response) => {
+    console.log(`mouvement/sortie/${id}/`, "sdssssssssssssssssssssssssss");
+    axios.delete(API_URL + `sortie/${id}/`).then((response) => {
       fetchProduit(Id_entreMouvement);
     });
   };
@@ -242,7 +217,7 @@ const LisCommandeBar = () => {
   };
   const fetchProduit = (id) => {
     setid_entreMouvement(id);
-    axios.get(API_URL + `entre/mouvement/${id}/`).then((response) => {
+    axios.get(API_URL + `sortie/mouvements/${id}/`).then((response) => {
       setlistproduit(response.data);
     });
   };
@@ -334,8 +309,8 @@ const LisCommandeBar = () => {
       //   cellClassName: "name-column--cell",
     },
     {
-      field: "fournisseur",
-      headerName: "Fournisseur",
+      field: "client",
+      headerName: "Client",
       type: "number",
       headerAlign: "left",
       align: "left",
@@ -445,7 +420,7 @@ const LisCommandeBar = () => {
                 .then((result) => {
                   if (result.isConfirmed) {
                     axios
-                      .delete(API_URL + `mouvement/entre/${params.row.id}/`)
+                      .delete(API_URL + `mouvement/sortie/${params.row.id}/`)
                       .then((response) => fetchentreproduit());
                   }
                 })
@@ -481,6 +456,9 @@ const LisCommandeBar = () => {
             onClick={() => {
               setopenModalv(true);
               fetchProduit(params.row.id);
+              setnumero_Facture(params.row.reference);
+              setdate(params.row.created_at);
+              setserveur(params.row.client);
               setid(params.row.id);
               setvalidated_by(params.row.validated_by);
             }}
@@ -508,10 +486,14 @@ const LisCommandeBar = () => {
     console.log(firstPageRows);
     window.print();
   };
+
+  const totalPT = produitdata
+    .reduce((acc, row) => acc + Number(row.prix_total), 0)
+    .toFixed(2);
   return (
     <Box m="20px">
       <Header
-        title="Approvisionnement Bar"
+        title="listes des factures"
         // subtitle="Listes des produits"
       />
       <Box
@@ -548,21 +530,14 @@ const LisCommandeBar = () => {
       >
         <Box>
           {/* <ReactToPrint
-        trigger={() => (
-          <Button variant="contained" color="primary" sx={{ marginRight: 'auto' }}>
-            Print
-          </Button>
-        )}
-        content={() => dataGridRef.current}
-      /> */}
-          <Button
-            variant="contained"
-            color="secondary"
-            sx={{ marginRight: "auto" }}
-            onClick={() => setopenModal(true)}
-          >
-            Ajouter un commande
-          </Button>
+            trigger={() => (
+              <Button variant="contained" color="primary" sx={{ marginRight: 'auto' }}>
+                Print
+              </Button>
+            )}
+            content={() => dataGridRef.current}
+          /> */}
+
           {/* <Button variant="contained" color="primary"  sx={{ marginRight:'auto' }} onClick={handlePayButtonClick}>print</Button> */}
         </Box>
         <DataGrid
@@ -573,50 +548,39 @@ const LisCommandeBar = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      <>
-        <style media="print">
-          {`
-          @page {
-            size: auto; /* auto is the initial value */
-            margin:   0mm; /* this affects the margin in the printer settings */
-          }
-          body {
-            margin:   1cm; /* this affects the margin on the content before sending to printer */
-          }
-        `}
-        </style>
-        <table
-          id="printableArea"
-          className="hiddenOnScreen"
-          style={{ display: "none" }}
-        >
-          <thead>
-            <tr>
+      <style media="print">
+        {`
+              @page {
+                size: auto; /* auto is the initial value */
+                margin:   0mm; /* this affects the margin in the printer settings */
+              }
+              body {
+                margin:   1cm; /* this affects the margin on the content before sending to printer */
+              }
+            `}
+      </style>
+      <table
+        id="printableArea"
+        className="hiddenOnScreen"
+        style={{ display: "none" }}
+      >
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.field}>{column.headerName}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id}>
               {columns.map((column) => (
-                <th key={column.field}>{column.headerName}</th>
+                <td key={column.field}>{row[column.field]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                {columns.map((column) => (
-                  <td key={column.field}>{row[column.field]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>
-      {/* <motion.div
-   initial={{ scale: 0 }}
-   animate={{ rotate: 180, scale: 1 }}
-   transition={{
-     type: "spring",
-     stiffness: 260,
-     damping: 20
-   }}
-> */}
+          ))}
+        </tbody>
+      </table>
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -648,11 +612,7 @@ const LisCommandeBar = () => {
               </Grid>
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel
-                    id="demo-simple-select-label"
-                    sx={{ margin: -1 }}
-                    color="secondary"
-                  >
+                  <InputLabel id="demo-simple-select-label">
                     Selectionnez fournisseur
                   </InputLabel>
                   <Select
@@ -687,25 +647,25 @@ const LisCommandeBar = () => {
             </Grid>
 
             {/* {Category === "comprime" && <TextField
-      name="nombre de pillule"
-      label="nombre de pillule"
-      onChange={(e)=>setnombrepillule(e.target.value)}
-    />} */}
+          name="nombre de pillule"
+          label="nombre de pillule"
+          onChange={(e)=>setnombrepillule(e.target.value)}
+        />} */}
             {/* {Category === "Blister" && <TextField
-      name="nombre de comprime par plaquette"
-      label="nombre de comprime par  plaquette"
-      onChange={(e)=>setnombreplaquette(e.target.value)}
-    />} */}
+          name="nombre de comprime par plaquette"
+          label="nombre de comprime par  plaquette"
+          onChange={(e)=>setnombreplaquette(e.target.value)}
+        />} */}
             {/* {Category === "comprime" &&<TextField
-      name="prix par plaquette"
-      label="prix par plaquette"
-      onChange={(e)=>setprixplaquette(e.target.value)}
-    />}
-    {Category === "comprime" && <TextField
-      name="prix par comprime"
-      label="prix par comprime"
-      onChange={(e)=>setprixpillule(e.target.value)}
-    />} */}
+          name="prix par plaquette"
+          label="prix par plaquette"
+          onChange={(e)=>setprixplaquette(e.target.value)}
+        />}
+        {Category === "comprime" && <TextField
+          name="prix par comprime"
+          label="prix par comprime"
+          onChange={(e)=>setprixpillule(e.target.value)}
+        />} */}
 
             <Box mt={2} paddingLeft={70}>
               <Button
@@ -731,7 +691,6 @@ const LisCommandeBar = () => {
         </Box>
       </Modal>
       {/* </motion.div> */}
-      /**update medication */
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
           sx={{
@@ -829,45 +788,45 @@ const LisCommandeBar = () => {
                 </Grid>
               </Grid>
               {/* <Grid item xs={6}>
-    <TextField
-      name="Quantite"
-      label="Quantite"
-      value={quantiteu}
-      onChange={(e) => setquantiteu(e.target.value)}
-      fullWidth
-    />
-  </Grid>
-  <Grid item xs={6}>
-    <TextField
-      name="prix"
-      label="prix"
-      value={priceu}
-      onChange={(e) => setpriceu(e.target.value)}
-      fullWidth
-    />
-  </Grid> */}
+        <TextField
+          name="Quantite"
+          label="Quantite"
+          value={quantiteu}
+          onChange={(e) => setquantiteu(e.target.value)}
+          fullWidth
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <TextField
+          name="prix"
+          label="prix"
+          value={priceu}
+          onChange={(e) => setpriceu(e.target.value)}
+          fullWidth
+        />
+      </Grid> */}
             </Grid>
 
             {/* {Category === "comprime" && <TextField
-      name="nombre de pillule"
-      label="nombre de pillule"
-      onChange={(e)=>setnombrepillule(e.target.value)}
-    />} */}
+          name="nombre de pillule"
+          label="nombre de pillule"
+          onChange={(e)=>setnombrepillule(e.target.value)}
+        />} */}
             {/* {Category === "Blister" && <TextField
-      name="nombre de comprime par plaquette"
-      label="nombre de comprime par  plaquette"
-      onChange={(e)=>setnombreplaquette(e.target.value)}
-    />} */}
+          name="nombre de comprime par plaquette"
+          label="nombre de comprime par  plaquette"
+          onChange={(e)=>setnombreplaquette(e.target.value)}
+        />} */}
             {/* {Category === "comprime" &&<TextField
-      name="prix par plaquette"
-      label="prix par plaquette"
-      onChange={(e)=>setprixplaquette(e.target.value)}
-    />}
-    {Category === "comprime" && <TextField
-      name="prix par comprime"
-      label="prix par comprime"
-      onChange={(e)=>setprixpillule(e.target.value)}
-    />} */}
+          name="prix par plaquette"
+          label="prix par plaquette"
+          onChange={(e)=>setprixplaquette(e.target.value)}
+        />}
+        {Category === "comprime" && <TextField
+          name="prix par comprime"
+          label="prix par comprime"
+          onChange={(e)=>setprixpillule(e.target.value)}
+        />} */}
 
             <Box mt={2}>
               <Button
@@ -908,7 +867,13 @@ const LisCommandeBar = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h3" mb={1}>
-              Produit
+              {numero_Facture}
+            </Typography>
+            <Typography variant="h4" mb={1}>
+              {serveur}
+            </Typography>
+            <Typography variant="h4" mb={1}>
+              {moment(date).format("YYYY-MM-DD")}
             </Typography>
             <TableContainer style={{ borderRadius: "4px" }}>
               <Table
@@ -931,8 +896,8 @@ const LisCommandeBar = () => {
                   {produitdata.map((row) => (
                     <TableRow key={row.id}>
                       {/* <TableCell component="th" scope="row" sx={{ border: 2 }}>
-                        {row.id}
-                      </TableCell> */}
+                            {row.id}
+                          </TableCell> */}
                       <TableCell>{row.produit}</TableCell>
                       {/* <TableCell>{row.mouvement_entre}</TableCell> */}
                       <TableCell>{row.quantite}</TableCell>
@@ -945,16 +910,28 @@ const LisCommandeBar = () => {
                       </TableCell>
                     </TableRow>
                   ))}
+                  <TableRow sx={{ bgcolor: colors.primary[700] }}>
+                    <TableCell
+                      colSpan={3}
+                      align="left"
+                      sx={{ fontSize: 30, fontWeight: "bold" }}
+                    >
+                      Total
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontSize: 30, fontWeight: "bold" }}
+                    >
+                      {totalPT}
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
                 </TableBody>
                 <TableFooter>
-                  <TableRow>
+                  <TableRow sx={{ border: 0 }}>
                     <TableCell sx={{ border: 0 }}>
                       {validated_by == null ? (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={updatevalidated_by}
-                        >
+                        <Button variant="contained" color="secondary">
                           valide
                         </Button>
                       ) : (
@@ -974,4 +951,4 @@ const LisCommandeBar = () => {
   );
 };
 
-export default LisCommandeBar;
+export default ListFactureCuisine;
