@@ -109,6 +109,23 @@ const LisCommandeBar = () => {
     axios.get(API_URL + "fournisseur/").then((res) => setData(res.data));
   };
 
+  //valide l'approvisionnement
+  const updatevalidated_by = () => {
+    axios
+      .patch(API_URL + `mouvement/entre/${id}/`, {
+        validated_by: 1,
+      })
+      .then((response) => {
+        handleCloseforView();
+        Swal.fire({
+          icon: "success",
+          title: "operation reussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      });
+  };
+
   // creation mouvement entre
 
   const creationMouvement = () => {
@@ -933,7 +950,11 @@ const LisCommandeBar = () => {
                   <TableRow>
                     <TableCell sx={{ border: 0 }}>
                       {validated_by == null ? (
-                        <Button variant="contained" color="secondary">
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={updatevalidated_by}
+                        >
                           valide
                         </Button>
                       ) : (

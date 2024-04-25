@@ -90,7 +90,7 @@ const CommandeBar = () => {
   const itemEntre = secondTableData.map((row) => ({
     produit: row.produit,
     unite_mesure: row.id,
-    quantite: row.quantity,
+    quantite: (row.quantity * row.value_rapport).toFixed(2),
     prix_unitaire: row.PU,
     type_sortie: 1,
     prix_total: row.quantity * row.PU,
@@ -128,6 +128,7 @@ const CommandeBar = () => {
         unite: row.code,
         nom: row.produit_info.produit,
         produit: row.produit,
+        value_rapport: row.value_rapport,
         quantity: 1,
         PU: row.value_prix_vente,
         PT: 0,
@@ -347,10 +348,7 @@ const CommandeBar = () => {
         <Grid item xs={12} md={6}>
           <Box padding={3}>
             <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
-              <Typography
-                padding={2}
-                sx={{ fontSize: 20, fontWeight: "bold", }}
-              >
+              <Typography padding={2} sx={{ fontSize: 20, fontWeight: "bold" }}>
                 Listes des produits
               </Typography>
 
@@ -396,7 +394,11 @@ const CommandeBar = () => {
                               gutterBottom
                               variant="h5"
                               component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold",paddingTop:"10px" }}
+                              sx={{
+                                fontSize: 16,
+                                fontWeight: "bold",
+                                paddingTop: "10px",
+                              }}
                             >
                               {item.produit_info.produit}
                             </Typography>
