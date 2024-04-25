@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Grid,
   Card,
@@ -38,6 +38,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logo-bar-resto-light.png";
+import ReactToPrint from "react-to-print";
 
 const CommandeBar = () => {
   const theme = useTheme();
@@ -73,7 +75,10 @@ const CommandeBar = () => {
   const [quantity, setQuantity] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [listclient, setlistclient] = useState([]);
+  const [client_name, setclient_name] = useState();
   const [Nomunite, setNomunite] = useState();
+  const [invoiceData, setInvoiceData] = useState(null);
+
   //   const [PU, setPU] = useState();
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -131,6 +136,57 @@ const CommandeBar = () => {
     }
   };
 
+  function handlePrintTable() {
+    // Generate a print-friendly HTML table structure
+
+    const printTableHTML = `
+      <div style="width: 100%; margin: 0 auto;">
+        <table style="width: 100%;">
+          <tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>
+        </table><br>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
+          <tr><td>Serveur</td><td>: ${client_name}</td></tr>
+          <tr><td>Date</td><td>: 24/04/2024</td></tr>
+          <tr><td>FACT No</td><td>: ${generatedCode}</td></tr>   
+        </table><br>
+        <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+          <thead>                         
+            <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
+          </thead>
+          <tbody>
+            ${secondTableData.map(
+              (item) => `
+              <tr>
+                <td>${item.nom}</td>
+                <td>${item.quantity}</td>
+                <td>${item.PU} Fbu</td>
+                <td>${item.quantity * item.PU} Fbu</td>
+              </tr>
+            `
+            )}
+            <tr>
+              <td colspan="3">Total</td>
+              <td>${totalPT} Fbu</td>
+            </tr>             
+          </tbody>
+        </table>
+      </div> <br>
+      <table style="width: 100%;">
+        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+      </table><hr><br><br>
+      
+    `;
+    const printWindow = window.open("", "", "width=1000,height=1000");
+    printWindow.document.write(printTableHTML);
+    printWindow.document.close();
+
+    printWindow.onload = function () {
+      printWindow.print();
+      printWindow.close();
+    };
+  }
+
   // fetch list client
   const fetchClient = () => {
     axios.get(API_URL + "client/").then((res) => setlistclient(res.data));
@@ -179,6 +235,44 @@ const CommandeBar = () => {
       });
   };
 
+  // creation entre
+  const valideEntre = () => {
+    axios
+      .post(API_URL + "mouvement/sortie/", {
+        reference: generatedCode,
+        client: id_client,
+        description: "facture",
+        created_by: 1,
+      })
+      .then((response) => {
+        axios
+          .post(API_URL + "sortie/data/", itemEntre, {
+            transformRequest: [
+              (data, headers) => {
+                // Assuming itemEntre is an array of objects
+                // Modify each item in the array to include the new property
+                const modifiedData = data.map((item) => ({
+                  ...item,
+                  mouvement_sortie: response.data.id, // Add your new property here
+                }));
+
+                // Return the modified data as a JSON string
+                return JSON.stringify(modifiedData);
+              },
+            ],
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            setopenModal(false);
+          });
+      });
+
+    handlePrintTable();
+    setSecondTableData([]);
+  };
+
   const handleRemoveButtonClick = (rowId) => {
     setSecondTableData((prevData) =>
       prevData.filter((item) => item.id !== rowId)
@@ -192,6 +286,7 @@ const CommandeBar = () => {
       )
     );
   };
+
   const decreaseQuantity = (id, newQuantity) => {
     setSecondTableData(
       secondTableData.map((item) =>
@@ -208,7 +303,6 @@ const CommandeBar = () => {
   };
 
   // search for products
-
   const searchProduct = async () => {
     try {
       const response = await axios.get(API_URL + "unite/search/", {
@@ -219,11 +313,6 @@ const CommandeBar = () => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    if (searchTerm !== undefined) {
-      searchProduct();
-    }
-  }, [searchTerm]);
 
   useEffect(() => {
     fetchProduct();
@@ -257,13 +346,10 @@ const CommandeBar = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
               <Typography
                 padding={2}
-                sx={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                }}
+                sx={{ fontSize: 20, fontWeight: "bold", }}
               >
                 Listes des produits
               </Typography>
@@ -286,7 +372,7 @@ const CommandeBar = () => {
               </IconButton>
               <CardContent>
                 <div>
-                  <Grid container xs={12} spacing={2}>
+                  <Grid container xs={12} spacing={1}>
                     {product.map((item) => (
                       <Grid item sm={12} md={12} lg={3} key={item.nom}>
                         <Card
@@ -294,7 +380,7 @@ const CommandeBar = () => {
                           sx={{
                             backgroundColor: colors.greenAccent[700],
                             maxWidth: 200,
-                            height: 100,
+                            // height: 100,
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
@@ -302,21 +388,15 @@ const CommandeBar = () => {
                           }}
                           onClick={() => {
                             handleAddButtonClick(item);
-                            console.log(item);
+                            // console.log(item);
                           }}
                         >
-                          {/* <CardMedia
-                           component="img"
-                           height="140"
-                           image={item.imageUrl}
-                           alt={item.nom}
-                         /> */}
                           <CardContent>
                             <Typography
                               gutterBottom
                               variant="h5"
                               component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold" }}
+                              sx={{ fontSize: 16, fontWeight: "bold",paddingTop:"10px" }}
                             >
                               {item.produit_info.produit}
                             </Typography>
@@ -332,17 +412,17 @@ const CommandeBar = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
-                title="Facturation"
+                title="Liste produits commande"
                 sx={{
                   backgroundColor: colors.blueAccent[700],
-                  padding: 1,
+                  padding: 2,
                 }}
                 titleTypographyProps={{
-                  variant: "h1", // Adjust the variant to change the font size
+                  variant: "h3", // Adjust the variant to change the font size
                   sx: {
-                    // fontSize: 20, // Directly set the font size
+                    fontSize: 20, // Directly set the font size
                     color: "white",
                     fontWeight: "bold", // Set the color of the title
                   },
@@ -350,8 +430,8 @@ const CommandeBar = () => {
               />
               <CardContent>
                 {secondTableData.length === 0 ? (
-                  <Typography variant="h3" align="center">
-                    No product added
+                  <Typography variant="h4" align="center">
+                    Aucun produit ajouter
                   </Typography>
                 ) : (
                   // Only display invoice details if a product is selected
@@ -475,11 +555,15 @@ const CommandeBar = () => {
                       color="secondary"
                       sx={{
                         margin: 1,
-                        fontSize: 20,
+                        // fontSize: 10,
+                        marginTop: 5,
+                        color: "white",
                       }}
-                      onClick={() => setopenModal(true)}
+                      onClick={() => {
+                        setopenModal(true);
+                      }}
                     >
-                      Add to Invoice
+                      Valider la commande
                     </Button>
                   </>
                 )}
@@ -527,6 +611,10 @@ const CommandeBar = () => {
                     onChange={(e) => {
                       setid_client(e.target.value);
                       console.log(e.target.value);
+                      const nameClient = listclient.find(
+                        (item) => item.id === e.target.value
+                      );
+                      setclient_name(nameClient.first_name);
                     }}
                   >
                     {listclient.map((item) => (
@@ -540,6 +628,18 @@ const CommandeBar = () => {
             </Grid>
 
             <Box mt={2}>
+              <Button
+                style={{ marginRight: "10px" }}
+                variant="contained"
+                color="info"
+                onClick={() => {
+                  valideEntre();
+                  setopenModal(false);
+                  handlePrintTable();
+                }}
+              >
+                Valider
+              </Button>
               <Button
                 style={{ marginRight: "10px" }}
                 variant="contained"

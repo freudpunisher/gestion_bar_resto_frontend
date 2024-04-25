@@ -94,8 +94,8 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h2" sx={{ fontWeight: "bold" }}>
-                  BUGARAMA
+                <Typography variant="h1" sx={{ fontWeight: "bold" }}>
+                    SGRB
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon color="white" />

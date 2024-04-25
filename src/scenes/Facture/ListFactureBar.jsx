@@ -548,7 +548,6 @@ const ListFactureBar = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      <>
         <style media="print">
           {`
             @page {
@@ -581,18 +580,7 @@ const ListFactureBar = () => {
               </tr>
             ))}
           </tbody>
-        </table>
-      </>
-      /**Add medication */
-      {/* <motion.div
-     initial={{ scale: 0 }}
-     animate={{ rotate: 180, scale: 1 }}
-     transition={{
-       type: "spring",
-       stiffness: 260,
-       damping: 20
-     }}
-  > */}
+        </table>      
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -703,7 +691,6 @@ const ListFactureBar = () => {
         </Box>
       </Modal>
       {/* </motion.div> */}
-      /**update medication */
       <Modal open={openModalu} onClose={handleCloseforupdate}>
         <Box
           sx={{

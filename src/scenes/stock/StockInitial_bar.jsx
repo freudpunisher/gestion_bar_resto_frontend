@@ -39,6 +39,10 @@ import IconButton from "@mui/material/IconButton";
 import { jsPDF } from 'jspdf'; //or use your library of choice here
 import autoTable from 'jspdf-autotable';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import * as XLSX from "xlsx";
+import { saveAs } from 'file-saver';
+import html2canvas from 'html2canvas';
+import { PDFDownloadLink,Document, Page, Text, View, pdf } from '@react-pdf/renderer';
 
 const rowsPerPageOptions = [5, 10, 25];
 
@@ -280,6 +284,89 @@ function StockInitialBar() {
     ),
   });
 
+  // print excel file--------------------------------------
+  // const handleExportToExcel = () => {
+  //   const workbook = XLSX.utils.book_new();
+  //   const worksheet = XLSX.utils.json_to_sheet(data);
+  
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+  
+  //   const excelBuffer = XLSX.write(workbook, {
+  //     bookType: "xlsx",
+  //     type: "array",
+  //   });
+  
+  //   const fileName = "data.xlsx";
+  //   const excelBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  //   const excelUrl = URL.createObjectURL(excelBlob);
+  
+  //   const downloadLink = document.createElement("a");
+  //   downloadLink.href = excelUrl;
+  //   downloadLink.download = fileName;
+  //   downloadLink.click();
+  
+  //   // Clean up the object URL
+  //   URL.revokeObjectURL(excelUrl);
+  // };
+
+  // print PDF file----------------------------------------
+  const handleExportToPDF = async () => {
+    const input = document.getElementById('data_liste');
+  
+    // Convertir le contenu HTML en une image
+    const image = await html2canvas(input);
+  
+    // Créer un PDF avec `jspdf`
+    const doc = new jsPDF();
+  
+    // Ajouter l'image au PDF
+    const width = doc.internal.pageSize.getWidth();
+    const height = (image.height * width) / image.width;
+    doc.addImage(image.toDataURL('image/png'), 'PNG', 0, 0, width, height);
+  
+    // Sauvegarder ou afficher le PDF
+    doc.save('grille_de_donnees.pdf');
+  };
+
+  const MyPDF = ({ data }) => (
+    <Document>
+      <Page>
+        <View>
+          <Text>My DataGrid PDF</Text>
+          <DataGrid rows={data} columns={columns} />
+        </View>
+      </Page>
+    </Document>
+  );
+
+  // const handleExportToPDF = () => {
+  //   const fileName = 'datagrid.pdf';
+  
+  //   const pdfContent = (
+  //     <MyPDF data={data} columns={columns} />
+  //   );
+  
+  //   return (
+  //     <PDFDownloadLink document={pdfContent} fileName={fileName}>
+  //       {({ blob, url, loading, error }) =>
+  //         loading ? 'Generating PDF...' : 'Download PDF'
+  //       }
+  //     </PDFDownloadLink>
+  //   );
+  // };
+
+  // const handleExportToPDF = () => {
+  //   const fileName = 'datagrid.pdf';
+  
+  //   const pdfContent = (
+  //     <MyPDF data={data} columns={columns} />
+  //   );
+  
+  //   const blob = pdf(pdfContent).toBlob();
+  
+  //   saveAs(blob, fileName);
+  // };
+
     
   return (
     <Box m="20px">
@@ -323,6 +410,7 @@ function StockInitialBar() {
                 color: "white",
                 backgroundColor: "inherit",
               }}
+              placeholder="code ou nom produit"
               onChange={(e) => {
                 setproduit(e.target.value);
                 console.log(e.target.value, "change");
@@ -330,7 +418,7 @@ function StockInitialBar() {
             />            
           </Grid>
           {/* bouton recherch */}
-          <Grid item sm={2}>
+          <Grid item sm={3}>
             <Button
               title="Rechercher"
               sx={{
@@ -351,8 +439,22 @@ function StockInitialBar() {
                 backgroundColor: colors.blueAccent[700],
                 color: colors.grey[100],
                 fontSize: "14px",
+                marginTop: 3,                
+                marginRight: 1
+              }}
+              onClick={handleExportToPDF}
+            >
+              <DownloadOutlinedIcon/>
+            </Button>
+            <Button
+              title="Imprimer la liste"
+              sx={{
+                backgroundColor: colors.blueAccent[400],
+                color: colors.grey[100],
+                fontSize: "14px",
                 marginTop: 3
               }}
+              onClick={handleExportToPDF}
             >
               <DownloadOutlinedIcon/>
             </Button>
@@ -360,7 +462,8 @@ function StockInitialBar() {
           {/*etat stock liste */}
           <Grid item xs={12}>            
             <Box
-               m="40px 0 0 0"
+               m="10px 0 0 0"
+               id="data_liste"
               //  height="75vh"
                sx={{
                  "& .MuiDataGrid-root": {
@@ -391,6 +494,9 @@ function StockInitialBar() {
                  },
                }}
             >
+              <Typography variant="h3" sx={{ padding: '4px',}}>
+                Liste etat stock Produits
+              </Typography>
               {/* <MaterialReactTable table={table} /> */}
               <DataGrid
                 checkboxSelection
