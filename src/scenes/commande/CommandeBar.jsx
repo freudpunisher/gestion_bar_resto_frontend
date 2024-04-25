@@ -145,6 +145,9 @@ const CommandeBar = () => {
         <table style="width: 100%;">
           <tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>
         </table><br>
+        <table style="width: 100%; fonte-size:14;">
+        <tr><th>DODOMA PARK BUGARAMA</th></tr>
+      </table><hr><br>
         <table style="width: 100%; border-collapse: collapse;">
           <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
           <tr><td>Serveur</td><td>: ${client_name}</td></tr>
@@ -182,10 +185,8 @@ const CommandeBar = () => {
     printWindow.document.write(printTableHTML);
     printWindow.document.close();
 
-    printWindow.onload = function () {
-      printWindow.print();
-      printWindow.close();
-    };
+    printWindow.print();
+    printWindow.close();
   }
 
   // fetch list client
@@ -371,7 +372,7 @@ const CommandeBar = () => {
               </IconButton>
               <CardContent>
                 <div>
-                  <Grid container xs={12} spacing={1}>
+                  <Grid container xs={12} spacing={2}>
                     {product.map((item) => (
                       <Grid item sm={12} md={12} lg={3} key={item.nom}>
                         <Card
@@ -381,7 +382,7 @@ const CommandeBar = () => {
                             maxWidth: 200,
                             // height: 100,
                             display: "flex",
-                            flexDirection: "column",
+                            // flexDirection: "column",
                             justifyContent: "center",
                             alignItems: "center",
                           }}
@@ -638,7 +639,6 @@ const CommandeBar = () => {
                 onClick={() => {
                   valideEntre();
                   setopenModal(false);
-                  handlePrintTable();
                 }}
               >
                 Valider
