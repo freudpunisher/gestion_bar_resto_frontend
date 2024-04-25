@@ -117,6 +117,7 @@ const LisEntreCuisine = () => {
       .post(API_URL + "mouvement/entre/", {
         reference: generatedCode,
         description: description,
+        type_entre: 2,
         fournisseur: id_fournisseur,
         created_by: 1,
       })
@@ -135,8 +136,8 @@ const LisEntreCuisine = () => {
   // listes des mouvement entre
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/entre/type/3/").then((response) => {
-      setlistentreproduit([response.data]);
+    axios.get(API_URL + "mouvement/entre/type/2/").then((response) => {
+      setlistentreproduit(response.data);
     });
   };
 
