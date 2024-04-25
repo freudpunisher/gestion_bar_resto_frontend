@@ -41,7 +41,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-bar-resto-light.png";
 import ReactToPrint from "react-to-print";
 
-const CommandeBar = () => {
+const CommandeCuisine = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const blue = colors.blueAccent[400];
@@ -63,7 +63,7 @@ const CommandeBar = () => {
   }
   const code = generateRandomCode(4);
   const [generatedCode, setGeneratedCode] = useState(
-    `FCT${currentYear}${currentMonth}${code}BR`
+    `FCT${currentYear}${currentMonth}${code}CS`
   );
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [id, setId] = useState();
@@ -88,12 +88,12 @@ const CommandeBar = () => {
   };
 
   const itemEntre = secondTableData.map((row) => ({
-    produit: row.produit,
-    unite_mesure: row.id,
-    quantite: (row.quantity * row.value_rapport).toFixed(2),
+    recette: row.id,
+    // unite_mesure: row.id,
+    quantite: row.quantity,
     prix_unitaire: row.PU,
-    type_sortie: 1,
-    prix_total: row.quantity * row.PU,
+    // type_sortie: 2,
+    prix_total: "12000.00",
   }));
 
   // recupere pU d'un produit et nom du produit
@@ -125,12 +125,10 @@ const CommandeBar = () => {
       // Add new product to the table
       const newItem = {
         id: row.id,
-        unite: row.code,
-        nom: row.produit_info.produit,
-        produit: row.produit,
-        value_rapport: row.value_rapport,
+        // unite: row.code,
+        nom: row.name,
         quantity: 1,
-        PU: row.value_prix_vente,
+        PU: row.amount,
         PT: 0,
       };
       setSecondTableData((prevData) => [...prevData, newItem]);
@@ -200,12 +198,13 @@ const CommandeBar = () => {
       .post(API_URL + "mouvement/sortie/", {
         reference: generatedCode,
         client: id_client,
+        type_sortie: 2,
         description: "facture",
         created_by: 1,
       })
       .then((response) => {
         axios
-          .post(API_URL + "sortie/data/", itemEntre, {
+          .post(API_URL + "ciusine/tarif/data/", itemEntre, {
             transformRequest: [
               (data, headers) => {
                 // Assuming itemEntre is an array of objects
@@ -242,13 +241,13 @@ const CommandeBar = () => {
       .post(API_URL + "mouvement/sortie/", {
         reference: generatedCode,
         client: id_client,
-        type_sortie: 1,
+        type_sortie: 2,
         description: "facture",
         created_by: 1,
       })
       .then((response) => {
         axios
-          .post(API_URL + "sortie/data/", itemEntre, {
+          .post(API_URL + "ciusine/tarif/data/", itemEntre, {
             transformRequest: [
               (data, headers) => {
                 // Assuming itemEntre is an array of objects
@@ -299,7 +298,7 @@ const CommandeBar = () => {
 
   //fetch of product
   const fetchProduct = () => {
-    axios.get(API_URL + "unite/").then((response) => {
+    axios.get(API_URL + "ciusine/tarif/").then((response) => {
       setproduct(response.data);
     });
   };
@@ -401,7 +400,7 @@ const CommandeBar = () => {
                                 paddingTop: "10px",
                               }}
                             >
-                              {item.produit_info.produit}
+                              {item.name}
                             </Typography>
                           </CardContent>
                         </Card>
@@ -668,4 +667,4 @@ const CommandeBar = () => {
   );
 };
 
-export default CommandeBar;
+export default CommandeCuisine;

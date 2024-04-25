@@ -95,7 +95,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h1" sx={{ fontWeight: "bold" }}>
-                    SGRB
+                  SGRB
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon color="white" />
@@ -345,7 +345,7 @@ const Sidebar = () => {
                 />
                 <Item
                   title={!isCollapsed ? "Cuisine" : "CCN"}
-                  to="/unite"
+                  to="/entre/commande/cuisine"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
@@ -381,7 +381,7 @@ const Sidebar = () => {
                 />
                 <Item
                   title="Cuisine"
-                  to="/entre/cuisine"
+                  to="/facture/cuisine"
                   icon={<TrendingFlatIcon />}
                   selected={selected}
                   setSelected={setSelected}
