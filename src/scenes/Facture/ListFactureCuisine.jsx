@@ -101,7 +101,7 @@ const ListFactureCuisine = () => {
   var produitdata = listproduit.map((obj) => ({
     id: obj.id,
     reference: obj.reference,
-    produit: obj.produit_info.produit,
+    produit: obj.recette_info.produit,
     // mouvement_entre: obj.mouvement_entre_info.mouvement_entre,
     quantite: obj.quantite,
     prix_unitaire: obj.prix_unitaire,
@@ -135,10 +135,12 @@ const ListFactureCuisine = () => {
 
   // delete entreProduit
   const deleteentreproduit = (id) => {
-    console.log(`mouvement/sortie/${id}/`, "sdssssssssssssssssssssssssss");
-    axios.delete(API_URL + `sortie/${id}/`).then((response) => {
-      fetchProduit(Id_entreMouvement);
-    });
+    // console.log(`mouvement/sortie/${id}/`, "sdssssssssssssssssssssssssss");
+    axios
+      .delete(API_URL + `sortie/mouvements/cuisine/delete/${id}/`)
+      .then((response) => {
+        fetchProduit(Id_entreMouvement);
+      });
   };
 
   function generateRandomCode(length) {
@@ -217,7 +219,7 @@ const ListFactureCuisine = () => {
   };
   const fetchProduit = (id) => {
     setid_entreMouvement(id);
-    axios.get(API_URL + `sortie/mouvements/${id}/`).then((response) => {
+    axios.get(API_URL + `sortie/mouvements/cuisine/${id}/`).then((response) => {
       setlistproduit(response.data);
     });
   };
