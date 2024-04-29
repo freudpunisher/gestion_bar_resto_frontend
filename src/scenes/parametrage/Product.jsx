@@ -103,6 +103,8 @@ const Product = () => {
       .then((response) => {
         handleClose();
         fetchProduct();
+        fetchBarCode();
+
         //         Swal.fire({
         //   icon: 'success',
         //   title: 'operation reussi',
@@ -481,7 +483,7 @@ const Product = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h5" mb={2}>
-              Metre à jour le  produit
+              Metre à jour le produit
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={6}>
