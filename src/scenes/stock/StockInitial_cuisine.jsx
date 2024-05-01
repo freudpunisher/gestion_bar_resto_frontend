@@ -39,6 +39,7 @@ import IconButton from "@mui/material/IconButton";
 import { jsPDF } from 'jspdf'; //or use your library of choice here
 import autoTable from 'jspdf-autotable';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import * as XLSX from "xlsx";
 
 const rowsPerPageOptions = [5, 10, 25];
 
@@ -280,6 +281,59 @@ function StockInitialCuisine() {
     ),
   });
 
+  
+  // Fonction pour formater la date au format "YYYY-MM-DD"
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}-${month}-${year}`;
+  }
+
+  // print excel file--------------------------------------
+  const handleExportToExcel = () => {
+    // Obtenir la date actuelle
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate)
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
+  
+    // Ajouter les données à partir de la ligne 3
+    XLSX.utils.sheet_add_json(worksheet, data, { skipHeader: true, origin: "A3" });
+  
+    // Modifier les titres des colonnes
+    const title = ["ID", "Code", "Nom", "Famille", "Nombre Entre", "Quantite Entre", "Nombre Sortie", "Quantite Sortie", "Inventaire", "Quantie Perdi", "Quantite En stock"];
+    XLSX.utils.sheet_add_aoa(worksheet, [["Etat Stock Cuisine"]], { origin: "A1" }); // Ajouter le titre à partir de la ligne 1
+    XLSX.utils.sheet_add_aoa(worksheet, [title], { origin: "A2" }); // Ajouter le titre à partir de la ligne 2
+  
+    // Fusionner les cellules de la première ligne
+    worksheet["!merges"] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 10 } }
+    ];
+    worksheet["A1"].s = { alignment: { horizontal: "center" } };
+  
+    XLSX.utils.book_append_sheet(workbook, worksheet, "STOCK INITIAL CUISINE");
+  
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+  
+    // Construire le nom du fichier avec la date
+    const fileName = `EtatStockCuisine_${formattedDate}.xlsx`;
+
+    const excelBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    const excelUrl = URL.createObjectURL(excelBlob);
+  
+    const downloadLink = document.createElement("a");
+    downloadLink.href = excelUrl;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  
+    // Nettoyer l'URL de l'objet
+    URL.revokeObjectURL(excelUrl);
+  };
     
   return (
     <Box m="20px">
@@ -353,6 +407,7 @@ function StockInitialCuisine() {
                 fontSize: "14px",
                 marginTop: 3
               }}
+              onClick={handleExportToExcel}
             >
               <DownloadOutlinedIcon/>
             </Button>
@@ -399,105 +454,7 @@ function StockInitialCuisine() {
                 columns={columns}
                 components={{ Toolbar: GridToolbar }}
               />
-              {/* <TableContainer
-                component={Paper}
-                sx={{ backgroundColor: "inherit" }}
-              >
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell >ID</TableCell>
-                      <TableCell align="center">Code Produit</TableCell>
-                      <TableCell align="center">Nom Produit</TableCell>
-                      <TableCell align="center">Etat Stock</TableCell>
-                      <TableCell align="center">Nombre entre</TableCell>
-                      <TableCell align="center">Quantite entre</TableCell>
-                      <TableCell align="center">Nombre sortie</TableCell>
-                      <TableCell align="center">Quantite sortie</TableCell>
-                      <TableCell align="center">Perte</TableCell>
-                      <TableCell align="center">Action</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.length !== 0 ? (
-                      data.map((row) => (
-                        <TableRow 
-                          key={row.id}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          <TableCell>{row.id}</TableCell>
-                          <TableCell align="center">{row.code}</TableCell>
-                          <TableCell align="center">{row.nom}</TableCell>
-                          <TableCell align="center">{row.stock_qte}</TableCell>
-                          <TableCell align="center">{row.entres_nbr}</TableCell>
-                          <TableCell align="center">{row.entres_qte}</TableCell>
-                          <TableCell align="center">{row.sorties_nbr}</TableCell>
-                          <TableCell align="center">{row.sorties_qte}</TableCell>
-                          <TableCell align="center">{row.inventaires_qte}</TableCell>
                           
-                          <TableCell align="right">
-                            <Button
-                              title="Effectue une inventaire"
-                              sx={{
-                                color: colors.grey[100],
-                                fontSize: "14px",
-                              }}
-                              onClick={() => {
-                                if(row.stock_qte !== 0){
-                                  setopenModal(true);
-                                }else{
-                                  Swal.fire({
-                                      icon: 'warning',
-                                      title: 'Veuillez ajouter les produits dans le stock',
-                                      showConfirmButton: false,
-                                      timer: 3000,
-                                    });
-                                }                                
-                                setproduit_data_id(row.id);
-                                setproduit_data_name(row.code +' '+row.nom);
-                                setproduit_data_qte(row.stock_qte);
-                              }}
-                            >
-                              <AssignmentReturnedIcon/>
-                            </Button>
-                          </TableCell>
-
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell
-                          colSpan={5}
-                          sx={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              height: "100%",
-                            }}
-                          >
-                            Aucun donnée enregistre
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-                <TablePagination
-                  rowsPerPageOptions={rowsPerPageOptions}
-                  component="div"
-                  count={data.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </TableContainer> */}
             </Box> 
           </Grid>
         </Grid>

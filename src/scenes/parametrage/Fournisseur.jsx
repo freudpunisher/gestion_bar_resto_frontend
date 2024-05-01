@@ -389,60 +389,6 @@ const Fournisseur = () => {
               Fournisseur
             </Typography>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12}>
-<FormControl fullWidth size='small'>
-      <InputLabel id="demo-simple-select-label">Category</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={Category}
-        onChange={(e)=>{setCategory(e.target.value);}}
-      >
-        <MenuItem value="antispamedique">antispamedique</MenuItem>
-        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
-        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
-        <MenuItem value="antifongiques">antifongiques</MenuItem>
-        <MenuItem value="antigripaux">antigripaux</MenuItem>
-        <MenuItem value="antalagiques">antalagiques</MenuItem>
-        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
-        <MenuItem value="collyres">collyres</MenuItem>
-        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
-        <MenuItem value="anti_septiques">anti septiques</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settype(e.target.value);}}
-  >
-    {famille.map(item =>(
-    <MenuItem value={item.id}>{item.nom}</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genre}
-    onChange={(e)=>{setgenre(e.target.value);}}
-  >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
               <Grid item xs={6}>
                 <TextField
                   name="FistName"
@@ -503,39 +449,7 @@ const Fournisseur = () => {
                   size="small"
                 />
               </Grid>
-              {/* <Grid item xs={6}>
-   <input type='date' value={selectedDate}
-      onChange={(e)=> setSelectedDate(e.target.value)}  style={{
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-    width:'100%'
-    // Add more styles as needed
-  }}/>
-    </Grid> */}
             </Grid>
-
-            {/* {Category === "comprime" && <TextField
-      name="nombre de pillule"
-      label="nombre de pillule"
-      onChange={(e)=>setnombrepillule(e.target.value)}
-    />} */}
-            {/* {Category === "Blister" && <TextField
-      name="nombre de comprime par plaquette"
-      label="nombre de comprime par  plaquette"
-      onChange={(e)=>setnombreplaquette(e.target.value)}
-    />} */}
-            {/* {Category === "comprime" &&<TextField
-      name="prix par plaquette"
-      label="prix par plaquette"
-      onChange={(e)=>setprixplaquette(e.target.value)}
-    />}
-    {Category === "comprime" && <TextField
-      name="prix par comprime"
-      label="prix par comprime"
-      onChange={(e)=>setprixpillule(e.target.value)}
-    />} */}
 
             <Box mt={2} paddingLeft={2}>
               <Button
@@ -544,17 +458,16 @@ const Fournisseur = () => {
                 color="info"
                 onClick={() => {
                   updateUnite();
-                  // creatDrug();
                 }}
               >
-                Save
+                Enregistre
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleCloseforupdate}
               >
-                close
+                Fermer
               </Button>
             </Box>
           </Stack>
@@ -564,4 +477,4 @@ const Fournisseur = () => {
   );
 };
 
-export default Fournisseur;
+export default Fournisseur
