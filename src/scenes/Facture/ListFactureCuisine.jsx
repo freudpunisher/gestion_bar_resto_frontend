@@ -648,7 +648,7 @@ const ListFactureCuisine = () => {
         <Button
           variant="contained"
           color="warning"
-          onClick={() => navigate("/entre/commande/bar")}
+          onClick={() => navigate("/entre/commande/cuisine")}
         >
           Commande
         </Button>
