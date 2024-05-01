@@ -120,6 +120,11 @@ const EntreCuisine = () => {
     });
   };
 
+  // const searchProduct = (product) => {
+
+  //   let result = product.find(item => item.nom == product)
+  // }
+
   // search for products
 
   const searchProduct = async () => {
@@ -133,7 +138,7 @@ const EntreCuisine = () => {
     }
   };
   useEffect(() => {
-    if (searchTerm !== undefined) {
+    if (searchTerm) {
       searchProduct();
     }
   }, [searchTerm]);

@@ -34,12 +34,16 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import { API_URL } from "../../data/Api";
+import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
+import ReplayIcon from "@mui/icons-material/Replay";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo-bar-resto-light.png";
 import ReactToPrint from "react-to-print";
+import { LogoDevOutlined } from "@mui/icons-material";
 
 const CommandeBar = () => {
   const theme = useTheme();
@@ -52,23 +56,13 @@ const CommandeBar = () => {
   const currentMonth = currentDate.getMonth() + 1; // Adding 1 because getMonth() is zero-based
   const currentDay = currentDate.getDate();
   const currentYear = currentDate.getFullYear();
-  function generateRandomCode(length) {
-    const characters = "0123456789";
-    const charactersLength = characters.length;
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
-  const code = generateRandomCode(4);
-  const [generatedCode, setGeneratedCode] = useState(
-    `FCT${currentYear}${currentMonth}${code}BR`
-  );
+  // const code = generateRandomCode(4);
+  const [generatedCode, setGeneratedCode] = useState();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [id, setId] = useState();
   const [pu, setpu] = useState();
   const [openModal, setopenModal] = useState(false);
+  const [is_validated, setis_validated] = useState(false);
   const [product, setproduct] = useState([]);
   const [secondTableData, setSecondTableData] = useState([]);
   const [id_client, setid_client] = useState();
@@ -83,6 +77,17 @@ const CommandeBar = () => {
   const handleProductClick = (product) => {
     setSelectedProduct(product);
   };
+
+  function generateRandomCode() {
+    const characters = "0123456789";
+    const charactersLength = characters.length;
+    let result = "";
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    // let code = `FCT${currentYear}${currentMonth}${result}BR`;
+    setGeneratedCode(`FCT${currentYear}${currentMonth}${result}BR`);
+  }
   const handleClose = () => {
     setopenModal(false);
   };
@@ -239,6 +244,7 @@ const CommandeBar = () => {
 
   // creation entre
   const valideEntre = () => {
+    setis_validated(true);
     axios
       .post(API_URL + "mouvement/sortie/", {
         reference: generatedCode,
@@ -248,6 +254,7 @@ const CommandeBar = () => {
         created_by: 1,
       })
       .then((response) => {
+        generateRandomCode();
         axios
           .post(API_URL + "sortie/data/", itemEntre, {
             transformRequest: [
@@ -273,7 +280,7 @@ const CommandeBar = () => {
       });
 
     handlePrintTable();
-    setSecondTableData([]);
+    // setSecondTableData([]);
   };
 
   const handleRemoveButtonClick = (rowId) => {
@@ -320,6 +327,7 @@ const CommandeBar = () => {
   useEffect(() => {
     fetchProduct();
     fetchClient();
+    generateRandomCode();
   }, []);
 
   const handleQuantityIncrease = (event) => {
@@ -346,41 +354,99 @@ const CommandeBar = () => {
 
   return (
     <Box>
+      <Button
+        variant="contained"
+        color="warning"
+        sx={{ marginLeft: 3, marginTop: 3 }}
+        onClick={() => navigate("/facture/bar")}
+      >
+        Facture
+      </Button>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 0 }}>
+            <Card
+              sx={{
+                backgroundColor: "transparent",
+                padding: 0,
+                height: "50vh",
+              }}
+            >
               <Typography padding={2} sx={{ fontSize: 20, fontWeight: "bold" }}>
                 Listes des produits
               </Typography>
-
-              <InputBase
-                color="secondary"
+              <Box
                 sx={{
-                  ml: 2,
-                  flex: 1,
-                  border: 1,
-                  borderRadius: 2,
-                  paddingLeft: 2,
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                 }}
-                placeholder="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <IconButton type="button" sx={{ p: 1 }} onClick={searchProduct}>
-                <SearchIcon />
-              </IconButton>
+              >
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <InputBase
+                    color="secondary"
+                    sx={{
+                      ml: 2,
+                      flex: 1,
+                      border: 1,
+                      width: "20%",
+                      borderRadius: 2,
+                      paddingLeft: 2,
+                    }}
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <IconButton
+                    type="button"
+                    sx={{ p: 1 }}
+                    onClick={searchProduct}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </Box>
+
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Age"
+                  size="small"
+                  fullWidth
+                  sx={{
+                    mr: 2,
+                    border: "1px solid white", // Specify the border style and color here
+                    width: "20%",
+                    borderRadius: 2,
+                    paddingLeft: 2,
+                  }} // Ensure this doesn't override the FormControl border
+                  IconComponent={LogoDevOutlined}
+                  onChange={(e) => {
+                    setid_client(e.target.value);
+                    console.log(e.target.value);
+                    const nameClient = listclient.find(
+                      (item) => item.id === e.target.value
+                    );
+                    setclient_name(nameClient.first_name);
+                  }}
+                >
+                  {listclient.map((item) => (
+                    <MenuItem value={item.id}>
+                      {item.first_name} {item.last_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
               <CardContent>
                 <div>
                   <Grid container xs={12} spacing={2}>
                     {product.map((item) => (
-                      <Grid item sm={12} md={12} lg={3} key={item.nom}>
+                      <Grid item sm={12} md={6} lg={3} key={item.nom}>
                         <Card
                           variant="outlined"
                           sx={{
                             backgroundColor: colors.greenAccent[700],
                             maxWidth: 200,
-                            // height: 100,
+
                             display: "flex",
                             // flexDirection: "column",
                             justifyContent: "center",
@@ -416,22 +482,34 @@ const CommandeBar = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent" }}>
-              <CardHeader
-                title="Liste produits commande"
+            <Card
+              sx={{
+                backgroundColor: "transparent",
+                // height: "50vh",
+              }}
+            >
+              <Box
                 sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   backgroundColor: colors.blueAccent[700],
                   padding: 2,
                 }}
-                titleTypographyProps={{
-                  variant: "h3", // Adjust the variant to change the font size
-                  sx: {
-                    fontSize: 20, // Directly set the font size
-                    color: "white",
-                    fontWeight: "bold", // Set the color of the title
-                  },
-                }}
-              />
+              >
+                <Typography
+                  variant="h2"
+                  sx={{ color: "white", fontWeight: "bold" }}
+                >
+                  Total:
+                </Typography>
+                <Typography
+                  variant="h3"
+                  sx={{ color: "white", fontWeight: "bold" }}
+                >
+                  {totalPT} BIF
+                </Typography>
+              </Box>
               <CardContent>
                 {secondTableData.length === 0 ? (
                   <Typography variant="h4" align="center">
@@ -440,7 +518,74 @@ const CommandeBar = () => {
                 ) : (
                   // Only display invoice details if a product is selected
                   <>
-                    <TableContainer>
+                    <Box sx={{ display: "flex", flexDirection: "row" }}>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        color="secondary"
+                        sx={{
+                          margin: 1,
+                          fontSize: 20,
+                          height: 40,
+                          marginTop: 2,
+
+                          color: "black",
+                        }}
+                        onClick={() => {
+                          // setopenModal(true);
+                          setSecondTableData([]);
+                          setis_validated(false);
+                          generateRandomCode();
+                        }}
+                      >
+                        <ReplayIcon />
+                      </Button>
+                      {is_validated === true ? (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          color="secondary"
+                          sx={{
+                            margin: 1,
+                            fontSize: 20,
+                            height: 40,
+                            marginTop: 2,
+
+                            color: "black",
+                          }}
+                          onClick={() => {
+                            handlePrintTable();
+                          }}
+                        >
+                          <LocalPrintshopIcon />
+                        </Button>
+                      ) : null}
+
+                      <Button
+                        variant="contained"
+                        size="small"
+                        color="secondary"
+                        sx={{
+                          margin: 1,
+                          fontSize: 20,
+                          height: 40,
+                          marginTop: 2,
+                          display: "flex",
+                          marginLeft: "auto",
+                          color: "black",
+                        }}
+                        onClick={() => {
+                          setopenModal(true);
+                        }}
+                      >
+                        Valider
+                      </Button>
+                    </Box>
+                    <TableContainer
+                      sx={{
+                        marginY: 5,
+                      }}
+                    >
                       <Table>
                         <TableHead sx={{ backgroundColor: "transparent" }}>
                           <TableRow>
@@ -533,7 +678,7 @@ const CommandeBar = () => {
                             </TableRow>
                           ))}
                         </TableBody>
-                        <TableFooter>
+                        {/* <TableFooter>
                           <TableRow sx={{ bgcolor: colors.primary[700] }}>
                             <TableCell
                               colSpan={4}
@@ -550,31 +695,28 @@ const CommandeBar = () => {
                             </TableCell>
                             <TableCell />
                           </TableRow>
-                        </TableFooter>
+                        </TableFooter> */}
                       </Table>
                     </TableContainer>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      color="secondary"
-                      sx={{
-                        margin: 1,
-                        // fontSize: 10,
-                        marginTop: 5,
-                        color: "white",
-                      }}
-                      onClick={() => {
-                        setopenModal(true);
-                      }}
-                    >
-                      Valider la commande
-                    </Button>
                   </>
                 )}
                 {/* Content for Invoice */}
               </CardContent>
             </Card>
           </Box>
+          {/* <Button
+            variant="contained"
+            color="success"
+            sx={{
+              display: "flex",
+              marginLeft: "auto",
+              marginRight: 2,
+              fontSize: 20,
+              height: 60,
+            }}
+          >
+            facture
+          </Button> */}
         </Grid>
       </Grid>
 
