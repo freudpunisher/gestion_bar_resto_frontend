@@ -40,53 +40,7 @@ const Client = () => {
   const [email, setEmail] = useState("");
   const [emailu, setEmailu] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [contact_person, setcontact_person] = useState("");
-  const [contact_personu, setcontact_personu] = useState("");
   const [phoneNumberu, setPhoneNumberu] = useState("");
-
-  // // print carte
-  // function printCard() {
-  //   const cardWidth = 53.98; // Largeur en millimètres
-  //   const cardHeight = 85.6; // Hauteur en millimètres
-
-  //   const printWindow = window.open("", "_blank");
-  //   printWindow.document.open();
-
-  //   // Injecter le contenu de votre carte dans la fenêtre d'impression
-  //   printWindow.document.write(
-  //     "<html><head><title>Impression de la carte</title></head><body>"
-  //   );
-
-  //   // Ajouter le contenu de votre carte ici
-  //   printWindow.document.write(
-  //     '<div style="width: ' +
-  //       cardWidth +
-  //       "mm; height: " +
-  //       cardHeight +
-  //       'mm; border: 1px solid black;">'
-  //   );
-
-  //   // Contenu de la carte
-  //   printWindow.document.write("</div>");
-
-  //   printWindow.document.write("</body></html>");
-  //   printWindow.document.close();
-
-  //   printWindow.onload = function () {
-  //     printWindow.print();
-  //     printWindow.close();
-  //   };
-  // }
-
-  // // data liste
-  // var productdata = Product.map((obj) => ({
-  //   id: obj.id,
-  //   famille: obj.famille_info.famille,
-  //   code: obj.code,
-  //   nom: obj.nom,
-  //   description: obj.description,
-  //   barcode: obj.barcode,
-  // }));
 
   // data drid
   const dataGridRef = useRef();
@@ -100,13 +54,6 @@ const Client = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
-
-  //liste client
-  // const fetchProduct = () => {
-  //   axios.get(API_URL + "produit/").then((response) => {
-  //     setProduct(response.data);
-  //   });
-  // };
 
   // create client
   const createUnite = () => {
@@ -259,7 +206,7 @@ const Client = () => {
 
   return (
     <Box m="20px">
-      <Header title="Client" />
+      <Header  title="Serveur" subtitle="Listes des serveurs"/>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -299,7 +246,7 @@ const Client = () => {
             sx={{ marginRight: "auto" }}
             onClick={() => setopenModal(true)}
           >
-            Ajouter Client
+            Ajouter Serveur
           </Button>
         </Box>
         <DataGrid
@@ -350,63 +297,9 @@ const Client = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h5" mb={1}>
-              Nouveau Client
+              Nouveau Serveur
             </Typography>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12}>
-<FormControl fullWidth size='small'>
-      <InputLabel id="demo-simple-select-label">Category</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={Category}
-        onChange={(e)=>{setCategory(e.target.value);}}
-      >
-        <MenuItem value="antispamedique">antispamedique</MenuItem>
-        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
-        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
-        <MenuItem value="antifongiques">antifongiques</MenuItem>
-        <MenuItem value="antigripaux">antigripaux</MenuItem>
-        <MenuItem value="antalagiques">antalagiques</MenuItem>
-        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
-        <MenuItem value="collyres">collyres</MenuItem>
-        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
-        <MenuItem value="anti_septiques">anti septiques</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settype(e.target.value);}}
-  >
-    {famille.map(item =>(
-    <MenuItem value={item.id}>{item.nom}</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genre}
-    onChange={(e)=>{setgenre(e.target.value);}}
-  >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
               <Grid item xs={6}>
                 <TextField
                   name="FistName"
@@ -452,40 +345,7 @@ const Client = () => {
                   size="small"
                 />
               </Grid>
-              {/* <Grid item xs={6}>
-   <input type='date' value={selectedDate}
-      onChange={(e)=> setSelectedDate(e.target.value)}  style={{
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '16px',
-    width:'100%'
-    // Add more styles as needed
-  }}/>
-    </Grid> */}
             </Grid>
-
-            {/* {Category === "comprime" && <TextField
-      name="nombre de pillule"
-      label="nombre de pillule"
-      onChange={(e)=>setnombrepillule(e.target.value)}
-    />} */}
-            {/* {Category === "Blister" && <TextField
-      name="nombre de comprime par plaquette"
-      label="nombre de comprime par  plaquette"
-      onChange={(e)=>setnombreplaquette(e.target.value)}
-    />} */}
-            {/* {Category === "comprime" &&<TextField
-      name="prix par plaquette"
-      label="prix par plaquette"
-      onChange={(e)=>setprixplaquette(e.target.value)}
-    />}
-    {Category === "comprime" && <TextField
-      name="prix par comprime"
-      label="prix par comprime"
-      onChange={(e)=>setprixpillule(e.target.value)}
-    />} */}
-
             <Box mt={2} paddingLeft={2}>
               <Button
                 style={{ marginRight: "10px" }}
@@ -493,17 +353,16 @@ const Client = () => {
                 color="info"
                 onClick={() => {
                   createUnite();
-                  // creatDrug();
                 }}
               >
-                Save
+                Enregistre
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleClose}
               >
-                close
+                Fermer
               </Button>
             </Box>
           </Stack>
@@ -526,63 +385,9 @@ const Client = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h5" mb={1}>
-              Modifier information Client
+              Modifier information du Serveur
             </Typography>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12}>
-<FormControl fullWidth size='small'>
-      <InputLabel id="demo-simple-select-label">Category</InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={Category}
-        onChange={(e)=>{setCategory(e.target.value);}}
-      >
-        <MenuItem value="antispamedique">antispamedique</MenuItem>
-        <MenuItem value="antiallergiques">antiallergiques</MenuItem>
-        <MenuItem value="antieurmetiques">antieurmetiques</MenuItem>
-        <MenuItem value="antifongiques">antifongiques</MenuItem>
-        <MenuItem value="antigripaux">antigripaux</MenuItem>
-        <MenuItem value="antalagiques">antalagiques</MenuItem>
-        <MenuItem value="antiparasitaires">antiparasitaires</MenuItem>
-        <MenuItem value="collyres">collyres</MenuItem>
-        <MenuItem value="anti_diabetiques">anti diabetiques</MenuItem>
-        <MenuItem value="anti_septiques">anti septiques</MenuItem>
-      </Select>
-    </FormControl>
-  </Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selctionnez famille</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={type}
-    onChange={(e)=>{settype(e.target.value);}}
-  >
-    {famille.map(item =>(
-    <MenuItem value={item.id}>{item.nom}</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
-              {/* <Grid item xs={6}>
-    <FormControl fullWidth size='small'>
-  <InputLabel id="demo-simple-select-label">Selectionnez unite de mesure</InputLabel>
-  <Select
-    labelId="demo-simple-select-label"
-    id="demo-simple-select"
-    label="Age"
-    value={genre}
-    onChange={(e)=>{setgenre(e.target.value);}}
-  >
-   {unite.map(item =>(
-    <MenuItem value={item.id}>{item.desigantion} ({item.code})</MenuItem>))}
-    
-  </Select>
-</FormControl>
-</Grid> */}
               <Grid item xs={6}>
                 <TextField
                   name="FistName"
@@ -658,46 +463,21 @@ const Client = () => {
   }}/>
     </Grid> */}
             </Grid>
-
-            {/* {Category === "comprime" && <TextField
-      name="nombre de pillule"
-      label="nombre de pillule"
-      onChange={(e)=>setnombrepillule(e.target.value)}
-    />} */}
-            {/* {Category === "Blister" && <TextField
-      name="nombre de comprime par plaquette"
-      label="nombre de comprime par  plaquette"
-      onChange={(e)=>setnombreplaquette(e.target.value)}
-    />} */}
-            {/* {Category === "comprime" &&<TextField
-      name="prix par plaquette"
-      label="prix par plaquette"
-      onChange={(e)=>setprixplaquette(e.target.value)}
-    />}
-    {Category === "comprime" && <TextField
-      name="prix par comprime"
-      label="prix par comprime"
-      onChange={(e)=>setprixpillule(e.target.value)}
-    />} */}
-
             <Box mt={2} paddingLeft={2}>
               <Button
                 style={{ marginRight: "10px" }}
                 variant="contained"
                 color="info"
-                onClick={() => {
-                  updateUnite();
-                  // creatDrug();
-                }}
+                onClick={() => {updateUnite();}}
               >
-                Save
+                Enregistre
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleCloseforupdate}
               >
-                close
+                Fermer
               </Button>
             </Box>
           </Stack>

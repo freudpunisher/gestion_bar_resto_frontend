@@ -1,4 +1,5 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import * as React from 'react';
+import { Box, Button, IconButton, Typography, useTheme, InputLabel,TextField, } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -7,6 +8,7 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
+import SearchIcon from "@mui/icons-material/Search";
 import LineChart from "../../components/LineChart";
 import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
@@ -21,6 +23,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateField } from '@mui/x-date-pickers/DateField';
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -34,6 +42,7 @@ const rows = [
 const Rapport = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);  
+  const [value, setValue] = React.useState(dayjs('2022-04-17'));
 
   return (
     <Box m="20px">
@@ -41,6 +50,42 @@ const Rapport = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="TABLEAU DE BORD" subtitle="Bienvenu sur le Tableau de bord" />       
 
+        <Box>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DateField', 'DateField']}>
+            <DateField label="Uncontrolled field" defaultValue={dayjs('2022-04-17')} />
+            <DateField
+              label="Controlled field"
+              value={value}
+              onChange={(newValue) => setValue(newValue)}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
+        </Box>
+        <Box>
+          <InputLabel htmlFor="au-input">Date</InputLabel>
+          <input
+            type="date"
+            style={{
+              padding: "10px 20px",
+            }}
+            onChange={(e) => {     }}
+          />
+        </Box>
+        <Box>
+          <Button
+            title="Rechercher"
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              color: colors.primary[100],
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            }}            
+          >
+            <SearchIcon/>
+          </Button>
+        </Box>
         <Box>
           <Button
             sx={{
@@ -371,65 +416,7 @@ const Rapport = () => {
               />
             }
           />
-        </Box>
-
-        {/* ROW 5 */}        
-        <Box
-          gridColumn="span 6"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Box
-            mt="25px"
-            p="0 30px"
-            display="flex "
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Approvisionnements
-              </Typography>
-              {/* <Typography
-                variant="h3"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                $59,342.32
-              </Typography> */}
-            </Box>
-            {/* <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box> */}
-          </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
-          </Box>
-        </Box>        
-        <Box
-          gridColumn="span 6"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
-          >
-            Montant
-          </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
-          </Box>
-        </Box>       
+        </Box>             
       </Box>
     </Box>
   );

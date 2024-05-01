@@ -206,28 +206,6 @@ const Settings = () => {
           components={{ Toolbar: GridToolbar }}
         />
       </Box>
-      {/* <table
-        id="printableArea"
-        className="hiddenOnScreen"
-        style={{ display: "none" }}
-      >
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th key={column.field}>{column.headerName}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id}>
-              {columns.map((column) => (
-                <td key={column.field}>{row[column.field]}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
 
       {/* formcreate famille produit ++++++++++++++++++++++++++++++++++ */}
       <Modal open={openModal} onClose={handleClose}>

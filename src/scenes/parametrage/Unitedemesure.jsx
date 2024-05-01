@@ -152,6 +152,12 @@ const Unite = () => {
       cellClassName: "name-column--cell",
     },
     {
+      field: "value_prix_vente",
+      headerName: "Prix de vente",
+      flex: 1,
+      cellClassName: "name-column--cell",
+    },
+    {
       field: "value_piece",
       headerName: "Valeur piece",
       flex: 1,
@@ -222,13 +228,10 @@ const Unite = () => {
 
   return (
     <Box m="20px">
-      <Header
-        title="Unite de mesure"
-        subtitle="Listes des Unites de mesure des produits"
-      />
+      <Header title="Unite de mesure" subtitle="Listes des Unites de mesure des produits" />
       <Box
         m="40px 0 0 0"
-        height="75vh"
+        // height="75vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",

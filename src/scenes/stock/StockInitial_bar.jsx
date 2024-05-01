@@ -284,30 +284,59 @@ function StockInitialBar() {
     ),
   });
 
+  // Fonction pour formater la date au format "YYYY-MM-DD"
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}-${month}-${year}`;
+  }
+
   // print excel file--------------------------------------
-  // const handleExportToExcel = () => {
-  //   const workbook = XLSX.utils.book_new();
-  //   const worksheet = XLSX.utils.json_to_sheet(data);
+  const handleExportToExcel = () => {
+
+    // Obtenir la date actuelle
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate)
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
   
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+    // Ajouter les données à partir de la ligne 3
+    XLSX.utils.sheet_add_json(worksheet, data, { skipHeader: true, origin: "A3" });
   
-  //   const excelBuffer = XLSX.write(workbook, {
-  //     bookType: "xlsx",
-  //     type: "array",
-  //   });
+    // Modifier les titres des colonnes
+    const title = ["ID", "Code", "Nom", "Famille", "Nombre Entre", "Quantite Entre", "Nombre Sortie", "Quantite Sortie", "Inventaire", "Quantie Perdi", "Quantite En stock"];
+    XLSX.utils.sheet_add_aoa(worksheet, [["Etat Stock Bar"]], { origin: "A1" }); // Ajouter le titre à partir de la ligne 1
+    XLSX.utils.sheet_add_aoa(worksheet, [title], { origin: "A2" }); // Ajouter le titre à partir de la ligne 2
   
-  //   const fileName = "data.xlsx";
-  //   const excelBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  //   const excelUrl = URL.createObjectURL(excelBlob);
+    // Fusionner les cellules de la première ligne
+    worksheet["!merges"] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 10 } }
+    ];
+    worksheet["A1"].s = { alignment: { horizontal: "center" } };
   
-  //   const downloadLink = document.createElement("a");
-  //   downloadLink.href = excelUrl;
-  //   downloadLink.download = fileName;
-  //   downloadLink.click();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "STOCK INITIAL BAR");
   
-  //   // Clean up the object URL
-  //   URL.revokeObjectURL(excelUrl);
-  // };
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+  
+    // Construire le nom du fichier avec la date
+    const fileName = `EtatStockBar_${formattedDate}.xlsx`;
+
+    const excelBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    const excelUrl = URL.createObjectURL(excelBlob);
+  
+    const downloadLink = document.createElement("a");
+    downloadLink.href = excelUrl;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  
+    // Nettoyer l'URL de l'objet
+    URL.revokeObjectURL(excelUrl);
+  };
 
   // print PDF file----------------------------------------
   const handleExportToPDF = async () => {
@@ -442,11 +471,11 @@ function StockInitialBar() {
                 marginTop: 3,                
                 marginRight: 1
               }}
-              onClick={handleExportToPDF}
+              onClick={handleExportToExcel}
             >
               <DownloadOutlinedIcon/>
             </Button>
-            <Button
+            {/* <Button
               title="Imprimer la liste"
               sx={{
                 backgroundColor: colors.blueAccent[400],
@@ -457,7 +486,7 @@ function StockInitialBar() {
               onClick={handleExportToPDF}
             >
               <DownloadOutlinedIcon/>
-            </Button>
+            </Button> */}
           </Grid>
           {/*etat stock liste */}
           <Grid item xs={12}>            
