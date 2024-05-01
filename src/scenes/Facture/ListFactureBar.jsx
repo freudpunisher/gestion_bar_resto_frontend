@@ -19,7 +19,11 @@ import {
   TableFooter,
   Paper,
 } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarQuickFilter,
+} from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
 import Header from "../../components/Header";
@@ -37,6 +41,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { API_URL } from "../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import logo from "../../assets/logo-bar-resto-light.png";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -81,7 +86,7 @@ const ListFactureBar = () => {
   const [listentreproduit, setlistentreproduit] = useState([]);
   const [listproduit, setlistproduit] = useState([]);
   const [openModalv, setopenModalv] = useState(false);
-  const [validated_by, setvalidated_by] = useState();
+  const [paye, setpaye] = useState();
   const [Id_entreMouvement, setid_entreMouvement] = useState();
   const [numero_Facture, setnumero_Facture] = useState();
   const [serveur, setserveur] = useState();
@@ -93,8 +98,60 @@ const ListFactureBar = () => {
     client: obj.client_info.client,
     created_by: obj.created_by_info.user,
     created_at: obj.created_at,
-    validated_by: obj.validated_by,
+    montant: obj.montant_total_info.montant,
+    status_paye: obj.status_paye,
   }));
+
+  function handlePrintTable() {
+    // Generate a print-friendly HTML table structure
+
+    const printTableHTML = `
+      <div style="width: 100%; margin: 0 auto;">
+        <table style="width: 100%;">
+          <tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>
+        </table><br>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
+          <tr><td>Serveur</td><td>: ${serveur}</td></tr>
+          <tr><td>Date</td><td>: ${moment(date).format("YYYY-MM-DD")}}</td></tr>
+          <tr><td>FACT No</td><td>: ${generatedCode}</td></tr>   
+        </table><br>
+        <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+          <thead>                         
+            <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
+          </thead>
+          <tbody>
+            ${produitdata.map(
+              (item) => `
+              <tr>
+                <td>${item.produit}</td>
+                <td>${item.quantite}</td>
+                <td>${item.prix_unitaire} Fbu</td>
+                <td>${item.quantite * item.prix_unitaire} Fbu</td>
+              </tr>
+            `
+            )}
+            <tr>
+              <td colspan="3">Total</td>
+              <td>${totalPT} Fbu</td>
+            </tr>             
+          </tbody>
+        </table>
+      </div> <br>
+      <table style="width: 100%;">
+        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+      </table><hr><br><br>
+      
+    `;
+    const printWindow = window.open("", "", "width=1000,height=1000");
+    printWindow.document.write(printTableHTML);
+    printWindow.document.close();
+
+    printWindow.onload = function () {
+      printWindow.print();
+      printWindow.close();
+    };
+  }
 
   // les donnees qui doit apparaitre dans le modal
 
@@ -128,7 +185,7 @@ const ListFactureBar = () => {
   // listes des mouvement sortie
 
   const fetchentreproduit = () => {
-    axios.get(API_URL + "mouvement/sortie/").then((response) => {
+    axios.get(API_URL + "mouvement/sortie/type/1/").then((response) => {
       setlistentreproduit(response.data);
     });
   };
@@ -299,6 +356,25 @@ const ListFactureBar = () => {
     setopenModalv(false);
   };
 
+  // update
+  const updatevalidated_by = () => {
+    axios
+      .patch(API_URL + `mouvement/sortie/${id}/`, {
+        validated_by: 1,
+        status_paye: true,
+      })
+      .then((response) => {
+        handleCloseforView();
+        fetchentreproduit();
+        Swal.fire({
+          icon: "success",
+          title: "operation reussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      });
+  };
+
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
     // { field: "registrarId", headerName: "Registrar ID" },
@@ -310,10 +386,12 @@ const ListFactureBar = () => {
     },
     {
       field: "client",
-      headerName: "Client",
-      type: "number",
+      headerName: "Serveur",
+      // type: "number",
       headerAlign: "left",
       align: "left",
+      cellClassName: "name-column--cell",
+
       flex: 1,
     },
     // {
@@ -332,12 +410,47 @@ const ListFactureBar = () => {
       //  ),
     },
     {
-      field: "validated_by",
+      field: "montant",
+      headerName: "Montant",
+      flex: 1,
+      cellClassName: "name-column--cell",
+      renderCell: (params) => params.row.montant + " BIF",
+    },
+    {
+      field: "status_paye",
       headerName: "Status",
       flex: 1,
       cellClassName: "name-column--cell",
       renderCell: (params) =>
-        params.row.validated_by === null ? "suspendu" : "valide",
+        params.row.status_paye === false ? (
+          <Typography
+            sx={{
+              bgcolor: "red",
+              color: "white",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+            align="center"
+          >
+            pas paye
+          </Typography>
+        ) : (
+          <Typography
+            sx={{
+              bgcolor: colors.greenAccent[500],
+              color: "white",
+              height: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            align="center"
+          >
+            paye
+          </Typography>
+        ),
     },
     {
       field: "created_by",
@@ -396,7 +509,7 @@ const ListFactureBar = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-          <IconButton
+          {/* <IconButton
             aria-label="edit"
             onClick={() => {
               console.log(params.row);
@@ -404,63 +517,67 @@ const ListFactureBar = () => {
             }}
           >
             <FolderIcon />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-              })
-                .then((result) => {
-                  if (result.isConfirmed) {
-                    axios
-                      .delete(API_URL + `mouvement/sortie/${params.row.id}/`)
-                      .then((response) => fetchentreproduit());
-                  }
+          </IconButton> */}
+          {params.row.status_paye === false && (
+            <IconButton
+              aria-label="delete"
+              color="error"
+              onClick={() => {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, delete it!",
                 })
-                .then((response) => {
-                  fetchentreproduit();
-                  fetchunite();
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success",
-                  });
-                  if (response.status === 200) {
+                  .then((result) => {
+                    if (result.isConfirmed) {
+                      axios
+                        .delete(API_URL + `mouvement/sortie/${params.row.id}/`)
+                        .then((response) => fetchentreproduit());
+                    }
+                  })
+                  .then((response) => {
+                    fetchentreproduit();
+                    fetchunite();
                     Swal.fire({
                       title: "Deleted!",
                       text: "Your item has been deleted.",
                       icon: "success",
                     });
-                  } else {
-                    Swal.fire({
-                      title: "Error!",
-                      text: "An error occurred while deleting the item.",
-                      icon: "error",
-                    });
-                  }
-                  fetchentreproduit();
-                });
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
+                    if (response.status === 200) {
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success",
+                      });
+                    } else {
+                      Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting the item.",
+                        icon: "error",
+                      });
+                    }
+                    fetchentreproduit();
+                  });
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
           <IconButton
             aria-label="delete"
             onClick={() => {
               setopenModalv(true);
               fetchProduit(params.row.id);
+              console.log(params.row.status_paye);
               setnumero_Facture(params.row.reference);
               setdate(params.row.created_at);
               setserveur(params.row.client);
               setid(params.row.id);
-              setvalidated_by(params.row.validated_by);
+              setpaye(params.row.status_paye);
             }}
           >
             <VisibilityIcon />
@@ -528,6 +645,13 @@ const ListFactureBar = () => {
           },
         }}
       >
+        <Button
+          variant="contained"
+          color="warning"
+          onClick={() => navigate("/entre/commande/bar")}
+        >
+          Commande
+        </Button>
         <Box>
           {/* <ReactToPrint
           trigger={() => (
@@ -545,11 +669,11 @@ const ListFactureBar = () => {
           ref={dataGridRef}
           rows={productdata}
           columns={columns}
-          components={{ Toolbar: GridToolbar }}
+          components={{ Toolbar: GridToolbarQuickFilter }}
         />
       </Box>
-        <style media="print">
-          {`
+      <style media="print">
+        {`
             @page {
               size: auto; /* auto is the initial value */
               margin:   0mm; /* this affects the margin in the printer settings */
@@ -558,29 +682,29 @@ const ListFactureBar = () => {
               margin:   1cm; /* this affects the margin on the content before sending to printer */
             }
           `}
-        </style>
-        <table
-          id="printableArea"
-          className="hiddenOnScreen"
-          style={{ display: "none" }}
-        >
-          <thead>
-            <tr>
+      </style>
+      <table
+        id="printableArea"
+        className="hiddenOnScreen"
+        style={{ display: "none" }}
+      >
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th key={column.field}>{column.headerName}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.id}>
               {columns.map((column) => (
-                <th key={column.field}>{column.headerName}</th>
+                <td key={column.field}>{row[column.field]}</td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                {columns.map((column) => (
-                  <td key={column.field}>{row[column.field]}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>      
+          ))}
+        </tbody>
+      </table>
       <Modal open={openModal} onClose={handleClose}>
         <Box
           sx={{
@@ -930,9 +1054,13 @@ const ListFactureBar = () => {
                 <TableFooter>
                   <TableRow sx={{ border: 0 }}>
                     <TableCell sx={{ border: 0 }}>
-                      {validated_by == null ? (
-                        <Button variant="contained" color="secondary">
-                          valide
+                      {paye === false ? (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={updatevalidated_by}
+                        >
+                          paye
                         </Button>
                       ) : (
                         ""
@@ -940,6 +1068,15 @@ const ListFactureBar = () => {
                     </TableCell>
                     <TableCell sx={{ border: 0 }}></TableCell>
                     <TableCell sx={{ border: 0 }}></TableCell>
+                    <TableCell sx={{ border: 0 }}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handlePrintTable}
+                      >
+                        print
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>

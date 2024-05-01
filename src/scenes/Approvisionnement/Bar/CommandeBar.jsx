@@ -126,24 +126,25 @@ const CommandeBarEntre = () => {
 
   const searchProduct = async () => {
     try {
-      const response = await axios.get(API_URL + "produits/searched/1/", {
+      const response = await axios.get(API_URL + "produits/search/", {
         params: {
-          product: searchTerm,
+          search: searchTerm,
         },
       });
-      setproductsearch(response.data);
+      setproduct(response.data);
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    if (searchTerm !== undefined) {
+    if (searchTerm) {
       searchProduct();
     }
   }, [searchTerm]);
 
   useEffect(() => {
     fetchProduct();
+    // fetchProduct();
   }, []);
 
   const handleQuantityChange = (event) => {
@@ -198,81 +199,43 @@ const CommandeBarEntre = () => {
               <CardContent>
                 <div>
                   <Grid container xs={12} spacing={2}>
-                    {searchTerm !== undefined
-                      ? productsearch.map((item) => (
-                          <Grid item sm={12} md={12} lg={3} key={item.nom}>
-                            <Card
-                              variant="outlined"
-                              sx={{
-                                backgroundColor: colors.greenAccent[700],
-                                maxWidth: 200,
-                                height: 100,
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                              onClick={() => {
-                                handleAddButtonClick(item);
-                                console.log(item);
-                              }}
-                            >
-                              {/* <CardMedia
+                    {product.map((item) => (
+                      <Grid item sm={12} md={12} lg={3} key={item.nom}>
+                        <Card
+                          variant="outlined"
+                          sx={{
+                            backgroundColor: colors.greenAccent[700],
+                            maxWidth: 200,
+                            height: 100,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                          onClick={() => {
+                            handleAddButtonClick(item);
+                            console.log(item);
+                          }}
+                        >
+                          {/* <CardMedia
                            component="img"
                            height="140"
                            image={item.imageUrl}
                            alt={item.nom}
                          /> */}
-                              <CardContent>
-                                <Typography
-                                  gutterBottom
-                                  variant="h5"
-                                  component="div"
-                                  sx={{ fontSize: 16, fontWeight: "bold" }}
-                                >
-                                  {item.nom}
-                                </Typography>
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        ))
-                      : product.map((item) => (
-                          <Grid item sm={12} md={12} lg={3} key={item.nom}>
-                            <Card
-                              variant="outlined"
-                              sx={{
-                                backgroundColor: colors.greenAccent[700],
-                                maxWidth: 200,
-                                height: 100,
-                                display: "flex",
-                                flexDirection: "column",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                              onClick={() => {
-                                handleAddButtonClick(item);
-                                console.log(item);
-                              }}
+                          <CardContent>
+                            <Typography
+                              gutterBottom
+                              variant="h5"
+                              component="div"
+                              sx={{ fontSize: 16, fontWeight: "bold" }}
                             >
-                              {/* <CardMedia
-                           component="img"
-                           height="140"
-                           image={item.imageUrl}
-                           alt={item.nom}
-                         /> */}
-                              <CardContent>
-                                <Typography
-                                  gutterBottom
-                                  variant="h5"
-                                  component="div"
-                                  sx={{ fontSize: 16, fontWeight: "bold" }}
-                                >
-                                  {item.nom}
-                                </Typography>
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        ))}
+                              {item.nom}
+                            </Typography>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    ))}
                   </Grid>
                 </div>
               </CardContent>

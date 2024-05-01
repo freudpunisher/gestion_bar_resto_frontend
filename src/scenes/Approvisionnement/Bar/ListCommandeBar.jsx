@@ -36,7 +36,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 // import { motion } from 'framer-motion';
 import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
-
+import moment from "moment";
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const LisCommandeBar = () => {
@@ -117,6 +117,7 @@ const LisCommandeBar = () => {
       })
       .then((response) => {
         handleCloseforView();
+        fetchentreproduit();
         Swal.fire({
           icon: "success",
           title: "operation reussi",
@@ -166,20 +167,9 @@ const LisCommandeBar = () => {
     });
   };
 
-  function generateRandomCode(length) {
-    const characters = "0123456789";
-    const charactersLength = characters.length;
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  }
   // Example usage:
-  const code = generateRandomCode(4);
-  const [generatedCode, setGeneratedCode] = useState(
-    `AP${currentYear}${currentMonth}${code}BR`
-  );
+  // const code = generateRandomCode(4);
+  const [generatedCode, setGeneratedCode] = useState();
   const fetchProduct = () => {
     axios.get(API_URL + "produit/").then((response) => {
       setitems(response.data);
@@ -192,6 +182,15 @@ const LisCommandeBar = () => {
   const handleCloseforupdate = () => {
     setopenModalu(false);
   };
+  function generateRandomCode() {
+    const characters = "0123456789";
+    const charactersLength = characters.length;
+    let result = "";
+    for (let i = 0; i < 4; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    setGeneratedCode(`AP${currentYear}${currentMonth}${result}BR`);
+  }
 
   const createUnite = () => {
     axios
@@ -226,6 +225,7 @@ const LisCommandeBar = () => {
       })
       .then((response) => {
         handleCloseforupdate();
+        // fetchProduct()
         fetchunite();
         Swal.fire({
           icon: "success",
@@ -250,6 +250,7 @@ const LisCommandeBar = () => {
   useEffect(() => {
     fetchFournisseur();
     fetchentreproduit();
+    generateRandomCode();
   }, []);
   // const fetchData = () => {
   //   axios.get(API_Url+"medication/list/").then((response) => {
@@ -352,9 +353,8 @@ const LisCommandeBar = () => {
       headerName: "Date",
       flex: 1,
       cellClassName: "name-column--cell",
-      //   renderCell: (params) => (
-      //     // moment(params.row.created_at).format('YYYY-MM-DD')
-      //  ),
+      renderCell: (params) =>
+        moment(params.row.created_at).format("YYYY-MM-DD"),
     },
     {
       field: "validated_by",
@@ -421,61 +421,66 @@ const LisCommandeBar = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-          <IconButton
-            aria-label="edit"
-            onClick={() => {
-              console.log(params.row);
-              navigate("/entre/bar/commande", { state: params.row.id });
-            }}
-          >
-            <FolderIcon />
-          </IconButton>
-          <IconButton
-            aria-label="delete"
-            onClick={() => {
-              Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-              })
-                .then((result) => {
-                  if (result.isConfirmed) {
-                    axios
-                      .delete(API_URL + `mouvement/entre/${params.row.id}/`)
-                      .then((response) => fetchentreproduit());
-                  }
+          {params.row.validated_by === null && (
+            <IconButton
+              aria-label="edit"
+              onClick={() => {
+                console.log(params.row);
+                navigate("/entre/bar/commande", { state: params.row.id });
+              }}
+            >
+              <FolderIcon />
+            </IconButton>
+          )}
+          {params.row.validated_by === null && (
+            <IconButton
+              aria-label="delete"
+              color="error"
+              onClick={() => {
+                Swal.fire({
+                  title: "Are you sure?",
+                  text: "You won't be able to revert this!",
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Yes, delete it!",
                 })
-                .then((response) => {
-                  fetchentreproduit();
-                  fetchunite();
-                  Swal.fire({
-                    title: "Deleted!",
-                    text: "Your item has been deleted.",
-                    icon: "success",
-                  });
-                  if (response.status === 200) {
+                  .then((result) => {
+                    if (result.isConfirmed) {
+                      axios
+                        .delete(API_URL + `mouvement/entre/${params.row.id}/`)
+                        .then((response) => fetchentreproduit());
+                    }
+                  })
+                  .then((response) => {
+                    fetchentreproduit();
+                    fetchunite();
                     Swal.fire({
                       title: "Deleted!",
                       text: "Your item has been deleted.",
                       icon: "success",
                     });
-                  } else {
-                    Swal.fire({
-                      title: "Error!",
-                      text: "An error occurred while deleting the item.",
-                      icon: "error",
-                    });
-                  }
-                  fetchentreproduit();
-                });
-            }}
-          >
-            <DeleteIcon />
-          </IconButton>
+                    if (response.status === 200) {
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your item has been deleted.",
+                        icon: "success",
+                      });
+                    } else {
+                      Swal.fire({
+                        title: "Error!",
+                        text: "An error occurred while deleting the item.",
+                        icon: "error",
+                      });
+                    }
+                    fetchentreproduit();
+                  });
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          )}
           <IconButton
             aria-label="delete"
             onClick={() => {
