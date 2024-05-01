@@ -40,7 +40,7 @@ const Product = () => {
   // Example usage:
   const code = generateRandomCode();
   const [codeu, setcodeu] = useState();
-  const [generatedCode, setGeneratedCode] = useState(`PR${code}`);
+  const [generatedCode, setGeneratedCode] = useState(`PR2404${code}`);
   const [Categoryu, setCategoryu] = useState();
   const [typeu, settypeu] = useState();
   const [quantite, setquantite] = useState();
@@ -95,7 +95,7 @@ const Product = () => {
         famille: type,
         unite_mesure: genre,
         description: quantite,
-        code: "PR" + newCode,
+        code: "PR2404" + newCode,
         type_produit: Categorie,
         barcode: barcode,
         prix_vente: price,
@@ -268,12 +268,13 @@ const Product = () => {
       ),
     },
   ];
+
   return (
     <Box m="20px">
       <Header title="Produits" subtitle="Listes des produits" />
       <Box
         m="40px 0 0 0"
-        height="75vh"
+        // height="75vh"
         sx={{
           "& .MuiDataGrid-root": {
             border: "none",
@@ -346,6 +347,7 @@ const Product = () => {
           ))}
         </tbody>
       </table>
+
       {/* form creation produit */}
       <Modal open={openModal} onClose={handleClose}>
         <Box
@@ -415,7 +417,7 @@ const Product = () => {
 
               <Grid item xs={3}>
                 <TextField
-                  name="code"
+                  name="codeprod"
                   label="Code"
                   value={generatedCode}
                   disabled

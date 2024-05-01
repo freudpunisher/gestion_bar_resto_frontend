@@ -504,7 +504,7 @@ const Sidebar = () => {
                   setSelected={setSelected}
                 />
                 <Item
-                  title={!isCollapsed ? "Clients" : "PCL"}
+                  title={!isCollapsed ? "Serveurs" : "PSV"}
                   to="/Client"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
