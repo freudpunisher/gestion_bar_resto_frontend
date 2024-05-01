@@ -19,7 +19,11 @@ import {
   TableFooter,
   Paper,
 } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarQuickFilter,
+} from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { mockDataContacts } from "../../../data/mockData";
 import Header from "../../../components/Header";
@@ -36,6 +40,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 // import { motion } from 'framer-motion';
 import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -117,6 +122,7 @@ const LisEntreCuisine = () => {
       })
       .then((response) => {
         handleCloseforView();
+        fetchentreproduit();
         Swal.fire({
           icon: "success",
           title: "operation reussi",
@@ -352,9 +358,8 @@ const LisEntreCuisine = () => {
       headerName: "Date",
       flex: 1,
       cellClassName: "name-column--cell",
-      //   renderCell: (params) => (
-      //     // moment(params.row.created_at).format('YYYY-MM-DD')
-      //  ),
+      renderCell: (params) =>
+        moment(params.row.created_at).format("YYYY-MM-DD"),
     },
     {
       field: "validated_by",
@@ -421,18 +426,21 @@ const LisEntreCuisine = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-          <IconButton
-            aria-label="edit"
-            onClick={() => {
-              console.log(params.row);
-              navigate("/entre/cuisine/commande", { state: params.row.id });
-            }}
-          >
-            <FolderIcon />
-          </IconButton>
+          {params.row.validated_by === null && (
+            <IconButton
+              aria-label="edit"
+              onClick={() => {
+                console.log(params.row);
+                navigate("/entre/cuisine/commande", { state: params.row.id });
+              }}
+            >
+              <FolderIcon />
+            </IconButton>
+          )}
           {params.row.validated_by === null && (
             <IconButton
               aria-label="delete"
+              color="error"
               onClick={() => {
                 Swal.fire({
                   title: "Are you sure?",
@@ -442,37 +450,23 @@ const LisEntreCuisine = () => {
                   confirmButtonColor: "#3085d6",
                   cancelButtonColor: "#d33",
                   confirmButtonText: "Yes, delete it!",
-                })
-                  .then((result) => {
-                    if (result.isConfirmed) {
-                      axios
-                        .delete(API_URL + `mouvement/entre/${params.row.id}/`)
-                        .then((response) => fetchentreproduit());
-                    }
-                  })
-                  .then((response) => {
-                    fetchentreproduit();
-                    fetchunite();
-                    Swal.fire({
-                      title: "Deleted!",
-                      text: "Your item has been deleted.",
-                      icon: "success",
-                    });
-                    if (response.status === 200) {
-                      Swal.fire({
-                        title: "Deleted!",
-                        text: "Your item has been deleted.",
-                        icon: "success",
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    axios
+                      .delete(API_URL + `mouvement/entre/${params.row.id}/`)
+                      .then((response) => {
+                        fetchentreproduit();
+                        fetchunite();
+                        Swal.fire({
+                          title: "Deleted!",
+                          text: "Your item has been deleted.",
+                          icon: "success",
+                        });
+
+                        // fetchentreproduit();
                       });
-                    } else {
-                      Swal.fire({
-                        title: "Error!",
-                        text: "An error occurred while deleting the item.",
-                        icon: "error",
-                      });
-                    }
-                    fetchentreproduit();
-                  });
+                  }
+                });
               }}
             >
               <DeleteIcon />
@@ -510,6 +504,11 @@ const LisEntreCuisine = () => {
     console.log(firstPageRows);
     window.print();
   };
+
+  const totalPT = produitdata
+    .reduce((acc, row) => acc + Number(row.prix_total), 0)
+    .toFixed(2);
+
   return (
     <Box m="20px">
       <Header
@@ -572,7 +571,12 @@ const LisEntreCuisine = () => {
           ref={dataGridRef}
           rows={productdata}
           columns={columns}
-          components={{ Toolbar: GridToolbar }}
+          slots={{ Toolbar: GridToolbarQuickFilter }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+            },
+          }}
         />
       </Box>
       <>
@@ -948,11 +952,27 @@ const LisEntreCuisine = () => {
                       )}
                     </TableRow>
                   ))}
+                  <TableRow sx={{ bgcolor: colors.primary[700] }}>
+                    <TableCell
+                      colSpan={3}
+                      align="left"
+                      sx={{ fontSize: 30, fontWeight: "bold" }}
+                    >
+                      Total
+                    </TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{ fontSize: 30, fontWeight: "bold" }}
+                    >
+                      {totalPT}
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
                 </TableBody>
                 <TableFooter>
                   <TableRow>
                     <TableCell sx={{ border: 0 }}>
-                      {validated_by == null ? (
+                      {validated_by == null && produitdata.length !== 0 ? (
                         <Button
                           variant="contained"
                           color="secondary"
