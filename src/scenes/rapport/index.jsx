@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as React from 'react';
 import { Box, Button, IconButton, Typography, useTheme, InputLabel,TextField, } from "@mui/material";
 import { tokens } from "../../theme";
@@ -22,6 +23,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import * as XLSX from "xlsx";
+// import XLSX from 'xlsx-style';
 
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -43,6 +46,106 @@ const Rapport = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);  
   const [value, setValue] = React.useState(dayjs('2022-04-17'));
+  
+  // function genererRapportExcel() {
+  //   // Création d'un nouveau classeur Excel
+  //   const classeur = XLSX.utils.book_new();
+  
+  //   // Création des données du rapport
+  //   const rapportData = [
+  //     ['RAPPORT ACTIVITE DE 01/05/2024 AU 30/05/2024'],
+  //     ['MONTANT SUR LES ACTIVITES'],
+  //     ['ACTIVITE', 'BAR', 'CUISINE', 'TOTAL'],
+  //     ['Approvisionnement', 200000, 150000, 350000],
+  //     ['Facture', 350000, 200000, 550000],
+  //     ['Perte', 40000, 30000, 70000],
+  //     ['Benefice', 110000, 20000, 130000],
+  //     [],
+  //     ['RECOUVREMENT'],
+  //     ['Montant recouvrement bar', 60000],
+  //     ['Montant recouvrement cuisine', 70000],
+  //     ['Montant total recouvrement', 130000]
+  //   ];
+  
+  //   // Création d'une feuille Excel avec les données du rapport
+  //   const feuille = XLSX.utils.aoa_to_sheet(rapportData);
+  
+  //   // Ajout de la feuille au classeur
+  //   XLSX.utils.book_append_sheet(classeur, feuille, 'Rapport d\'activité');
+  
+  //   // Génération du fichier Excel
+  //   const fichierExcel = XLSX.write(classeur, { type: 'binary', bookType: 'xlsx' });
+  
+  //   // Convertir le fichier Excel en blob
+  //   const blob = new Blob([s2ab(fichierExcel)], { type: 'application/octet-stream' });
+  
+  //   // Télécharger le fichier Excel
+  //   saveAs(blob, 'rapport_activite.xlsx');
+  // }
+  
+  // // Fonction pour convertir une chaîne de caractères en tableau de bytes
+  // function s2ab(s) {
+  //   const buf = new ArrayBuffer(s.length);
+  //   const view = new Uint8Array(buf);
+  //   for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+  //   return buf;
+  // }
+
+  function genererRapportExcel() {
+    // Création d'un nouveau classeur Excel
+    const classeur = XLSX.utils.book_new();
+  
+    // Création des données du rapport
+    const rapportData = [
+      ['RAPPORT ACTIVITE DE 01/05/2024 AU 30/05/2024'],
+      ['MONTANT SUR LES ACTIVITES'],
+      ['ACTIVITE', 'BAR', 'CUISINE', 'TOTAL'],
+      ['Approvisionnement', 200000, 150000, 350000],
+      ['Facture', 350000, 200000, 550000],
+      ['Perte', 40000, 30000, 70000],
+      ['Benefice', 110000, 20000, 130000],
+      [],
+      ['RECOUVREMENT'],
+      ['Montant recouvrement bar', 60000],
+      ['Montant recouvrement cuisine', 70000],
+      ['Montant total recouvrement', 130000]
+    ];
+  
+    // Création d'une feuille Excel avec les données du rapport
+    const feuille = XLSX.utils.aoa_to_sheet(rapportData);
+  
+    // Ajout de la feuille au classeur
+    XLSX.utils.book_append_sheet(classeur, feuille, 'Rapport d\'activité');
+  
+    // Génération du fichier Excel
+    const fichierExcel = XLSX.write(classeur, {
+      bookType: 'xlsx',
+      type: 'binary',
+      cellStyles: true
+    });
+  
+    // Conversion binaire en tableau d'octets
+    const fichierExcelOctets = s2ab(fichierExcel);
+  
+    // Création d'un objet Blob à partir du tableau d'octets
+    const blob = new Blob([fichierExcelOctets], { type: 'application/octet-stream' });
+  
+    // Téléchargement du fichier Excel
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'rapport_activite.xlsx';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+  
+  // Fonction pour convertir une chaîne de caractères en tableau d'octets
+  function s2ab(s) {
+    const buf = new ArrayBuffer(s.length);
+    const view = new Uint8Array(buf);
+    for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff;
+    return view;
+  }
 
   return (
     <Box m="20px">
@@ -95,6 +198,7 @@ const Rapport = () => {
               fontWeight: "bold",
               padding: "10px 20px",
             }}
+            onClick={genererRapportExcel}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Télécharger le Rapport
