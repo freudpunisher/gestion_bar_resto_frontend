@@ -23,6 +23,11 @@ import {
   DataGrid,
   GridToolbar,
   GridToolbarQuickFilter,
+  gridPaginatedVisibleSortedGridRowIdsSelector,
+  gridSortedRowIdsSelector,
+  GridToolbarContainer,
+  gridExpandedSortedRowIdsSelector,
+  useGridApiContext,
 } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { mockDataContacts } from "../../../data/mockData";
@@ -41,6 +46,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { createSvgIcon } from "@mui/material/utils";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -265,6 +271,63 @@ const LisEntreCuisine = () => {
   // useEffect(()=>{
   //   fetchData();
   // },[])
+  const getRowsFromCurrentPage = ({ apiRef }) =>
+    gridPaginatedVisibleSortedGridRowIdsSelector(apiRef);
+
+  const getUnfilteredRows = ({ apiRef }) => gridSortedRowIdsSelector(apiRef);
+
+  const getFilteredRows = ({ apiRef }) =>
+    gridExpandedSortedRowIdsSelector(apiRef);
+
+  const ExportIcon = createSvgIcon(
+    <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" />,
+    "SaveAlt"
+  );
+  function CustomToolbar() {
+    const apiRef = useGridApiContext();
+    // const date = new date.now();
+
+    const handleExport = (options, exportName) => {
+      const exportOptions = {
+        ...options,
+        fileName: `Approvissionnement`, // Customize the file name here
+      };
+
+      apiRef.current.exportDataAsCsv(exportOptions);
+    };
+
+    const buttonBaseProps = {
+      color: "primary",
+      size: "small",
+      startIcon: <ExportIcon />,
+    };
+
+    return (
+      <GridToolbarContainer>
+        <Button
+          {...buttonBaseProps}
+          onClick={() =>
+            handleExport({ getRowsToExport: getRowsFromCurrentPage })
+          }
+        >
+          Current page rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getFilteredRows })}
+        >
+          Filtered rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getUnfilteredRows })}
+        >
+          Unfiltered rows
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
+
   const id_user = sessionStorage.getItem("user_id");
   // const creatDrug = () => {
   //   axios.post(API_Url+"medication/list/", {
@@ -571,12 +634,12 @@ const LisEntreCuisine = () => {
           ref={dataGridRef}
           rows={productdata}
           columns={columns}
-          slots={{ Toolbar: GridToolbarQuickFilter }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-            },
-          }}
+          slots={{ toolbar: CustomToolbar }}
+          // slotProps={{
+          //   toolbar: {
+          //     showQuickFilter: true,
+          //   },
+          // }}
         />
       </Box>
       <>

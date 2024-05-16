@@ -50,6 +50,7 @@ import SortieProduitCuisine from "./scenes/stock/sortie_produit_cuisine.jsx";
 import Rapport from "./scenes/rapport/index.jsx";
 import CommandeCuisine from "./scenes/commande/CommandeCuisine.jsx";
 import ListFactureCuisine from "./scenes/Facture/ListFactureCuisine.jsx";
+import SignIn from "./scenes/signinForm/index.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -99,6 +100,7 @@ function App() {
               <Route path="/inventiarebar" element={<InventaireBar />} />
               <Route path="/pie" element={<Pie />} />
               <Route path="/line" element={<Line />} />
+              <Route path="/login" element={<SignIn />} />
               <Route path="/faq" element={<FAQ />} />
               {/* <Route path="/calendar" element={<Calendar />} /> */}
               <Route path="/geography" element={<Geography />} />
