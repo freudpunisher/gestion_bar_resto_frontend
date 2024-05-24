@@ -41,7 +41,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo-bar-resto-light.png";
+import logo from "../../assets/Dodoma_Park_Logo.png";
 import ReactToPrint from "react-to-print";
 import { LogoDevOutlined } from "@mui/icons-material";
 
@@ -121,13 +121,29 @@ const CommandeBar = () => {
     );
 
     if (existingIndex >= 0) {
-      // Update quantity for existing product
-      const updatedTableData = [...secondTableData];
-      updatedTableData[existingIndex].quantity =
-        parseInt(updatedTableData[existingIndex].quantity) + 1;
-      setSecondTableData(updatedTableData);
+      // If the product already exists in the table
+      const product = secondTableData[existingIndex];
+      axios
+        .post(API_URL + "verification/quantite/sortie/", {
+          produit_id: product.produit,
+          quantite_sortie: product.quantity + 1, // Increment quantity by 1 for verification
+          mouv_entre_prod: 20,
+        })
+        .then((res) => {
+          if (res.data.reste_quantite_entre >= product.quantity + 1) {
+            // If there's enough quantity available after incrementing
+            const updatedTableData = [...secondTableData];
+            updatedTableData[existingIndex].quantity += 1;
+            setSecondTableData(updatedTableData);
+          }
+          // You might want to handle other cases here, like what to do if there's not enough quantity available
+        })
+        .catch((error) => {
+          console.error("Error while verifying quantity:", error);
+          // Handle errors appropriately
+        });
     } else {
-      // Add new product to the table
+      // If the product doesn't exist in the table, add it
       const newItem = {
         id: row.id,
         unite: row.code,
@@ -292,17 +308,50 @@ const CommandeBar = () => {
   const inCreaseQuantity = (id, newQuantity) => {
     setSecondTableData(
       secondTableData.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity - 1 } : item
+        item.produit === id ? { ...item, quantity: newQuantity - 1 } : item
       )
     );
   };
 
   const decreaseQuantity = (id, newQuantity) => {
-    setSecondTableData(
-      secondTableData.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity + 1 } : item
-      )
-    );
+    console.log(id);
+    axios
+      .post(API_URL + "verification/quantite/sortie/", {
+        produit_id: id,
+        quantite_sortie: newQuantity,
+        mouv_entre_prod: 20,
+      })
+      .then((res) => {
+        console.log(res.data.reste_quantite_entre, "jjjjjjjjjjjjjjjjjjj");
+        if (res.data.reste_quantite_entre === newQuantity) {
+          setSecondTableData(
+            secondTableData.map((item) =>
+              item.produit === id ? { ...item, quantity: newQuantity } : item
+            )
+          );
+        } else {
+          setSecondTableData(
+            secondTableData.map((item) =>
+              item.produit === id
+                ? { ...item, quantity: newQuantity + 1 }
+                : item
+            )
+          );
+        }
+      })
+      .catch((err) => {
+        setSecondTableData(
+          secondTableData.map((item) =>
+            item.produit === id ? { ...item, quantity: newQuantity - 1 } : item
+          )
+        );
+        console.log(err);
+        // Swal.fire({
+        //   title: "Quantite",
+        //   text: err.response.data.message,
+        //   icon: "error",
+        // });
+      });
   };
 
   //fetch of product
@@ -626,7 +675,10 @@ const CommandeBar = () => {
                                   <IconButton
                                     color="error"
                                     onClick={() =>
-                                      inCreaseQuantity(item.id, item.quantity)
+                                      inCreaseQuantity(
+                                        item.produit,
+                                        item.quantity
+                                      )
                                     }
                                   >
                                     <RemoveIcon />
@@ -640,7 +692,10 @@ const CommandeBar = () => {
                                   <IconButton
                                     color="secondary"
                                     onClick={() =>
-                                      decreaseQuantity(item.id, item.quantity)
+                                      decreaseQuantity(
+                                        item.produit,
+                                        item.quantity
+                                      )
                                     }
                                   >
                                     <AddIcon />

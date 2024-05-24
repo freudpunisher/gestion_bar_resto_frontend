@@ -39,6 +39,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TrendingFlatIcon from "@mui/icons-material/TrendingFlat";
+import logo from "../../assets/Dodoma_Park_Logo.png";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -94,9 +95,17 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h1" sx={{ fontWeight: "bold" }}>
-                  SGRB
-                </Typography>
+                <img
+                  src={logo}
+                  style={{
+                    width: isCollapsed ? 50 : 100,
+                    height: isCollapsed ? 50 : 100,
+                    // marginLeft: 15,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                />
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon color="white" />
                 </IconButton>
