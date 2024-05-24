@@ -23,6 +23,11 @@ import {
   DataGrid,
   GridToolbar,
   GridToolbarQuickFilter,
+  gridPaginatedVisibleSortedGridRowIdsSelector,
+  gridSortedRowIdsSelector,
+  GridToolbarContainer,
+  gridExpandedSortedRowIdsSelector,
+  useGridApiContext,
 } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { mockDataContacts } from "../../data/mockData";
@@ -41,7 +46,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { API_URL } from "../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import logo from "../../assets/logo-bar-resto-light.png";
+import logo from "../../assets/Dodoma_Park_Logo.png";
+import { createSvgIcon } from "@mui/material/utils";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -99,7 +105,7 @@ const ListFactureCuisine = () => {
     created_by: obj.created_by_info.user,
     created_at: obj.created_at,
     montant: obj.montant_total_info.montant,
-    status_paye: obj.status_paye,
+    status_paye: obj.status_paye ? "paye" : "pas paye",
   }));
 
   // les donnees qui doit apparaitre dans le modal
@@ -375,8 +381,57 @@ const ListFactureCuisine = () => {
       });
   };
 
+  const getRowsFromCurrentPage = ({ apiRef }) =>
+    gridPaginatedVisibleSortedGridRowIdsSelector(apiRef);
+
+  const getUnfilteredRows = ({ apiRef }) => gridSortedRowIdsSelector(apiRef);
+
+  const getFilteredRows = ({ apiRef }) =>
+    gridExpandedSortedRowIdsSelector(apiRef);
+
+  const ExportIcon = createSvgIcon(
+    <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" />,
+    "SaveAlt"
+  );
+  function CustomToolbar() {
+    const apiRef = useGridApiContext();
+
+    const handleExport = (options) => apiRef.current.exportDataAsCsv(options);
+
+    const buttonBaseProps = {
+      color: "primary",
+      size: "small",
+      startIcon: <ExportIcon />,
+    };
+
+    return (
+      <GridToolbarContainer>
+        <Button
+          {...buttonBaseProps}
+          onClick={() =>
+            handleExport({ getRowsToExport: getRowsFromCurrentPage })
+          }
+        >
+          Current page rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getFilteredRows })}
+        >
+          Filtered rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getUnfilteredRows })}
+        >
+          Unfiltered rows
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
+
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    // { field: "id", headerName: "ID", flex: 0.5 },
     // { field: "registrarId", headerName: "Registrar ID" },
     {
       field: "reference",
@@ -422,7 +477,7 @@ const ListFactureCuisine = () => {
       flex: 1,
       cellClassName: "name-column--cell",
       renderCell: (params) =>
-        params.row.status_paye === false ? (
+        params.row.status_paye === "pas paye" ? (
           <Typography
             sx={{
               bgcolor: "red",
@@ -518,7 +573,7 @@ const ListFactureCuisine = () => {
           >
             <FolderIcon />
           </IconButton> */}
-          {params.row.status_paye === false && (
+          {params.row.status_paye === "pas paye" && (
             <IconButton
               aria-label="delete"
               color="error"
@@ -648,7 +703,7 @@ const ListFactureCuisine = () => {
         <Button
           variant="contained"
           color="warning"
-          onClick={() => navigate("/entre/commande/bar")}
+          onClick={() => navigate("/entre/commande/cuisine")}
         >
           Commande
         </Button>
@@ -669,7 +724,7 @@ const ListFactureCuisine = () => {
           ref={dataGridRef}
           rows={productdata}
           columns={columns}
-          components={{ Toolbar: GridToolbarQuickFilter }}
+          slots={{ toolbar: CustomToolbar }}
         />
       </Box>
       <style media="print">

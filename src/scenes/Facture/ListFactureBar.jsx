@@ -41,7 +41,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { API_URL } from "../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import logo from "../../assets/logo-bar-resto-light.png";
+import logo from "../../assets/Dodoma_Park_Logo.png";
 
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -113,8 +113,9 @@ const ListFactureBar = () => {
         <table style="width: 100%; border-collapse: collapse;">
           <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
           <tr><td>Serveur</td><td>: ${serveur}</td></tr>
-          <tr><td>Date</td><td>: ${moment(date).format("YYYY-MM-DD")}}</td></tr>
+          <tr><td>Date</td><td>: ${moment(date).format("DD-MM-YYYY")}</td></tr>
           <tr><td>FACT No</td><td>: ${generatedCode}</td></tr>   
+          <tr><td>NIF  </td><td>: 4002545897</td></tr>   
         </table><br>
         <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
           <thead>                         
@@ -405,9 +406,8 @@ const ListFactureBar = () => {
       headerName: "Date",
       flex: 1,
       cellClassName: "name-column--cell",
-      //   renderCell: (params) => (
-      //     // moment(params.row.created_at).format('YYYY-MM-DD')
-      //  ),
+      renderCell: (params) =>
+        moment(params.row.created_at).format("DD-MM-YYYY"),
     },
     {
       field: "montant",
@@ -997,7 +997,7 @@ const ListFactureBar = () => {
               {serveur}
             </Typography>
             <Typography variant="h4" mb={1}>
-              {moment(date).format("YYYY-MM-DD")}
+              {moment(date).format("DD-MM-YYYY")}
             </Typography>
             <TableContainer style={{ borderRadius: "4px" }}>
               <Table
@@ -1013,7 +1013,7 @@ const ListFactureBar = () => {
                     <TableCell>Quantite</TableCell>
                     <TableCell>Prix Unitaire</TableCell>
                     <TableCell>Prix Total</TableCell>
-                    <TableCell>Actons</TableCell>
+                    {paye === false && <TableCell>Actons</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1027,11 +1027,15 @@ const ListFactureBar = () => {
                       <TableCell>{row.quantite}</TableCell>
                       <TableCell>{row.prix_unitaire}</TableCell>
                       <TableCell>{row.prix_total}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => deleteentreproduit(row.id)}>
-                          <DeleteIcon color="error" />
-                        </IconButton>
-                      </TableCell>
+                      {paye === false && (
+                        <TableCell>
+                          <IconButton
+                            onClick={() => deleteentreproduit(row.id)}
+                          >
+                            <DeleteIcon color="error" />
+                          </IconButton>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                   <TableRow sx={{ bgcolor: colors.primary[700] }}>

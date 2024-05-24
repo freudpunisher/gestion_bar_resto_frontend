@@ -41,7 +41,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import logo from "../../assets/logo-bar-resto-light.png";
+import logo from "../../assets/Dodoma_Park_Logo.png";
 import ReactToPrint from "react-to-print";
 import { LogoDevOutlined } from "@mui/icons-material";
 

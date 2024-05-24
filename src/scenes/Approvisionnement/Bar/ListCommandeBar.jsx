@@ -19,7 +19,15 @@ import {
   TableFooter,
   Paper,
 } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  gridPaginatedVisibleSortedGridRowIdsSelector,
+  gridSortedRowIdsSelector,
+  GridToolbarContainer,
+  gridExpandedSortedRowIdsSelector,
+  useGridApiContext,
+} from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { mockDataContacts } from "../../../data/mockData";
 import Header from "../../../components/Header";
@@ -28,6 +36,7 @@ import { useTheme, Grid } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -37,6 +46,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import { createSvgIcon } from "@mui/material/utils";
+
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const LisCommandeBar = () => {
@@ -108,6 +119,55 @@ const LisCommandeBar = () => {
   const fetchFournisseur = () => {
     axios.get(API_URL + "fournisseur/").then((res) => setData(res.data));
   };
+
+  const getRowsFromCurrentPage = ({ apiRef }) =>
+    gridPaginatedVisibleSortedGridRowIdsSelector(apiRef);
+
+  const getUnfilteredRows = ({ apiRef }) => gridSortedRowIdsSelector(apiRef);
+
+  const getFilteredRows = ({ apiRef }) =>
+    gridExpandedSortedRowIdsSelector(apiRef);
+
+  const ExportIcon = createSvgIcon(
+    <path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" />,
+    "SaveAlt"
+  );
+  function CustomToolbar() {
+    const apiRef = useGridApiContext();
+
+    const handleExport = (options) => apiRef.current.exportDataAsCsv(options);
+
+    const buttonBaseProps = {
+      color: "primary",
+      size: "small",
+      startIcon: <ExportIcon />,
+    };
+
+    return (
+      <GridToolbarContainer>
+        <Button
+          {...buttonBaseProps}
+          onClick={() =>
+            handleExport({ getRowsToExport: getRowsFromCurrentPage })
+          }
+        >
+          Current page rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getFilteredRows })}
+        >
+          Filtered rows
+        </Button>
+        <Button
+          {...buttonBaseProps}
+          onClick={() => handleExport({ getRowsToExport: getUnfilteredRows })}
+        >
+          Unfiltered rows
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   //valide l'approvisionnement
   const updatevalidated_by = () => {
@@ -323,6 +383,85 @@ const LisCommandeBar = () => {
   // }
   const handleCloseforView = () => {
     setopenModalv(false);
+  };
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}-${month}-${year}`;
+  }
+
+  const exportToExcel = (data, fileName) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
+  const tableData = produitdata.map((row) => ({
+    Produit: row.produit,
+    Quantite: row.quantite,
+    PrixUnitaire: row.prix_unitaire,
+    PrixTotal: row.prix_total,
+    // Include other columns as needed
+  }));
+
+  //excel of aporovisionnement ----------------------
+
+  const handleExportToExcel = () => {
+    // Obtenir la date actuelle
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate);
+    exportToExcel(tableData, ` Approvisionnement${formattedDate}`);
+
+    // const workbook = XLSX.utils.book_new();
+    // const worksheet = XLSX.utils.json_to_sheet(produitdata);
+
+    // // Ajouter les données à partir de la ligne 3
+    // XLSX.utils.sheet_add_json(worksheet, produitdata, {
+    //   skipHeader: true,
+    //   origin: "A3",
+    // });
+
+    // // Modifier les titres des colonnes
+    // const title = [
+    //   "Produit",
+    //   "Quantite",
+    //   "Mouvement Entre",
+    //   "Prix Unitaire",
+    //   "Prix Total",
+    // ];
+    // XLSX.utils.sheet_add_aoa(worksheet, [["Etat Stock Bar"]], { origin: "A1" }); // Ajouter le titre à partir de la ligne 1
+    // XLSX.utils.sheet_add_aoa(worksheet, [title], { origin: "A2" }); // Ajouter le titre à partir de la ligne 2
+
+    // // Fusionner les cellules de la première ligne
+    // worksheet["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 10 } }];
+    // worksheet["A1"].s = { alignment: { horizontal: "center" } };
+
+    // XLSX.utils.book_append_sheet(workbook, worksheet, "STOCK INITIAL BAR");
+
+    // const excelBuffer = XLSX.write(workbook, {
+    //   bookType: "xlsx",
+    //   type: "array",
+    // });
+
+    // // Construire le nom du fichier avec la date
+    // const fileName = `EtatStockBar_${formattedDate}.xlsx`;
+
+    // const excelBlob = new Blob([excelBuffer], {
+    //   type: "application/octet-stream",
+    // });
+    // const excelUrl = URL.createObjectURL(excelBlob);
+
+    // const downloadLink = document.createElement("a");
+    // downloadLink.href = excelUrl;
+    // downloadLink.download = fileName;
+    // downloadLink.click();
+
+    // // Nettoyer l'URL de l'objet
+    // URL.revokeObjectURL(excelUrl);
   };
 
   const columns = [
@@ -575,7 +714,7 @@ const LisCommandeBar = () => {
           ref={dataGridRef}
           rows={productdata}
           columns={columns}
-          components={{ Toolbar: GridToolbar }}
+          slots={{ toolbar: CustomToolbar }}
         />
       </Box>
       <>
@@ -967,7 +1106,15 @@ const LisCommandeBar = () => {
                       )}
                     </TableCell>
                     <TableCell sx={{ border: 0 }}></TableCell>
-                    <TableCell sx={{ border: 0 }}></TableCell>
+                    <TableCell sx={{ border: 0 }}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleExportToExcel}
+                      >
+                        excel
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
