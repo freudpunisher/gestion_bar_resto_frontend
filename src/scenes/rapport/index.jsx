@@ -49,6 +49,9 @@ import {
   View,
   pdf,
 } from "@react-pdf/renderer";
+import PrintReport from "./PrintReport";
+import { getByTestId } from "@testing-library/react";
+import logo from "../../assets/Dodoma_Park_Logo.png";
 
 const rowsPerPageOptions = [5, 10, 25];
 
@@ -58,6 +61,7 @@ function Rapport() {
   const dataGridRef = useRef();
   // variable de recherche
   const [date, setdate] = useState();
+  const [dateau, setdateau] = useState();
   const [produit, setproduit] = useState();
 
   // variabale pour la vration invataire
@@ -65,6 +69,7 @@ function Rapport() {
   const [produit_data_name, setproduit_data_name] = useState();
   const [produit_data_qte, setproduit_data_qte] = useState();
   const [produit_post_qte, setproduit_post_qte] = useState();
+  const [dataset, setdataset] = useState([]);
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -87,7 +92,7 @@ function Rapport() {
 
   // liste etat stock
   const fetchdata = () => {
-    axios.get(API_URL + "etat/stock/1/").then((response) => {
+    axios.get(API_URL + "rapport/comptable/").then((response) => {
       setData(response.data);
     });
   };
@@ -95,7 +100,8 @@ function Rapport() {
   // focntion recherche
   const fetchdatabyparams = () => {
     const data = {
-      date: date,
+      du: date,
+      au: dateau,
       produit: produit,
     };
 
@@ -104,10 +110,12 @@ function Rapport() {
       headers: { "Content-Type": "application/json" },
     };
 
-    axios.get(API_URL + "etat/stock/1/", options).then((response) => {
+    axios.get(API_URL + "rapport/comptable/", options).then((response) => {
       setData(response.data);
     });
   };
+
+  console.log(date, "date for filter");
 
   // cqlcul perte
   const perte = produit_data_qte - produit_post_qte;
@@ -555,7 +563,7 @@ function Rapport() {
 
   // let sort some data
 
-  const filteredData = dataTest.filter((item) => item.produits.length !== 0);
+  const filteredData = data.filter((item) => item.produits.length !== 0);
   const sortedData = dataTest.forEach((item) => console.log(item, "dfvgrecc"));
 
   const hasMultipleSorties = (filteredData) =>
@@ -567,6 +575,85 @@ function Rapport() {
 
   //// test
   console.log(sortedData);
+
+  // handle print
+
+  const handlePrintTable = () => {
+    // Generate a print-friendly HTML table structure based on filteredData
+    const printTableHTML = `
+      <div style="width: 100%; margin: 0 auto;">
+        <table style="width: 100%;">
+          ${
+            logo
+              ? `<tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>`
+              : ""
+          }
+        </table><br>
+        <table style="width: 100%; font-size:14;">
+          <tr><th>DODOMA PARK BUGARAMA</th></tr>
+        </table><hr><br>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
+          <tr><td>Serveur</td><td>: test</td></tr>
+          <tr><td>Date</td><td>: ${new Date().toLocaleDateString()}</td></tr>  <tr><td>FACT No</td><td>: test</td></tr>   
+        </table><br>
+        <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+          <thead>                         
+            <tr>
+              <td>Produit</td>
+              <td>Qte Achetée</td> <td>P.U Achat</td>
+              <td>P.T Achat</td>
+              <td>Qte Vendue</td>
+              <td>P.U Vente</td>
+              <td>P.T Vente</td>
+              <td>Bénéfice</td>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredData.map(
+              (item) =>
+                `<tr>
+                <td colspan="4">${
+                  item.reference
+                }</td>  <td colspan="4"></td>  </tr>
+              <tr>
+                <td>${item.produits[0].produit}</td>  <td>${
+                  item.produits[0].quantite_ach
+                }</td>
+                <td>${item.produits[0].prix_unitaire_ach} Fbu</td>
+                <td>${item.produits[0].prix_total_ach} Fbu</td>
+                <td>${item.produits[0].sorties.reduce(
+                  (sum, sortie) => sum + sortie.quantite_vnt,
+                  0
+                )}</td>  <td>${item.produits[0].sorties.reduce(
+                  (sum, sortie) => sum + sortie.prix_unitaire_vnt,
+                  0
+                )} Fbu</td>  <td>${item.produits[0].sorties.reduce(
+                  (sum, sortie) => sum + sortie.prix_total_vnt,
+                  0
+                )} Fbu</td>  </tr>`
+            )}
+            <tr>
+              <td colspan="3">Total</td>
+              <td>test Fbu</td>
+              <td></td>  <td></td>
+              <td></td>
+            </tr>             
+          </tbody>
+        </table>
+      </div> <br>
+      <table style="width: 100%;">
+        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+      </table><hr><br><br>
+    `;
+
+    const printWindow = window.open("", "", "width=1000,height=1000");
+    printWindow.document.write(printTableHTML);
+    printWindow.document.close();
+
+    printWindow.print();
+    printWindow.close();
+  };
 
   function generateTableRows(data) {
     let output = "";
@@ -611,7 +698,7 @@ function Rapport() {
         <Grid container spacing={2}>
           {/* input date recherche */}
           <Grid item sm={2}>
-            <InputLabel htmlFor="au-input">Date</InputLabel>
+            <InputLabel htmlFor="au-input">Du</InputLabel>
             <input
               type="date"
               style={{
@@ -625,6 +712,25 @@ function Rapport() {
               }}
               onChange={(e) => {
                 setdate(e.target.value);
+                console.log(e.target.value, "change");
+              }}
+            />
+          </Grid>
+          <Grid item sm={2}>
+            <InputLabel htmlFor="au-input">Au</InputLabel>
+            <input
+              type="date"
+              style={{
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                fontSize: "16px",
+                width: "100%",
+                color: "white",
+                backgroundColor: "inherit",
+              }}
+              onChange={(e) => {
+                setdateau(e.target.value);
                 console.log(e.target.value, "change");
               }}
             />
@@ -778,93 +884,7 @@ function Rapport() {
                 })}
               </table> */}
 
-              <TableContainer component={Paper}>
-                <Table>
-                  {filteredData.map((item) => (
-                    <React.Fragment key={item.reference}>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell colSpan={8}>
-                            {item.reference}
-                            <br />
-                            {item.date}
-                            <br />
-                            {item.cloture}
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>Produit</TableCell>
-                          <TableCell>Quantité achetée</TableCell>
-                          <TableCell>Prix unitaire achat</TableCell>
-                          <TableCell>Prix total achat</TableCell>
-                          <TableCell>Quantite Vendu</TableCell>
-                          <TableCell>Prix unitaire vendu</TableCell>
-                          <TableCell>Prix Total vendu</TableCell>
-                          <TableCell>Benefice</TableCell>
-                        </TableRow>
-                        {item.produits.map((produit, index) => (
-                          <React.Fragment key={produit.produit}>
-                            <TableRow>
-                              {produit.sorties.length >= 1 ? (
-                                <TableCell
-                                  rowSpan={produit.sorties.length === 1 ? 2 : 3}
-                                >
-                                  {produit.produit}
-                                </TableCell>
-                              ) : (
-                                <TableCell>{produit.produit}</TableCell>
-                              )}
-                              {produit.sorties.length >= 1 ? (
-                                <TableCell
-                                  rowSpan={produit.sorties.length === 1 ? 2 : 3}
-                                >
-                                  {produit.quantite_ach}
-                                </TableCell>
-                              ) : (
-                                <TableCell>{produit.quantite_ach}</TableCell>
-                              )}
-                              {produit.sorties.length >= 1 ? (
-                                <TableCell
-                                  rowSpan={produit.sorties.length === 1 ? 2 : 3}
-                                >
-                                  {produit.prix_unitaire_ach}
-                                </TableCell>
-                              ) : (
-                                <TableCell>
-                                  {produit.prix_unitaire_ach}
-                                </TableCell>
-                              )}
-                              {produit.sorties.length >= 1 ? (
-                                <TableCell
-                                  rowSpan={produit.sorties.length === 1 ? 2 : 3}
-                                >
-                                  {produit.prix_total_ach}
-                                </TableCell>
-                              ) : (
-                                <TableCell>{produit.prix_total_ach}</TableCell>
-                              )}
-                            </TableRow>
-                            {produit.sorties.map((sortie, index) => (
-                              <TableRow key={index}>
-                                {/* <TableCell colSpan={4}></TableCell>{" "} */}
-                                {/* Adjust the colspan as needed */}
-                                <TableCell>{sortie.quantite_vnt}</TableCell>
-                                <TableCell>
-                                  {sortie.prix_unitaire_vnt}
-                                </TableCell>
-                                <TableCell>{sortie.prix_total_vnt}</TableCell>
-                                <TableCell>{sortie.benefice}</TableCell>
-                              </TableRow>
-                            ))}
-                          </React.Fragment>
-                        ))}
-                      </TableBody>
-                    </React.Fragment>
-                  ))}
-                </Table>
-              </TableContainer>
+              <PrintReport filteredData={filteredData} />
             </Box>
           </Grid>
         </Grid>

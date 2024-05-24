@@ -66,7 +66,7 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<Example />} />
+              <Route path="/team" element={<ListFactureBar />} />
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/list/avenant" element={<ListAvenant />} />
@@ -93,7 +93,7 @@ function App() {
                 element={<CommandeCuisine />}
               />
               <Route path="/sortie/bar" element={<ListSortieBar />} />
-              <Route path="/facture/bar" element={<ListFactureBar />} />
+              <Route path="/facture/bar" element={<Example />} />
               <Route path="/facture/cuisine" element={<ListFactureCuisine />} />
               <Route path="/client" element={<Client />} />
               <Route path="/stockinitial" element={<StockInitial />} />
