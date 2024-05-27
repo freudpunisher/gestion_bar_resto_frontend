@@ -195,7 +195,7 @@ const Sidebar = () => {
               >
                 <StoreIcon sx={{ marginRight: "14px" }} />
                 {!isCollapsed ? (
-                  <Typography variant="subtitle1">Stock Initial</Typography>
+                  <Typography variant="subtitle1">Etat Stock</Typography>
                 ) : null}
               </AccordionSummary>
               <Divider component="li" />

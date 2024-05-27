@@ -47,7 +47,7 @@ import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { createSvgIcon } from "@mui/material/utils";
-
+import * as XLSX from "xlsx";
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const LisEntreCuisine = () => {
@@ -257,6 +257,81 @@ const LisEntreCuisine = () => {
     axios.get(API_URL + `entre/mouvement/${id}/`).then((response) => {
       setlistproduit(response.data);
     });
+  };
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${day}-${month}-${year}`;
+  }
+  const exportToExcel = (data, fileName) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+  const tableData = produitdata.map((row) => ({
+    Produit: row.produit,
+    Quantite: row.quantite,
+    PrixUnitaire: row.prix_unitaire,
+    PrixTotal: row.prix_total,
+    // Include other columns as needed
+  }));
+
+  const handleExportToExcel = () => {
+    // Obtenir la date actuelle
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate);
+    exportToExcel(tableData, ` Approvisionnement${formattedDate}`);
+
+    // const workbook = XLSX.utils.book_new();
+    // const worksheet = XLSX.utils.json_to_sheet(produitdata);
+
+    // // Ajouter les données à partir de la ligne 3
+    // XLSX.utils.sheet_add_json(worksheet, produitdata, {
+    //   skipHeader: true,
+    //   origin: "A3",
+    // });
+
+    // // Modifier les titres des colonnes
+    // const title = [
+    //   "Produit",
+    //   "Quantite",
+    //   "Mouvement Entre",
+    //   "Prix Unitaire",
+    //   "Prix Total",
+    // ];
+    // XLSX.utils.sheet_add_aoa(worksheet, [["Etat Stock Bar"]], { origin: "A1" }); // Ajouter le titre à partir de la ligne 1
+    // XLSX.utils.sheet_add_aoa(worksheet, [title], { origin: "A2" }); // Ajouter le titre à partir de la ligne 2
+
+    // // Fusionner les cellules de la première ligne
+    // worksheet["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 10 } }];
+    // worksheet["A1"].s = { alignment: { horizontal: "center" } };
+
+    // XLSX.utils.book_append_sheet(workbook, worksheet, "STOCK INITIAL BAR");
+
+    // const excelBuffer = XLSX.write(workbook, {
+    //   bookType: "xlsx",
+    //   type: "array",
+    // });
+
+    // // Construire le nom du fichier avec la date
+    // const fileName = `EtatStockBar_${formattedDate}.xlsx`;
+
+    // const excelBlob = new Blob([excelBuffer], {
+    //   type: "application/octet-stream",
+    // });
+    // const excelUrl = URL.createObjectURL(excelBlob);
+
+    // const downloadLink = document.createElement("a");
+    // downloadLink.href = excelUrl;
+    // downloadLink.download = fileName;
+    // downloadLink.click();
+
+    // // Nettoyer l'URL de l'objet
+    // URL.revokeObjectURL(excelUrl);
   };
 
   useEffect(() => {
@@ -494,7 +569,12 @@ const LisEntreCuisine = () => {
               aria-label="edit"
               onClick={() => {
                 console.log(params.row);
-                navigate("/entre/cuisine/commande", { state: params.row.id });
+                navigate("/entre/cuisine/commande", {
+                  state: {
+                    id_entre: params.row.id,
+                    reference: params.row.reference,
+                  },
+                });
               }}
             >
               <FolderIcon />
@@ -718,7 +798,11 @@ const LisEntreCuisine = () => {
               </Grid>
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel
+                    id="demo-simple-select-label"
+                    sx={{ margin: -1 }}
+                    color="secondary"
+                  >
                     Selectionnez fournisseur
                   </InputLabel>
                   <Select
@@ -974,7 +1058,7 @@ const LisEntreCuisine = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h3" mb={1}>
-              Produit
+              Produit approvisionné
             </Typography>
             <TableContainer style={{ borderRadius: "4px" }}>
               <Table
@@ -986,7 +1070,7 @@ const LisEntreCuisine = () => {
                   <TableRow>
                     {/* <TableCell>ID</TableCell> */}
                     <TableCell>Produit</TableCell>
-                    <TableCell>Mouvement Entre</TableCell>
+
                     <TableCell>Quantite</TableCell>
                     <TableCell>Prix Unitaire</TableCell>
                     <TableCell>Prix Total</TableCell>
@@ -1000,7 +1084,7 @@ const LisEntreCuisine = () => {
                         {row.id}
                       </TableCell> */}
                       <TableCell>{row.produit}</TableCell>
-                      <TableCell>{row.mouvement_entre}</TableCell>
+                      {/* <TableCell>{row.mouvement_entre}</TableCell> */}
                       <TableCell>{row.quantite}</TableCell>
                       <TableCell>{row.prix_unitaire}</TableCell>
                       <TableCell>{row.prix_total}</TableCell>
@@ -1032,7 +1116,7 @@ const LisEntreCuisine = () => {
                     <TableCell />
                   </TableRow>
                 </TableBody>
-                <TableFooter>
+                {/* <TableFooter>
                   <TableRow>
                     <TableCell sx={{ border: 0 }}>
                       {validated_by == null && produitdata.length !== 0 ? (
@@ -1050,10 +1134,31 @@ const LisEntreCuisine = () => {
                     <TableCell sx={{ border: 0 }}></TableCell>
                     <TableCell sx={{ border: 0 }}></TableCell>
                   </TableRow>
-                </TableFooter>
+                </TableFooter> */}
               </Table>
             </TableContainer>
           </Stack>
+          <Box sx={{ marginTop: 2 }}>
+            {validated_by == null ? (
+              <Button
+                variant="contained"
+                color="info"
+                onClick={updatevalidated_by}
+              >
+                valide
+              </Button>
+            ) : (
+              ""
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleExportToExcel}
+              sx={{ marginLeft: 2 }}
+            >
+              excel
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>

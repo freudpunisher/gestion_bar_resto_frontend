@@ -40,7 +40,7 @@ const CommandeBarEntre = () => {
   const blue = colors.blueAccent[400];
   const navigate = useNavigate();
   const location = useLocation();
-  const id_entre = location.state;
+  const { id_entre, reference } = location.state;
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [id, setId] = useState();
   const [pu, setpu] = useState();
@@ -244,10 +244,17 @@ const CommandeBarEntre = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
-                title="Invoice"
-                sx={{ backgroundColor: colors.blueAccent[700], padding: 1 }}
+                title={"Liste approvisionnement " + reference}
+                // style={{ display: "flex", width: "100%" }} // Inline style
+                sx={{
+                  backgroundColor: colors.blueAccent[700],
+                  padding: 1,
+                  margin: 0,
+                  display: "flex",
+                  width: "100%",
+                }}
               />
               <CardContent>
                 {secondTableData.length !== 0 && ( // Only display invoice details if a product is selected
@@ -322,7 +329,7 @@ const CommandeBarEntre = () => {
                       }}
                       onClick={createEntre}
                     >
-                      Add to Invoice
+                      Ajouter
                     </Button>
                   </>
                 )}
