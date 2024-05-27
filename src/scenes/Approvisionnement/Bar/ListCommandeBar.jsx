@@ -47,7 +47,7 @@ import { API_URL } from "../../../data/Api";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { createSvgIcon } from "@mui/material/utils";
-
+import DoneIcon from "@mui/icons-material/Done";
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const LisCommandeBar = () => {
@@ -174,6 +174,24 @@ const LisCommandeBar = () => {
     axios
       .patch(API_URL + `mouvement/entre/${id}/`, {
         validated_by: 1,
+      })
+      .then((response) => {
+        handleCloseforView();
+        fetchentreproduit();
+        Swal.fire({
+          icon: "success",
+          title: "operation reussi",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      });
+  };
+
+  //valide l'approvisionnement
+  const updatevactivate = (id) => {
+    axios
+      .patch(API_URL + `mouvement/entre/${id}/`, {
+        is_activte: true,
       })
       .then((response) => {
         handleCloseforView();
@@ -560,18 +578,23 @@ const LisCommandeBar = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-          {params.row.validated_by === null && (
+          {params.row.is_activte === true && (
             <IconButton
               aria-label="edit"
               onClick={() => {
                 console.log(params.row);
-                navigate("/entre/bar/commande", { state: params.row.id });
+                navigate("/entre/bar/commande", {
+                  state: {
+                    id_entre: params.row.id,
+                    reference: params.row.reference,
+                  },
+                });
               }}
             >
               <FolderIcon />
             </IconButton>
           )}
-          {params.row.validated_by === null && (
+          {params.row.is_activte === false && (
             <IconButton
               aria-label="delete"
               color="error"
@@ -620,16 +643,26 @@ const LisCommandeBar = () => {
               <DeleteIcon />
             </IconButton>
           )}
+          {params.row.is_activte !== true && (
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                setopenModalv(true);
+                fetchProduit(params.row.id);
+                setid(params.row.id);
+                setvalidated_by(params.row.validated_by);
+              }}
+            >
+              <VisibilityIcon />
+            </IconButton>
+          )}
           <IconButton
             aria-label="delete"
             onClick={() => {
-              setopenModalv(true);
-              fetchProduit(params.row.id);
-              setid(params.row.id);
-              setvalidated_by(params.row.validated_by);
+              console.log(console.log(params.row.id, "dfdfdgdggdgdgg"));
             }}
           >
-            <VisibilityIcon />
+            <DoneIcon />
           </IconButton>
         </div>
       ),
@@ -1052,7 +1085,7 @@ const LisCommandeBar = () => {
         >
           <Stack spacing={2}>
             <Typography variant="h3" mb={1}>
-              Produit
+              Produit approvisionné
             </Typography>
             <TableContainer style={{ borderRadius: "4px" }}>
               <Table
@@ -1068,7 +1101,7 @@ const LisCommandeBar = () => {
                     <TableCell>Quantite</TableCell>
                     <TableCell>Prix Unitaire</TableCell>
                     <TableCell>Prix Total</TableCell>
-                    <TableCell>Actons</TableCell>
+                    {validated_by == null && <TableCell>Actons</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1082,44 +1115,42 @@ const LisCommandeBar = () => {
                       <TableCell>{row.quantite}</TableCell>
                       <TableCell>{row.prix_unitaire}</TableCell>
                       <TableCell>{row.prix_total}</TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => deleteentreproduit(row.id)}>
-                          <DeleteIcon color="error" />
-                        </IconButton>
-                      </TableCell>
+                      {validated_by == null && (
+                        <TableCell>
+                          <IconButton
+                            onClick={() => deleteentreproduit(row.id)}
+                          >
+                            <DeleteIcon color="error" />
+                          </IconButton>
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell sx={{ border: 0 }}>
-                      {validated_by == null ? (
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          onClick={updatevalidated_by}
-                        >
-                          valide
-                        </Button>
-                      ) : (
-                        ""
-                      )}
-                    </TableCell>
-                    <TableCell sx={{ border: 0 }}></TableCell>
-                    <TableCell sx={{ border: 0 }}>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={handleExportToExcel}
-                      >
-                        excel
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
               </Table>
             </TableContainer>
           </Stack>
+          <Box sx={{ marginTop: 2 }}>
+            {validated_by == null ? (
+              <Button
+                variant="contained"
+                color="info"
+                onClick={updatevalidated_by}
+              >
+                valide
+              </Button>
+            ) : (
+              ""
+            )}
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleExportToExcel}
+              sx={{ marginLeft: 2 }}
+            >
+              excel
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </Box>
