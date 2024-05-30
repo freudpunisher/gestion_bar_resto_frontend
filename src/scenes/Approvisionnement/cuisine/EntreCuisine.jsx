@@ -40,7 +40,7 @@ const EntreCuisine = () => {
   const blue = colors.blueAccent[400];
   const navigate = useNavigate();
   const location = useLocation();
-  const id_entre = location.state;
+  const { id_entre, reference } = location.state;
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [id, setId] = useState();
   const [pu, setpu] = useState();
@@ -244,9 +244,9 @@ const EntreCuisine = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Box padding={3}>
-            <Card sx={{ backgroundColor: "transparent", padding: 2 }}>
+            <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
-                title="Invoice"
+                title={"liste approvisionnement " + reference}
                 sx={{ backgroundColor: colors.blueAccent[700], padding: 1 }}
               />
               <CardContent>
@@ -319,10 +319,11 @@ const EntreCuisine = () => {
                       color="secondary"
                       sx={{
                         margin: 1,
+                        marginTop: 2,
                       }}
                       onClick={createEntre}
                     >
-                      Add to Invoice
+                      Ajouter
                     </Button>
                   </>
                 )}
@@ -355,7 +356,7 @@ const EntreCuisine = () => {
                 <Grid item xs={6}>
                   <TextField
                     name="designation"
-                    label="Quantity"
+                    label="Quantite"
                     color="secondary"
                     // value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
@@ -388,14 +389,14 @@ const EntreCuisine = () => {
                   // updatecreatDrug();
                 }}
               >
-                Save
+                Enregistrer
               </Button>
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={handleClose}
               >
-                close
+                Fermer
               </Button>
             </Box>
           </Stack>

@@ -51,6 +51,7 @@ import Rapport from "./scenes/rapport/index.jsx";
 import CommandeCuisine from "./scenes/commande/CommandeCuisine.jsx";
 import ListFactureCuisine from "./scenes/Facture/ListFactureCuisine.jsx";
 import SignIn from "./scenes/signinForm/index.jsx";
+import ListFactureBar1 from "../src/scenes/ListFactureBar1.jsx";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -93,8 +94,8 @@ function App() {
                 element={<CommandeCuisine />}
               />
               <Route path="/sortie/bar" element={<ListSortieBar />} />
-              <Route path="/facture/bar" element={<Example />} />
-              <Route path="/facture/cuisine" element={<ListFactureCuisine />} />
+              <Route path="/facture/bar" element={<ListFactureBar1 />} />
+              <Route path="/facture/cuisine" element={<Example />} />
               <Route path="/client" element={<Client />} />
               <Route path="/stockinitial" element={<StockInitial />} />
               <Route path="/inventiarebar" element={<InventaireBar />} />
