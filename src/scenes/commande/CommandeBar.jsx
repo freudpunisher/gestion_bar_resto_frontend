@@ -455,7 +455,7 @@ const CommandeBar = () => {
                   </IconButton>
                 </Box>
 
-                <Select
+                {/* <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Age"
@@ -483,7 +483,7 @@ const CommandeBar = () => {
                       {item.first_name} {item.last_name}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
               </Box>
               <CardContent>
                 <div>
