@@ -206,7 +206,7 @@ const Client = () => {
 
   return (
     <Box m="20px">
-      <Header  title="Serveur" subtitle="Listes des serveurs"/>
+      <Header title="Serveur" subtitle="Listes des serveurs" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -290,13 +290,13 @@ const Client = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
             p: 4,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
+            <Typography variant="h3" mb={1}>
               Nouveau Serveur
             </Typography>
             <Grid container spacing={2}>
@@ -304,6 +304,7 @@ const Client = () => {
                 <TextField
                   name="FistName"
                   label="Nom"
+                  color="secondary"
                   onChange={(e) => setFirstName(e.target.value)}
                   fullWidth
                   size="small"
@@ -313,6 +314,7 @@ const Client = () => {
                 <TextField
                   name="Prenom"
                   label="Prenom"
+                  color="secondary"
                   onChange={(e) => setLastName(e.target.value)}
                   fullWidth
                   size="small"
@@ -322,6 +324,7 @@ const Client = () => {
                 <TextField
                   name="DeScription"
                   label="Email"
+                  color="secondary"
                   onChange={(e) => setEmail(e.target.value)}
                   fullWidth
                   size="small"
@@ -331,6 +334,7 @@ const Client = () => {
                 <TextField
                   name="prix"
                   label="Phone"
+                  color="secondary"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   fullWidth
                   size="small"
@@ -340,6 +344,7 @@ const Client = () => {
                 <TextField
                   name="code"
                   label="Adresse"
+                  color="secondary"
                   onChange={(e) => setAddress(e.target.value)}
                   fullWidth
                   size="small"
@@ -378,7 +383,7 @@ const Client = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
             p: 4,
           }}
@@ -392,6 +397,7 @@ const Client = () => {
                 <TextField
                   name="FistName"
                   label="Nom"
+                  color="secondary"
                   value={firstNameu}
                   onChange={(e) => setFirstNameu(e.target.value)}
                   fullWidth
@@ -402,6 +408,7 @@ const Client = () => {
                 <TextField
                   name="Prenom"
                   label="Prenom"
+                  color="secondary"
                   value={lastNameu}
                   onChange={(e) => setLastNameu(e.target.value)}
                   fullWidth
@@ -412,6 +419,7 @@ const Client = () => {
                 <TextField
                   name="code"
                   label="Adresse"
+                  color="secondary"
                   value={addressu}
                   onChange={(e) => setAddressu(e.target.value)}
                   fullWidth
@@ -436,6 +444,7 @@ const Client = () => {
                   name="prix"
                   label="Phone"
                   value={phoneNumberu}
+                  color="secondary"
                   onChange={(e) => setPhoneNumberu(e.target.value)}
                   fullWidth
                   size="small"
@@ -446,6 +455,7 @@ const Client = () => {
                   name="DeScription"
                   label="Email"
                   value={emailu}
+                  color="secondary"
                   onChange={(e) => setEmailu(e.target.value)}
                   fullWidth
                   size="small"
@@ -468,7 +478,9 @@ const Client = () => {
                 style={{ marginRight: "10px" }}
                 variant="contained"
                 color="info"
-                onClick={() => {updateUnite();}}
+                onClick={() => {
+                  updateUnite();
+                }}
               >
                 Enregistre
               </Button>

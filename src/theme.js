@@ -164,30 +164,30 @@ export const themeSettings = (mode) => {
     },
     typography: {
       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-      fontSize: 18,
+      fontSize: 20,
       h1: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 40,
+        fontSize: 45,
       },
       h2: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 32,
+        fontSize: 40,
       },
       h3: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 24,
+        fontSize: 30,
       },
       h4: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 20,
+        fontSize: 30,
       },
       h5: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 16,
+        fontSize: 20,
       },
       h6: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-        fontSize: 14,
+        fontSize: 20,
       },
     },
   };

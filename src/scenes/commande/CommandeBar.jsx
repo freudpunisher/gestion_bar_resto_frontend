@@ -92,14 +92,16 @@ const CommandeBar = () => {
     setopenModal(false);
   };
 
-  const itemEntre = secondTableData.map((row) => ({
-    produit: row.produit,
-    unite_mesure: row.id,
-    quantite: (row.quantity * row.value_rapport).toFixed(2),
-    prix_unitaire: row.PU,
-    type_sortie: 1,
-    prix_total: row.quantity * row.PU,
-  }));
+  const itemEntre = secondTableData
+    .filter((row) => row.quantity !== 0)
+    .map((row) => ({
+      produit: row.produit,
+      unite_mesure: row.id,
+      quantite: (row.quantity * row.value_rapport).toFixed(2),
+      prix_unitaire: row.PU,
+      type_sortie: 1,
+      prix_total: row.quantity * row.PU,
+    }));
 
   // recupere pU d'un produit et nom du produit
   const recupereIdProduit = (id) => {
@@ -127,7 +129,7 @@ const CommandeBar = () => {
         .post(API_URL + "verification/quantite/sortie/", {
           produit_id: product.produit,
           quantite_sortie: product.quantity + 1, // Increment quantity by 1 for verification
-          mouv_entre_prod: 20,
+          // mouv_entre_prod: 20,
         })
         .then((res) => {
           if (res.data.reste_quantite_entre >= product.quantity + 1) {
@@ -136,10 +138,23 @@ const CommandeBar = () => {
             updatedTableData[existingIndex].quantity += 1;
             setSecondTableData(updatedTableData);
           }
+          if (res.data.reste_quantite_entre < product.quantity) {
+            // If there's enough quantity available after incrementing
+            const updatedTableData = [...secondTableData];
+            updatedTableData[existingIndex].quantity -=
+              res.data.reste_quantite_entre;
+            setSecondTableData(updatedTableData);
+          }
           // You might want to handle other cases here, like what to do if there's not enough quantity available
         })
         .catch((error) => {
           console.error("Error while verifying quantity:", error);
+          if (error.response.data.reste_quantite_entre < product.quantity) {
+            // If there's enough quantity available after incrementing
+            const updatedTableData = [...secondTableData];
+            updatedTableData[existingIndex].quantity = 0;
+            setSecondTableData(updatedTableData);
+          }
           // Handle errors appropriately
         });
     } else {
@@ -150,7 +165,7 @@ const CommandeBar = () => {
         nom: row.produit_info.produit,
         produit: row.produit,
         value_rapport: row.value_rapport,
-        quantity: 1,
+        quantity: 0,
         PU: row.value_prix_vente,
         PT: 0,
       };
@@ -180,8 +195,10 @@ const CommandeBar = () => {
             <tr><td>Produit</td><td>Qte</td><td>P.U</td><td>P.T</td></tr>
           </thead>
           <tbody>
-            ${secondTableData.map(
-              (item) => `
+            ${secondTableData
+              .filter((item) => item.quantity !== 0)
+              .map(
+                (item) => `
               <tr>
                 <td>${item.nom}</td>
                 <td>${item.quantity}</td>
@@ -189,7 +206,7 @@ const CommandeBar = () => {
                 <td>${item.quantity * item.PU} Fbu</td>
               </tr>
             `
-            )}
+              )}
             <tr>
               <td colspan="3">Total</td>
               <td>${totalPT} Fbu</td>

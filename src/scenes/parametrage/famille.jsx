@@ -216,45 +216,60 @@ const Settings = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Ajouter nouvelle Famille
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="prix"
-                  label="Nom"
-                  onChange={(e) => setnom(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={1}>
+                Ajouter nouvelle Famille
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="prix"
+                    label="Nom"
+                    color="secondary"
+                    onChange={(e) => setnom(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  createFamille();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Fermer
-              </Button>
+              <Box mt={2} paddingLeft={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    createFamille();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClose}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
@@ -269,47 +284,61 @@ const Settings = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={2}>
-              Modifier famille
-            </Typography>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="name"
-                  label="Name"
-                  value={nameu}
-                  onChange={(e) => setnameu(e.target.value)}
-                  fullWidth
-                  size="medium"
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={2}>
+                Modifier famille
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                    color="secondary"
+                    value={nameu}
+                    onChange={(e) => setnameu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Box mt={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  updateFamille();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseforupdate}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    updateFamille();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseforupdate}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>

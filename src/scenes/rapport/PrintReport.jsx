@@ -87,7 +87,7 @@ function PrintReport({ filteredData }) {
   };
 
   const Data = filteredData.filter((item) =>
-    item.produits.some((produit) => produit.sorties.length > 0)
+    item.produits.some((produit) => produit.sorties.length !== 0)
   );
   function handlePrintTable() {
     // Extract data from filteredData (assuming it's accessible)
@@ -222,19 +222,22 @@ function PrintReport({ filteredData }) {
     // printWindow.close();
   }
   console.log(Data, "fffffffffffffffffffffffffffffffffff");
+  const filteredProducts = Data.map((item) => ({
+    ...item,
+    produits: item.produits.filter(
+      (produit) => produit.sorties.length > 0 && produit.sorties.length !== 0
+    ),
+  }));
+  console.log(Data, "dfffffffffffffggsffff");
+
   return (
     <div>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={handlePrintTable}
-        sx={{ margin: 5 }}
+      <TableContainer
+        component={Paper}
+        sx={{ bgcolor: "#1f2a40", marginTop: "12px" }}
       >
-        Print
-      </Button>
-      <TableContainer component={Paper}>
         <Table>
-          {Data.map((item) => (
+          {filteredProducts.map((item) => (
             <React.Fragment key={item.reference}>
               <TableHead>
                 <TableRow>
