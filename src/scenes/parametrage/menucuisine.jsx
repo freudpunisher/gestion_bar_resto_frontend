@@ -293,77 +293,96 @@ const MenuCuisine = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Ajouter Menu cuisine
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="Nom"
-                  label="Nom"
-                  onChange={(e) => setname(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={1}>
+                Ajouter Menu cuisine
+              </Typography>
+            </Box>
 
-              <Grid item xs={6}>
-                <TextField
-                  name="reduction"
-                  label="reduction"
-                  type="number"
-                  value="0"
-                  onChange={(e) => setreduction(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="Nom"
+                    label="Nom"
+                    color="secondary"
+                    onChange={(e) => setname(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  name="Amount"
-                  label="Montant"
-                  type="number"
-                  onChange={(e) => setamount(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="reduction"
+                    label="reduction"
+                    type="number"
+                    color="secondary"
+                    value="0"
+                    onChange={(e) => setreduction(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  name="DeScription"
-                  label="Description"
-                  onChange={(e) => setdescription(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
+                <Grid item xs={6}>
+                  <TextField
+                    name="Amount"
+                    color="secondary"
+                    label="Montant"
+                    type="number"
+                    onChange={(e) => setamount(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    name="DeScription"
+                    label="Description"
+                    color="secondary"
+                    onChange={(e) => setdescription(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  createUnite();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Fermer
-              </Button>
+              <Box mt={2} paddingLeft={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    createUnite();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClose}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
@@ -378,79 +397,98 @@ const MenuCuisine = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={2}>
-              Modification Menu cuisine
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  name="Nom"
-                  label="Nom"
-                  value={nameupt}
-                  onChange={(e) => setnameupt(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" noWrap sx={{ flexGrow: 1 }}>
+                Menu cuisine
+              </Typography>
+              {/* <CloseIcon onClick={() => handleCloseu()} /> */}
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="Nom"
+                    label="Nom"
+                    color="secondary"
+                    value={nameupt}
+                    onChange={(e) => setnameupt(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    name="reduction"
+                    label="reduction"
+                    color="secondary"
+                    value={reductionupt}
+                    onChange={(e) => setreductionupt(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    name="Amount"
+                    label="Montant"
+                    color="secondary"
+                    value={amountupt}
+                    onChange={(e) => setamountupt(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    name="DeScription"
+                    label="Description"
+                    color="secondary"
+                    value={descriptionupt}
+                    onChange={(e) => setdescriptionupt(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
 
-              <Grid item xs={6}>
-                <TextField
-                  name="reduction"
-                  label="reduction"
-                  value={reductionupt}
-                  onChange={(e) => setreductionupt(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <TextField
-                  name="Amount"
-                  label="Montant"
-                  value={amountupt}
-                  onChange={(e) => setamountupt(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <TextField
-                  name="DeScription"
-                  label="Description"
-                  value={descriptionupt}
-                  onChange={(e) => setdescriptionupt(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-
-            <Box mt={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  updateUnite();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseforupdate}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    updateUnite();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseforupdate}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>

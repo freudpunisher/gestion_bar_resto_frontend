@@ -49,6 +49,7 @@ import logo from "../assets/Dodoma_Park_Logo.png";
 import { useNavigate } from "react-router-dom";
 import DoneIcon from "@mui/icons-material/Done";
 import { mkConfig, generateCsv, download } from "export-to-csv";
+import Header from "../components/Header";
 
 const ListFactureBar1 = () => {
   const theme = useTheme();
@@ -389,7 +390,7 @@ const ListFactureBar1 = () => {
       sx: {
         borderRadius: "10",
         border: "10px  #e0e0e0",
-        width: "90%",
+        width: "95%",
         height: "50%",
         marginTop: -10,
       },
@@ -532,459 +533,459 @@ const ListFactureBar1 = () => {
   });
 
   return (
-    <Box
-      sx={{
-        marginTop: 20,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <MaterialReactTable table={table} />
+    <>
+      <Box
+        sx={{
+          marginTop: 10,
+          marginLeft: 5,
+        }}
+      >
+        <Header title="liste des factures Bar" />
+      </Box>
+      <Box
+        sx={{
+          marginTop: 20,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <MaterialReactTable table={table} />
 
-      <Modal open={openModal} onClose={handleClose}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 800,
-            bgcolor: colors.primary[400],
-            boxShadow: 24,
-            p: 0,
-          }}
-        >
+        <Modal open={openModal} onClose={handleClose}>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: colors.blueAccent[700],
-              height: "fit-content",
-              minHeight: 50,
-              p: 1,
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 800,
+              bgcolor: colors.primary[400],
+              boxShadow: 24,
+              p: 0,
             }}
           >
-            <Typography variant="h3" noWrap sx={{ flexGrow: 1 }}>
-              Avenant
-            </Typography>
-            <CloseIcon onClick={() => setOpenModal(false)} />
-          </Box>
-          <Box margin={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  color="secondary"
-                  label="Reference"
-                  type="text"
-                  size="small"
-                  fullWidth
-                  onChange={(e) => setreference(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  margin="dense"
-                  label="Nom"
-                  color="secondary"
-                  type="text"
-                  fullWidth
-                  size="small"
-                  onChange={(e) => setnom(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  margin="dense"
-                  label="Prenom"
-                  color="secondary"
-                  size="small"
-                  type="text"
-                  fullWidth
-                  onChange={(e) => setprenom(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  color="secondary"
-                  type="date"
-                  size="small"
-                  fullWidth
-                  onChange={(e) => setdate(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" color="secondary">
-                    Selectionnez assurance
-                  </InputLabel>
-                  <Select
-                    value={id_assurance}
-                    displayEmpty
-                    color="secondary"
-                    inputProps={{ "aria-label": "Without label" }}
-                    fullWidth={true}
-                    onChange={(e) => {
-                      setid_assurance(e.target.value);
-                    }}
-                    size="small"
-                    sx={{ marginTop: 1 }}
-                  >
-                    {listAssurance &&
-                      listAssurance.map((item) => (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item.nom}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" color="secondary">
-                    Selectionnez position
-                  </InputLabel>
-                  <Select
-                    value={selectValue}
-                    onChange={(e) => setSelectValue(e.target.value)}
-                    displayEmpty
-                    color="secondary"
-                    inputProps={{ "aria-label": "Without label" }}
-                    fullWidth={true}
-                    size="small"
-                    sx={{ marginTop: 1 }}
-                  >
-                    <MenuItem value="">
-                      <em>Principale</em>
-                    </MenuItem>
-                    <MenuItem value={1}>Principale</MenuItem>
-                    <MenuItem value={3}>Enfant</MenuItem>
-                    <MenuItem value={2}>Femme</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <label htmlFor="avatar">Choose a profile picture:</label>
-                <input
-                  accept="image/*"
-                  color="secondary"
-                  fullWidth
-                  type="file"
-                  id="avatar"
-                  name="avatar"
-                  value={avatar}
-                  onChange={(e) => setAvatar(e.target.files[0])}
-                />
-              </Grid>
-            </Grid>
-          </Box>
-          <Box
-            margin={2}
-            marginTop={5}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-            }}
-          >
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ marginRight: 3 }}
-              // onClick={creationAvenant}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
             >
-              <Typography> Enregistrer</Typography>
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              onClick={() => handleClose()}
-            >
-              <CloseIcon />
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-      <Modal open={openModalu} onClose={handleCloseu}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 800,
-            bgcolor: colors.primary[400],
-            boxShadow: 24,
-            p: 0,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              backgroundColor: colors.blueAccent[700],
-              height: "fit-content",
-              minHeight: 50,
-              p: 1,
-            }}
-          >
-            <Typography variant="h3" noWrap sx={{ flexGrow: 1 }}>
-              Avenant
-            </Typography>
-            <CloseIcon onClick={() => handleCloseu()} />
-          </Box>
-          <Box margin={2}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  color="secondary"
-                  label="Reference"
-                  type="text"
-                  size="small"
-                  fullWidth
-                  value={numero_membre}
-                  onChange={(e) => setnumero_membre(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  margin="dense"
-                  label="Nom"
-                  color="secondary"
-                  type="text"
-                  fullWidth
-                  size="small"
-                  value={nomu}
-                  onChange={(e) => setnomu(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <TextField
-                  margin="dense"
-                  label="Prenom"
-                  color="secondary"
-                  size="small"
-                  type="text"
-                  fullWidth
-                  value={prenomu}
-                  onChange={(e) => setprenomu(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  color="secondary"
-                  type="date"
-                  size="small"
-                  fullWidth
-                  value={date_naissance}
-                  onChange={(e) => setdate_naissance(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" color="secondary">
-                    Selectionnez assurance
-                  </InputLabel>
-                  <Select
-                    value={assurance}
-                    displayEmpty
+              <Typography variant="h3" noWrap sx={{ flexGrow: 1 }}>
+                Avenant
+              </Typography>
+              <CloseIcon onClick={() => setOpenModal(false)} />
+            </Box>
+            <Box margin={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
                     color="secondary"
-                    inputProps={{ "aria-label": "Without label" }}
-                    fullWidth={true}
-                    onChange={(e) => {
-                      setassurance(e.target.value);
-                    }}
+                    label="Reference"
+                    type="text"
                     size="small"
-                    sx={{ marginTop: 1 }}
-                  >
-                    {listAssurance &&
-                      listAssurance.map((item) => (
-                        <MenuItem key={item.id} value={item.id}>
-                          {item.nom}
-                        </MenuItem>
-                      ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label" color="secondary">
-                    Selectionnez position
-                  </InputLabel>
-                  <Select
-                    value={position_member}
-                    onChange={(e) => setposition_member(e.target.value)}
-                    displayEmpty
+                    fullWidth
+                    onChange={(e) => setreference(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    margin="dense"
+                    label="Nom"
                     color="secondary"
-                    inputProps={{ "aria-label": "Without label" }}
-                    fullWidth={true}
+                    type="text"
+                    fullWidth
                     size="small"
-                    sx={{ marginTop: 1 }}
-                  >
-                    <MenuItem value="">
-                      <em>Principale</em>
-                    </MenuItem>
-                    <MenuItem value={1}>Principale</MenuItem>
-                    <MenuItem value={3}>Enfant</MenuItem>
-                    <MenuItem value={2}>Femme</MenuItem>
-                  </Select>
-                </FormControl>
+                    onChange={(e) => setnom(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    margin="dense"
+                    label="Prenom"
+                    color="secondary"
+                    size="small"
+                    type="text"
+                    fullWidth
+                    onChange={(e) => setprenom(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    color="secondary"
+                    type="date"
+                    size="small"
+                    fullWidth
+                    onChange={(e) => setdate(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" color="secondary">
+                      Selectionnez assurance
+                    </InputLabel>
+                    <Select
+                      value={id_assurance}
+                      displayEmpty
+                      color="secondary"
+                      inputProps={{ "aria-label": "Without label" }}
+                      fullWidth={true}
+                      onChange={(e) => {
+                        setid_assurance(e.target.value);
+                      }}
+                      size="small"
+                      sx={{ marginTop: 1 }}
+                    >
+                      {listAssurance &&
+                        listAssurance.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nom}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" color="secondary">
+                      Selectionnez position
+                    </InputLabel>
+                    <Select
+                      value={selectValue}
+                      onChange={(e) => setSelectValue(e.target.value)}
+                      displayEmpty
+                      color="secondary"
+                      inputProps={{ "aria-label": "Without label" }}
+                      fullWidth={true}
+                      size="small"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <MenuItem value="">
+                        <em>Principale</em>
+                      </MenuItem>
+                      <MenuItem value={1}>Principale</MenuItem>
+                      <MenuItem value={3}>Enfant</MenuItem>
+                      <MenuItem value={2}>Femme</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <label htmlFor="avatar">Choose a profile picture:</label>
+                  <input
+                    accept="image/*"
+                    color="secondary"
+                    fullWidth
+                    type="file"
+                    id="avatar"
+                    name="avatar"
+                    value={avatar}
+                    onChange={(e) => setAvatar(e.target.files[0])}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-          <Box
-            margin={2}
-            marginTop={5}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "end",
-            }}
-          >
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ marginRight: 3 }}
-              // onClick={updateAvenant}
+            </Box>
+            <Box
+              margin={2}
+              marginTop={5}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
+              }}
             >
-              <Typography> Enregistrer</Typography>
-            </Button>
-            <Button
-              color="error"
-              variant="contained"
-              onClick={() => handleCloseu()}
-            >
-              <CloseIcon />
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-
-      {/* modal pour voir les produit avec  reference................................... */}
-      <Modal open={openModalv} onClose={handleCloseforView}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 800,
-            bgcolor: colors.primary[400],
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Stack spacing={2}>
-            <Typography variant="h3" mb={1}>
-              {numero_Facture}
-            </Typography>
-            <Typography variant="h4" mb={1}>
-              {serveur}
-            </Typography>
-            <Typography variant="h4" mb={1}>
-              {moment(date).format("YYYY-MM-DD")}
-            </Typography>
-            <TableContainer style={{ borderRadius: "4px" }}>
-              <Table
-                style={{ borderCollapse: "collapse" }}
-                aria-label="simple table"
-                // component={Paper}
+              <Button
+                color="secondary"
+                variant="contained"
+                sx={{ marginRight: 3 }}
               >
-                <TableHead sx={{ backgroundColor: colors.blueAccent[700] }}>
-                  <TableRow>
-                    {/* <TableCell>ID</TableCell> */}
-                    <TableCell>Produit</TableCell>
-                    {/* <TableCell>Mouvement Entre</TableCell> */}
-                    <TableCell>Quantite</TableCell>
-                    <TableCell>Prix Unitaire</TableCell>
-                    <TableCell>Prix Total</TableCell>
-                    {validated_by === "pas paye" && (
-                      <TableCell>Actions</TableCell>
-                    )}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {produitdata.map((row) => (
-                    <TableRow key={row.id}>
-                      {/* <TableCell component="th" scope="row" sx={{ border: 2 }}>
-                          {row.id}
-                        </TableCell> */}
-                      <TableCell>{row.produit}</TableCell>
-                      {/* <TableCell>{row.mouvement_entre}</TableCell> */}
-                      <TableCell>{row.quantite}</TableCell>
-                      <TableCell>{row.prix_unitaire} BIF</TableCell>
-                      <TableCell>{row.prix_total} BIF</TableCell>
+                <Typography> Enregistrer</Typography>
+              </Button>
+              <Button
+                color="error"
+                variant="contained"
+                onClick={() => handleClose()}
+              >
+                <CloseIcon />
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+        <Modal open={openModalu} onClose={handleCloseu}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 800,
+              bgcolor: colors.primary[400],
+              boxShadow: 24,
+              p: 0,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" noWrap sx={{ flexGrow: 1 }}>
+                Avenant
+              </Typography>
+              <CloseIcon onClick={() => handleCloseu()} />
+            </Box>
+            <Box margin={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    color="secondary"
+                    label="Reference"
+                    type="text"
+                    size="small"
+                    fullWidth
+                    value={numero_membre}
+                    onChange={(e) => setnumero_membre(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    margin="dense"
+                    label="Nom"
+                    color="secondary"
+                    type="text"
+                    fullWidth
+                    size="small"
+                    value={nomu}
+                    onChange={(e) => setnomu(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    margin="dense"
+                    label="Prenom"
+                    color="secondary"
+                    size="small"
+                    type="text"
+                    fullWidth
+                    value={prenomu}
+                    onChange={(e) => setprenomu(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    color="secondary"
+                    type="date"
+                    size="small"
+                    fullWidth
+                    value={date_naissance}
+                    onChange={(e) => setdate_naissance(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" color="secondary">
+                      Selectionnez assurance
+                    </InputLabel>
+                    <Select
+                      value={assurance}
+                      displayEmpty
+                      color="secondary"
+                      inputProps={{ "aria-label": "Without label" }}
+                      fullWidth={true}
+                      onChange={(e) => {
+                        setassurance(e.target.value);
+                      }}
+                      size="small"
+                      sx={{ marginTop: 1 }}
+                    >
+                      {listAssurance &&
+                        listAssurance.map((item) => (
+                          <MenuItem key={item.id} value={item.id}>
+                            {item.nom}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label" color="secondary">
+                      Selectionnez position
+                    </InputLabel>
+                    <Select
+                      value={position_member}
+                      onChange={(e) => setposition_member(e.target.value)}
+                      displayEmpty
+                      color="secondary"
+                      inputProps={{ "aria-label": "Without label" }}
+                      fullWidth={true}
+                      size="small"
+                      sx={{ marginTop: 1 }}
+                    >
+                      <MenuItem value="">
+                        <em>Principale</em>
+                      </MenuItem>
+                      <MenuItem value={1}>Principale</MenuItem>
+                      <MenuItem value={3}>Enfant</MenuItem>
+                      <MenuItem value={2}>Femme</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Box>
+            <Box
+              margin={2}
+              marginTop={5}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
+              }}
+            >
+              <Button
+                color="secondary"
+                variant="contained"
+                sx={{ marginRight: 3 }}
+              >
+                <Typography> Enregistrer</Typography>
+              </Button>
+              <Button
+                color="error"
+                variant="contained"
+                onClick={() => handleCloseu()}
+              >
+                <CloseIcon />
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+
+        {/* modal pour voir les produit avec  reference................................... */}
+        <Modal open={openModalv} onClose={handleCloseforView}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 800,
+              bgcolor: colors.primary[400],
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Stack spacing={2}>
+              <Typography variant="h3" mb={1}>
+                {numero_Facture}
+              </Typography>
+              <Typography variant="h4" mb={1}>
+                {serveur}
+              </Typography>
+              <Typography variant="h4" mb={1}>
+                {moment(date).format("YYYY-MM-DD")}
+              </Typography>
+              <TableContainer style={{ borderRadius: "4px" }}>
+                <Table
+                  style={{ borderCollapse: "collapse" }}
+                  aria-label="simple table"
+                >
+                  <TableHead sx={{ backgroundColor: colors.blueAccent[700] }}>
+                    <TableRow>
+                      {/* <TableCell>ID</TableCell> */}
+                      <TableCell>Produit</TableCell>
+                      {/* <TableCell>Mouvement Entre</TableCell> */}
+                      <TableCell>Quantite</TableCell>
+                      <TableCell>Prix Unitaire</TableCell>
+                      <TableCell>Prix Total</TableCell>
                       {validated_by === "pas paye" && (
-                        <TableCell>
-                          <IconButton
-                            onClick={() => deleteentreproduit(row.id)}
-                          >
-                            <DeleteIcon color="error" />
-                          </IconButton>
-                        </TableCell>
+                        <TableCell>Actions</TableCell>
                       )}
                     </TableRow>
-                  ))}
-                  <TableRow sx={{ bgcolor: colors.primary[700] }}>
-                    <TableCell
-                      colSpan={3}
-                      align="left"
-                      sx={{ fontSize: 30, fontWeight: "bold" }}
-                    >
-                      Total
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      sx={{ fontSize: 30, fontWeight: "bold" }}
-                    >
-                      {totalPT} BIF
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                </TableBody>
-                <TableFooter>
-                  <TableRow sx={{ border: 0 }}>
-                    {validated_by === "pas paye" && (
-                      <TableCell sx={{ border: 0 }}>
-                        <Button
-                          variant="contained"
-                          sx={{ bgcolor: colors.greenAccent[700] }}
-                          onClick={updatevalidated_by}
-                        >
-                          paye
-                        </Button>
-                      </TableCell>
-                    )}
-                    {/* <TableCell sx={{ border: 0 }}></TableCell> */}
-                    <TableCell sx={{ border: 0 }}>
-                      {" "}
-                      <Button
-                        variant="contained"
-                        // color="secondary"
-                        sx={{ bgcolor: colors.blueAccent[700] }}
-                        onClick={handlePrintTable}
+                  </TableHead>
+                  <TableBody>
+                    {produitdata.map((row) => (
+                      <TableRow key={row.id}>
+                        {/* <TableCell component="th" scope="row" sx={{ border: 2 }}>
+                {row.id}
+              </TableCell> */}
+                        <TableCell>{row.produit}</TableCell>
+                        {/* <TableCell>{row.mouvement_entre}</TableCell> */}
+                        <TableCell>{row.quantite}</TableCell>
+                        <TableCell>{row.prix_unitaire} BIF</TableCell>
+                        <TableCell>{row.prix_total} BIF</TableCell>
+                        {validated_by === "pas paye" && (
+                          <TableCell>
+                            <IconButton
+                              onClick={() => deleteentreproduit(row.id)}
+                            >
+                              <DeleteIcon color="error" />
+                            </IconButton>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))}
+                    <TableRow sx={{ bgcolor: colors.primary[700] }}>
+                      <TableCell
+                        colSpan={3}
+                        align="left"
+                        sx={{ fontSize: 30, fontWeight: "bold" }}
                       >
-                        print
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            </TableContainer>
-          </Stack>
-        </Box>
-      </Modal>
-    </Box>
+                        Total
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{ fontSize: 30, fontWeight: "bold" }}
+                      >
+                        {totalPT} BIF
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Stack>
+            <Box sx={{ marginTop: 2 }}>
+              {validated_by === "pas paye" ? (
+                <Button
+                  variant="contained"
+                  sx={{ bgcolor: colors.greenAccent[700] }}
+                  onClick={updatevalidated_by}
+                >
+                  paye
+                </Button>
+              ) : (
+                ""
+              )}
+              <Button
+                variant="contained"
+                sx={{ marginLeft: 2, bgcolor: colors.blueAccent[700] }}
+                onClick={handlePrintTable}
+              >
+                Print
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      </Box>
+    </>
   );
 };
 

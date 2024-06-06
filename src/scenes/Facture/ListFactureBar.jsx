@@ -610,7 +610,7 @@ const ListFactureBar = () => {
   return (
     <Box m="20px">
       <Header
-        title="listes des factures"
+        title="listes des factures "
         // subtitle="Listes des produits"
       />
       <Box

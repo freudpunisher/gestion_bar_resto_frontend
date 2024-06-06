@@ -578,82 +578,82 @@ function Rapport() {
 
   // handle print
 
-  const handlePrintTable = () => {
-    // Generate a print-friendly HTML table structure based on filteredData
-    const printTableHTML = `
-      <div style="width: 100%; margin: 0 auto;">
-        <table style="width: 100%;">
-          ${
-            logo
-              ? `<tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>`
-              : ""
-          }
-        </table><br>
-        <table style="width: 100%; font-size:14;">
-          <tr><th>DODOMA PARK BUGARAMA</th></tr>
-        </table><hr><br>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
-          <tr><td>Serveur</td><td>: test</td></tr>
-          <tr><td>Date</td><td>: ${new Date().toLocaleDateString()}</td></tr>  <tr><td>FACT No</td><td>: test</td></tr>   
-        </table><br>
-        <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
-          <thead>                         
-            <tr>
-              <td>Produit</td>
-              <td>Qte Achetée</td> <td>P.U Achat</td>
-              <td>P.T Achat</td>
-              <td>Qte Vendue</td>
-              <td>P.U Vente</td>
-              <td>P.T Vente</td>
-              <td>Bénéfice</td>
-            </tr>
-          </thead>
-          <tbody>
-            ${filteredData.map(
-              (item) =>
-                `<tr>
-                <td colspan="4">${
-                  item.reference
-                }</td>  <td colspan="4"></td>  </tr>
-              <tr>
-                <td>${item.produits[0].produit}</td>  <td>${
-                  item.produits[0].quantite_ach
-                }</td>
-                <td>${item.produits[0].prix_unitaire_ach} Fbu</td>
-                <td>${item.produits[0].prix_total_ach} Fbu</td>
-                <td>${item.produits[0].sorties.reduce(
-                  (sum, sortie) => sum + sortie.quantite_vnt,
-                  0
-                )}</td>  <td>${item.produits[0].sorties.reduce(
-                  (sum, sortie) => sum + sortie.prix_unitaire_vnt,
-                  0
-                )} Fbu</td>  <td>${item.produits[0].sorties.reduce(
-                  (sum, sortie) => sum + sortie.prix_total_vnt,
-                  0
-                )} Fbu</td>  </tr>`
-            )}
-            <tr>
-              <td colspan="3">Total</td>
-              <td>test Fbu</td>
-              <td></td>  <td></td>
-              <td></td>
-            </tr>             
-          </tbody>
-        </table>
-      </div> <br>
-      <table style="width: 100%;">
-        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
-      </table><hr><br><br>
-    `;
+  // const handlePrintTable = () => {
+  //   // Generate a print-friendly HTML table structure based on filteredData
+  //   const printTableHTML = `
+  //     <div style="width: 100%; margin: 0 auto;">
+  //       <table style="width: 100%;">
+  //         ${
+  //           logo
+  //             ? `<tr><th><img src=${logo} alt="Logo" style="width: 100px; height: 100px;"></th></tr>`
+  //             : ""
+  //         }
+  //       </table><br>
+  //       <table style="width: 100%; font-size:14;">
+  //         <tr><th>DODOMA PARK BUGARAMA</th></tr>
+  //       </table><hr><br>
+  //       <table style="width: 100%; border-collapse: collapse;">
+  //         <tr><td>Contact</td><td>: (+257) 69124625/68424589</td></tr>
+  //         <tr><td>Serveur</td><td>: test</td></tr>
+  //         <tr><td>Date</td><td>: ${new Date().toLocaleDateString()}</td></tr>  <tr><td>FACT No</td><td>: test</td></tr>
+  //       </table><br>
+  //       <table border=1 style="width: 100%; border-collapse: collapse; margin-bottom:10px;">
+  //         <thead>
+  //           <tr>
+  //             <td>Produit</td>
+  //             <td>Qte Achetée</td> <td>P.U Achat</td>
+  //             <td>P.T Achat</td>
+  //             <td>Qte Vendue</td>
+  //             <td>P.U Vente</td>
+  //             <td>P.T Vente</td>
+  //             <td>Bénéfice</td>
+  //           </tr>
+  //         </thead>
+  //         <tbody>
+  //           ${filteredData.map(
+  //             (item) =>
+  //               `<tr>
+  //               <td colspan="4">${
+  //                 item.reference
+  //               }</td>  <td colspan="4"></td>  </tr>
+  //             <tr>
+  //               <td>${item.produits[0].produit}</td>  <td>${
+  //                 item.produits[0].quantite_ach
+  //               }</td>
+  //               <td>${item.produits[0].prix_unitaire_ach} Fbu</td>
+  //               <td>${item.produits[0].prix_total_ach} Fbu</td>
+  //               <td>${item.produits[0].sorties.reduce(
+  //                 (sum, sortie) => sum + sortie.quantite_vnt,
+  //                 0
+  //               )}</td>  <td>${item.produits[0].sorties.reduce(
+  //                 (sum, sortie) => sum + sortie.prix_unitaire_vnt,
+  //                 0
+  //               )} Fbu</td>  <td>${item.produits[0].sorties.reduce(
+  //                 (sum, sortie) => sum + sortie.prix_total_vnt,
+  //                 0
+  //               )} Fbu</td>  </tr>`
+  //           )}
+  //           <tr>
+  //             <td colspan="3">Total</td>
+  //             <td>test Fbu</td>
+  //             <td></td>  <td></td>
+  //             <td></td>
+  //           </tr>
+  //         </tbody>
+  //       </table>
+  //     </div> <br>
+  //     <table style="width: 100%;">
+  //       <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+  //     </table><hr><br><br>
+  //   `;
 
-    const printWindow = window.open("", "", "width=1000,height=1000");
-    printWindow.document.write(printTableHTML);
-    printWindow.document.close();
+  //   const printWindow = window.open("", "", "width=1000,height=1000");
+  //   printWindow.document.write(printTableHTML);
+  //   printWindow.document.close();
 
-    printWindow.print();
-    printWindow.close();
-  };
+  //   printWindow.print();
+  //   printWindow.close();
+  // };
 
   function generateTableRows(data) {
     let output = "";
@@ -691,6 +691,147 @@ function Rapport() {
     return output;
   }
 
+  const Data = filteredData.filter((item) =>
+    item.produits.some((produit) => produit.sorties.length !== 0)
+  );
+  function handlePrintTable() {
+    // Extract data from filteredData (assuming it's accessible)
+    const printTableHTML = `
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  hr {
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+  }
+  table:last-of-type {
+    margin-top: 40px;
+  }
+
+  @media print {
+    .container {
+       display: table;
+       height: 100vh;
+       width: 100%;
+     }
+    .content {
+       display: table-cell;
+       vertical-align: middle;
+       text-align: center;
+       width: 80%; /* Adjust width as needed */
+       height: 80%; /* Adjust height as needed */
+     }
+   }
+</style>
+
+    <div style="width: 100%; margin: 0 auto;">
+    <table style="width: 100%;">
+          <tr><th></th></tr>
+        </table><br>
+        <table style="width: 100%; fonte-size:14;">
+        <tr><th>DODOMA PARK BUGARAMA</th></tr>
+      </table><hr><br>
+      ${Data.map(
+        (item) => `
+          <table style="width: 100%; margin-bottom: 20px;">
+            <thead>
+              <tr>
+                <th colspan="8">${item.reference} <br> ${item.date} <br> ${
+          item.cloture
+        }</th>
+              </tr>
+              <tr >
+                <th>Produit</th>
+                <th>Quantité achetée</th>
+                <th>Prix unitaire achat</th>
+                <th>Prix total achat</th>
+                <th>Quantité vendu</th>
+                <th>Prix unitaire vendu</th>
+                <th>Prix total vendu</th>
+                <th>Bénéfice</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${item.produits
+                .map(
+                  (produit) => `
+                  ${produit.sorties
+                    .map(
+                      (sortie, index) => `
+                      <tr>
+                        ${
+                          index === 0
+                            ? `<td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.produit}</td>
+                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.quantite_ach}</td>
+                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.prix_unitaire_ach}</td>
+                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.prix_total_ach}</td>`
+                            : ""
+                        }
+                        <td style="border:1px solid black">${
+                          sortie.quantite_vnt
+                        }</td>
+                        <td style="border:1px solid black">${
+                          sortie.prix_unitaire_vnt
+                        }</td>
+                        <td style="border:1px solid black">${
+                          sortie.prix_total_vnt
+                        }</td>
+                        <td style="border:1px solid black">${
+                          sortie.benefice
+                        }</td>
+                      </tr>
+                    `
+                    )
+                    .join("")}
+                `
+                )
+                .join("")}
+            </tbody>
+          </table>
+        `
+      ).join("")}
+      <hr>
+      <table style="width: 100%;">
+        <tr><th>Bujumbura Rohero AV italie No 125</th></tr>
+      </table>
+    </div>
+  `;
+
+    const printWindow = window.open("", "", "width=1000,height=1000");
+    printWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Table</title>
+      </head>
+      <body>
+        ${printTableHTML}
+      </body>
+    </html>
+  `);
+    printWindow.document.close();
+
+    // Trigger print and close the window
+    printWindow.print();
+    printWindow.close();
+  }
   return (
     <Box m="20px">
       <Header title="Rapport Stock" subtitle="Rapport stock Bar" />
@@ -781,7 +922,7 @@ function Rapport() {
                 marginTop: 3,
                 marginRight: 1,
               }}
-              onClick={handleExportToExcel}
+              onClick={handlePrintTable}
             >
               <DownloadOutlinedIcon />
             </Button>

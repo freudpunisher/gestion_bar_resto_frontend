@@ -228,7 +228,10 @@ const Unite = () => {
 
   return (
     <Box m="20px">
-      <Header title="Unite de mesure" subtitle="Listes des Unites de mesure des produits" />
+      <Header
+        title="Unite de mesure"
+        subtitle="Listes des Unites de mesure des produits"
+      />
       <Box
         m="40px 0 0 0"
         // height="75vh"
@@ -311,107 +314,127 @@ const Unite = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Ajouter unite de mesure
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Autocomplete
-                  sx={{ marginTop: 3 }}
-                  options={items}
-                  getOptionLabel={(items) => items.nom}
-                  inputValue={search}
-                  onChange={(event, newValue) => {
-                    setproduit_id(newValue.id);
-                    console.log(newValue.id, "id from search");
-                  }}
-                  onInputChange={(event, newInputValue) => {
-                    setSearch(newInputValue);
-                    console.log(newInputValue, "select from autocomplete");
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Search products"
-                      variant="outlined"
-                      size="small"
-                      sx={{ marginTop: -3 }}
-                      fullWidth
-                    />
-                  )}
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={1}>
+                Ajouter unite de mesure
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <Autocomplete
+                    sx={{ marginTop: 3 }}
+                    options={items}
+                    getOptionLabel={(items) => items.nom}
+                    inputValue={search}
+                    onChange={(event, newValue) => {
+                      setproduit_id(newValue.id);
+                      console.log(newValue.id, "id from search");
+                    }}
+                    onInputChange={(event, newInputValue) => {
+                      setSearch(newInputValue);
+                      console.log(newInputValue, "select from autocomplete");
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Search products"
+                        color="secondary"
+                        variant="outlined"
+                        size="small"
+                        sx={{ marginTop: -3 }}
+                        fullWidth
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    name="designation"
+                    label="Designation"
+                    color="secondary"
+                    onChange={(e) => setname(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    name="code"
+                    label="Code"
+                    color="secondary"
+                    onChange={(e) => setdescription(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    name="Quantite"
+                    label="Valeur Piece"
+                    color="secondary"
+                    onChange={(e) => setpiece(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    name="prix"
+                    label="Valuer rapport"
+                    color="secondary"
+                    onChange={(e) => setrapport(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    name="prix"
+                    label="Valeur prix vente"
+                    color="secondary"
+                    onChange={(e) => setprix_vente(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  name="designation"
-                  label="Designation"
-                  onChange={(e) => setname(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  name="code"
-                  label="Code"
-                  onChange={(e) => setdescription(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  name="Quantite"
-                  label="Valeur Piece"
-                  onChange={(e) => setpiece(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  name="prix"
-                  label="Valuer rapport"
-                  onChange={(e) => setrapport(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <TextField
-                  name="prix"
-                  label="Valeur prix vente"
-                  onChange={(e) => setprix_vente(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            </Grid>
 
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  createUnite();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    createUnite();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClose}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
@@ -426,16 +449,28 @@ const Unite = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={2}>
-              update unite de mesure
-            </Typography>
-            <Grid container spacing={2}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h5" mb={2}>
+                update unite de mesure
+              </Typography>
+            </Box>
+            <Box padding={2}>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <Autocomplete
@@ -514,25 +549,25 @@ const Unite = () => {
                   />
                 </Grid>
               </Grid>
-            </Grid>
-            <Box mt={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  updateUnite();
-                }}
-              >
-                Enregistrer
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseforupdate}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    updateUnite();
+                  }}
+                >
+                  Enregistrer
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseforupdate}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
