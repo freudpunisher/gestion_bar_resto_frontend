@@ -138,8 +138,9 @@ const LisCommandeBar = () => {
     const handleExport = (options) => apiRef.current.exportDataAsCsv(options);
 
     const buttonBaseProps = {
-      color: "primary",
+      color: "secondary",
       size: "small",
+      variant: "contained",
       startIcon: <ExportIcon />,
     };
 
@@ -154,6 +155,8 @@ const LisCommandeBar = () => {
           Current page rows
         </Button>
         <Button
+          variant="contained"
+          color="secondary"
           {...buttonBaseProps}
           onClick={() => handleExport({ getRowsToExport: getFilteredRows })}
         >
@@ -578,7 +581,7 @@ const LisCommandeBar = () => {
       width: 150,
       renderCell: (params) => (
         <div>
-          {params.row.is_activte === true && (
+          {params.row.validated_by === null && (
             <IconButton
               aria-label="edit"
               onClick={() => {
@@ -594,7 +597,8 @@ const LisCommandeBar = () => {
               <FolderIcon />
             </IconButton>
           )}
-          {params.row.is_activte === false && (
+
+          {params.row.validated_by === null && (
             <IconButton
               aria-label="delete"
               color="error"
@@ -643,27 +647,27 @@ const LisCommandeBar = () => {
               <DeleteIcon />
             </IconButton>
           )}
-          {params.row.is_activte !== true && (
-            <IconButton
-              aria-label="delete"
-              onClick={() => {
-                setopenModalv(true);
-                fetchProduit(params.row.id);
-                setid(params.row.id);
-                setvalidated_by(params.row.validated_by);
-              }}
-            >
-              <VisibilityIcon />
-            </IconButton>
-          )}
+
           <IconButton
+            aria-label="delete"
+            onClick={() => {
+              setopenModalv(true);
+              fetchProduit(params.row.id);
+              setid(params.row.id);
+              setvalidated_by(params.row.validated_by);
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton>
+
+          {/* <IconButton
             aria-label="delete"
             onClick={() => {
               console.log(console.log(params.row.id, "dfdfdgdggdgdgg"));
             }}
           >
             <DoneIcon />
-          </IconButton>
+          </IconButton> */}
         </div>
       ),
     },
@@ -734,8 +738,8 @@ const LisCommandeBar = () => {
       /> */}
           <Button
             variant="contained"
-            color="secondary"
-            sx={{ marginRight: "auto" }}
+            color="warning"
+            sx={{ marginRight: "auto", marginBottom: "12px" }}
             onClick={() => setopenModal(true)}
           >
             Ajouter un commande

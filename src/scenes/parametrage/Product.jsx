@@ -357,113 +357,127 @@ const Product = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Produit
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">
-                    Selctionnez famille
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Age"
-                    value={type}
-                    onChange={(e) => {
-                      settype(e.target.value);
-                    }}
-                  >
-                    {famille.map((item) => (
-                      <MenuItem value={item.id}>{item.nom}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Categorie
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={Categorie}
-                    label="Age"
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={1}>
+                Produit
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="demo-simple-select-label">
+                      Selectionnez famille
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Age"
+                      value={type}
+                      onChange={(e) => {
+                        settype(e.target.value);
+                      }}
+                    >
+                      {famille.map((item) => (
+                        <MenuItem value={item.id}>{item.nom}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="demo-simple-select-label">
+                      Categorie
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={Categorie}
+                      label="Age"
+                      size="small"
+                      onChange={(e) => setCategorie(e.target.value)}
+                    >
+                      <MenuItem value={1}>Bar</MenuItem>
+                      <MenuItem value={2}>Cuisine</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="Nom"
+                    label="Nom"
+                    onChange={(e) => setname(e.target.value)}
+                    fullWidth
                     size="small"
-                    onChange={(e) => setCategorie(e.target.value)}
-                  >
-                    <MenuItem value={1}>Bar</MenuItem>
-                    <MenuItem value={2}>Cuisine</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="Nom"
-                  label="Nom"
-                  onChange={(e) => setname(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+                  />
+                </Grid>
 
-              <Grid item xs={3}>
-                <TextField
-                  name="codeprod"
-                  label="Code"
-                  value={generatedCode}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
+                <Grid item xs={3}>
+                  <TextField
+                    name="codeprod"
+                    label="Code"
+                    value={generatedCode}
+                    disabled
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    name="Barcode"
+                    label="Barcode"
+                    value={barcode}
+                    disabled
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    name="DeScription"
+                    label="Description"
+                    onChange={(e) => setquantite(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  name="Barcode"
-                  label="Barcode"
-                  value={barcode}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="DeScription"
-                  label="Description"
-                  onChange={(e) => setquantite(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  createUnite();
-                  // creatDrug();
-                }}
-              >
-                Enregistre
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    createUnite();
+                    // creatDrug();
+                  }}
+                >
+                  Enregistre
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClose}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
@@ -478,124 +492,138 @@ const Product = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={2}>
-              Metre à jour le produit
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">
-                    Selectionnez famille
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={typeu}
-                    onChange={(e) => {
-                      settypeu(e.target.value);
-                    }}
-                  >
-                    {famille.map((item) => (
-                      <MenuItem value={item.id}>{item.nom}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Categorie
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={Categoryu}
-                    label="Age"
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h5" mb={2}>
+                Metre à jour le produit
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="demo-simple-select-label">
+                      Selectionnez famille
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={typeu}
+                      onChange={(e) => {
+                        settypeu(e.target.value);
+                      }}
+                    >
+                      {famille.map((item) => (
+                        <MenuItem value={item.id}>{item.nom}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Categorie
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={Categoryu}
+                      label="Age"
+                      size="small"
+                      onChange={(e) => setCategoryu(e.target.value)}
+                    >
+                      <MenuItem value={1}>Bar</MenuItem>
+                      <MenuItem value={2}>Cuisine</MenuItem>
+                      {/* <MenuItem value={30}>Thirty</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="Nom"
+                    label="Nom"
+                    value={nameu}
+                    onChange={(e) => setnameu(e.target.value)}
+                    fullWidth
                     size="small"
-                    onChange={(e) => setCategoryu(e.target.value)}
-                  >
-                    <MenuItem value={1}>Bar</MenuItem>
-                    <MenuItem value={2}>Cuisine</MenuItem>
-                    {/* <MenuItem value={30}>Thirty</MenuItem> */}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="Nom"
-                  label="Nom"
-                  value={nameu}
-                  onChange={(e) => setnameu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
+                  />
+                </Grid>
 
-              <Grid item xs={3}>
-                <TextField
-                  name="code"
-                  label="Code"
-                  value={codeu}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
+                <Grid item xs={3}>
+                  <TextField
+                    name="code"
+                    label="Code"
+                    value={codeu}
+                    disabled
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <TextField
+                    name="Barcode"
+                    label="Barcode"
+                    value={barcodeu}
+                    disabled
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="Nom"
+                    label="Prix de vente"
+                    value={priceu}
+                    onChange={(e) => setpriceu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="DeScription"
+                    label="Description"
+                    value={descriptionu}
+                    onChange={(e) => setdescriptionu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <TextField
-                  name="Barcode"
-                  label="Barcode"
-                  value={barcodeu}
-                  disabled
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="Nom"
-                  label="Prix de vente"
-                  value={priceu}
-                  onChange={(e) => setpriceu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="DeScription"
-                  label="Description"
-                  value={descriptionu}
-                  onChange={(e) => setdescriptionu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-            <Box mt={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  updateUnite();
-                }}
-              >
-                Enregistre
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseforupdate}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    updateUnite();
+                  }}
+                >
+                  Enregistre
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseforupdate}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>

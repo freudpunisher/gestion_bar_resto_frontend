@@ -206,7 +206,7 @@ const Client = () => {
 
   return (
     <Box m="20px">
-      <Header  title="Serveur" subtitle="Listes des serveurs"/>
+      <Header title="Serveur" subtitle="Listes des serveurs" />
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -290,80 +290,99 @@ const Client = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Nouveau Serveur
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  name="FistName"
-                  label="Nom"
-                  onChange={(e) => setFirstName(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h3" mb={1}>
+                Nouveau Serveur
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    name="FistName"
+                    label="Nom"
+                    color="secondary"
+                    onChange={(e) => setFirstName(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="Prenom"
+                    label="Prenom"
+                    color="secondary"
+                    onChange={(e) => setLastName(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="DeScription"
+                    label="Email"
+                    color="secondary"
+                    onChange={(e) => setEmail(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="prix"
+                    label="Phone"
+                    color="secondary"
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    name="code"
+                    label="Adresse"
+                    color="secondary"
+                    onChange={(e) => setAddress(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="Prenom"
-                  label="Prenom"
-                  onChange={(e) => setLastName(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="DeScription"
-                  label="Email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="prix"
-                  label="Phone"
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="code"
-                  label="Adresse"
-                  onChange={(e) => setAddress(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-            </Grid>
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {
-                  createUnite();
-                }}
-              >
-                Enregistre
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleClose}
-              >
-                Fermer
-              </Button>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    createUnite();
+                  }}
+                >
+                  Enregistre
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleClose}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
@@ -378,47 +397,63 @@ const Client = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 800,
-            bgcolor: "background.paper",
+            bgcolor: colors.primary[400],
             boxShadow: 24,
-            p: 4,
+            p: 0,
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h5" mb={1}>
-              Modifier information du Serveur
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <TextField
-                  name="FistName"
-                  label="Nom"
-                  value={firstNameu}
-                  onChange={(e) => setFirstNameu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="Prenom"
-                  label="Prenom"
-                  value={lastNameu}
-                  onChange={(e) => setLastNameu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="code"
-                  label="Adresse"
-                  value={addressu}
-                  onChange={(e) => setAddressu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              {/* <Grid item xs={6}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                backgroundColor: colors.blueAccent[700],
+                height: "fit-content",
+                minHeight: 50,
+                p: 1,
+              }}
+            >
+              <Typography variant="h5" mb={1}>
+                Modifier information du Serveur
+              </Typography>
+            </Box>
+            <Box padding={2}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField
+                    name="FistName"
+                    label="Nom"
+                    color="secondary"
+                    value={firstNameu}
+                    onChange={(e) => setFirstNameu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="Prenom"
+                    label="Prenom"
+                    color="secondary"
+                    value={lastNameu}
+                    onChange={(e) => setLastNameu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="code"
+                    label="Adresse"
+                    color="secondary"
+                    value={addressu}
+                    onChange={(e) => setAddressu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                {/* <Grid item xs={6}>
 
     <TextField
       name="Barcode"
@@ -431,27 +466,29 @@ const Client = () => {
     />
     </Grid> */}
 
-              <Grid item xs={6}>
-                <TextField
-                  name="prix"
-                  label="Phone"
-                  value={phoneNumberu}
-                  onChange={(e) => setPhoneNumberu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="DeScription"
-                  label="Email"
-                  value={emailu}
-                  onChange={(e) => setEmailu(e.target.value)}
-                  fullWidth
-                  size="small"
-                />
-              </Grid>
-              {/* <Grid item xs={6}>
+                <Grid item xs={6}>
+                  <TextField
+                    name="prix"
+                    label="Phone"
+                    value={phoneNumberu}
+                    color="secondary"
+                    onChange={(e) => setPhoneNumberu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    name="DeScription"
+                    label="Email"
+                    value={emailu}
+                    color="secondary"
+                    onChange={(e) => setEmailu(e.target.value)}
+                    fullWidth
+                    size="small"
+                  />
+                </Grid>
+                {/* <Grid item xs={6}>
    <input type='date' value={selectedDate}
       onChange={(e)=> setSelectedDate(e.target.value)}  style={{
     padding: '8px',
@@ -462,23 +499,26 @@ const Client = () => {
     // Add more styles as needed
   }}/>
     </Grid> */}
-            </Grid>
-            <Box mt={2} paddingLeft={2}>
-              <Button
-                style={{ marginRight: "10px" }}
-                variant="contained"
-                color="info"
-                onClick={() => {updateUnite();}}
-              >
-                Enregistre
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseforupdate}
-              >
-                Fermer
-              </Button>
+              </Grid>
+              <Box mt={2}>
+                <Button
+                  style={{ marginRight: "10px" }}
+                  variant="contained"
+                  color="info"
+                  onClick={() => {
+                    updateUnite();
+                  }}
+                >
+                  Enregistre
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleCloseforupdate}
+                >
+                  Fermer
+                </Button>
+              </Box>
             </Box>
           </Stack>
         </Box>
