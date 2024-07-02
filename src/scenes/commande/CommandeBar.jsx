@@ -90,6 +90,7 @@ const CommandeBar = () => {
   }
   const handleClose = () => {
     setopenModal(false);
+    setclient_name();
   };
 
   const itemEntre = secondTableData
@@ -169,9 +170,14 @@ const CommandeBar = () => {
         PU: row.value_prix_vente,
         PT: 0,
       };
+
       setSecondTableData((prevData) => [...prevData, newItem]);
     }
   };
+  console.log(
+    secondTableData.reduce((acc, item) => acc + item.PU * item.quantity, 0),
+    "total"
+  );
 
   function handlePrintTable() {
     // Generate a print-friendly HTML table structure
@@ -635,6 +641,14 @@ const CommandeBar = () => {
                         variant="contained"
                         size="small"
                         color="secondary"
+                        disabled={
+                          secondTableData.reduce(
+                            (acc, item) => acc + item.PU * item.quantity,
+                            0
+                          ) === 0
+                            ? true
+                            : false
+                        }
                         sx={{
                           margin: 1,
                           fontSize: 20,
@@ -854,6 +868,7 @@ const CommandeBar = () => {
                 style={{ marginRight: "10px" }}
                 variant="contained"
                 color="info"
+                disabled={client_name !== undefined ? false : true}
                 onClick={() => {
                   valideEntre();
                   setopenModal(false);
@@ -861,7 +876,7 @@ const CommandeBar = () => {
               >
                 Valider
               </Button>
-              <Button
+              {/* <Button
                 style={{ marginRight: "10px" }}
                 variant="contained"
                 color="info"
@@ -870,7 +885,7 @@ const CommandeBar = () => {
                 }}
               >
                 Enregistrer
-              </Button>
+              </Button> */}
               <Button
                 variant="contained"
                 color="secondary"
