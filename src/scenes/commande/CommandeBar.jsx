@@ -323,11 +323,15 @@ const CommandeBar = () => {
   };
 
   const inCreaseQuantity = (id, newQuantity) => {
-    setSecondTableData(
-      secondTableData.map((item) =>
-        item.produit === id ? { ...item, quantity: newQuantity - 1 } : item
-      )
-    );
+    if (newQuantity >= 0) {
+      setSecondTableData(
+        secondTableData.map((item) =>
+          item.produit === id
+            ? { ...item, quantity: newQuantity <= 0 ? 0 : newQuantity - 1 }
+            : item
+        )
+      );
+    }
   };
 
   const decreaseQuantity = (id, newQuantity) => {
