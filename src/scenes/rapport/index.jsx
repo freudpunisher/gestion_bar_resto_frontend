@@ -760,6 +760,7 @@ function Rapport() {
               </tr>
               <tr >
                 <th>Produit</th>
+                <th>Etat stock</th>
                 <th>Quantité achetée</th>
                 <th>Prix unitaire achat</th>
                 <th>Prix total achat</th>
@@ -779,10 +780,36 @@ function Rapport() {
                       <tr>
                         ${
                           index === 0
-                            ? `<td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.produit}</td>
-                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.quantite_ach}</td>
-                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.prix_unitaire_ach}</td>
-                             <td rowspan="${produit.sorties.length}" style="border:1px solid black">${produit.prix_total_ach}</td>`
+                            ? `<td rowspan="${
+                                produit.sorties.length
+                              }" style="border:1px solid black">${
+                                produit.produit
+                              }</td>
+                            <td rowspan="${
+                              produit.sorties.length
+                            }" style="border:1px solid black">${
+                                produit.quantite_ach -
+                                produit.sorties.reduce(
+                                  (total, sortie) =>
+                                    total + sortie.quantite_vnt,
+                                  0
+                                )
+                              }</td>
+                             <td rowspan="${
+                               produit.sorties.length
+                             }" style="border:1px solid black">${
+                                produit.quantite_ach
+                              }</td>
+                             <td rowspan="${
+                               produit.sorties.length
+                             }" style="border:1px solid black">${
+                                produit.prix_unitaire_ach
+                              }</td>
+                             <td rowspan="${
+                               produit.sorties.length
+                             }" style="border:1px solid black">${
+                                produit.prix_total_ach
+                              }</td>`
                             : ""
                         }
                         <td style="border:1px solid black">${

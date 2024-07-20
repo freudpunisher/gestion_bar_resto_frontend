@@ -253,6 +253,7 @@ function PrintReport({ filteredData }) {
               <TableBody>
                 <TableRow>
                   <TableCell>Produit</TableCell>
+                  <TableCell>Etat Stock</TableCell>
                   <TableCell>Quantité achetée</TableCell>
                   <TableCell>Prix unitaire achat</TableCell>
                   <TableCell>Prix total achat</TableCell>
@@ -273,6 +274,27 @@ function PrintReport({ filteredData }) {
                       ) : (
                         <TableCell>{produit.produit}</TableCell>
                       )}
+
+                      {produit.sorties.length >= 1 ? (
+                        <TableCell
+                          rowSpan={produit.sorties.length === 1 ? 2 : 3}
+                        >
+                          {produit.quantite_ach -
+                            produit.sorties.reduce(
+                              (total, sortie) => total + sortie.quantite_vnt,
+                              0
+                            )}
+                        </TableCell>
+                      ) : (
+                        <TableCell>
+                          {produit.quantite_ach -
+                            produit.sorties.reduce(
+                              (total, sortie) => total + sortie.quantite_vnt,
+                              0
+                            )}
+                        </TableCell>
+                      )}
+
                       {produit.sorties.length >= 1 ? (
                         <TableCell
                           rowSpan={produit.sorties.length === 1 ? 2 : 3}
