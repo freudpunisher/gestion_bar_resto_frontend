@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -9,7 +9,6 @@ import {
   Paper,
   Box,
   Button,
-  TextField,
 } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -17,9 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-const SalesTable = ({ data }) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-
+const SalesTable = ({ data, selectedDate, setSelectedDate }) => {
   const handleExportToPDF = () => {
     const doc = new jsPDF();
     const currentDate = selectedDate
@@ -33,19 +30,23 @@ const SalesTable = ({ data }) => {
     // Define columns for the table
     const columns = [
       "Recette",
-      "Quantité vendue",
+      "Quantité totale",
       "Prix unitaire",
       "Prix total",
     ];
 
     // Convert data to rows format expected by autoTable
-    const rows = data.flatMap((sale) =>
-      sale.recettes.map((recette) => [
-        recette.recette,
-        recette.quantite_vnt,
-        recette.prix_unitaire_vnt.toLocaleString(),
-        recette.prix_total_vnt.toLocaleString(),
-      ])
+    const rows = data.map((recette) => [
+      recette.recette || "N/A",
+      recette.quantite_vnt || 0,
+      (recette.prix_unitaire_vnt || 0).toLocaleString(),
+      (recette.prix_total_vnt || 0).toLocaleString(),
+    ]);
+
+    // Calculate total price
+    const totalPrice = data.reduce(
+      (acc, recette) => acc + (recette.prix_total_vnt || 0),
+      0
     );
 
     // Add table to PDF
@@ -68,10 +69,41 @@ const SalesTable = ({ data }) => {
       },
     });
 
+    // Add total row
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 10, // Position it below the table
+      head: [
+        [
+          "Total",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          totalPrice.toLocaleString(),
+        ],
+      ],
+      body: [],
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        textColor: [0, 0, 0],
+      },
+      headStyles: {
+        fillColor: [31, 42, 64],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+      },
+    });
+
     // Generate blob URL and open in new window
     const pdfBlob = new Blob([doc.output("blob")], { type: "application/pdf" });
     const blobUrl = URL.createObjectURL(pdfBlob);
-    window.open(blobUrl, "_blank", "width=800,height=600");
+    window.open(blobUrl, "_blank", "width=1000,height=1000");
 
     setTimeout(() => {
       URL.revokeObjectURL(blobUrl);
@@ -142,7 +174,7 @@ const SalesTable = ({ data }) => {
               <TableCell
                 sx={{ borderBottom: "1px solid white", color: "white" }}
               >
-                Quantité vendue
+                Quantité totale
               </TableCell>
               <TableCell
                 sx={{ borderBottom: "1px solid white", color: "white" }}
@@ -157,48 +189,46 @@ const SalesTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((sale) =>
-              sale.recettes.map((recette, index) => (
-                <TableRow key={`${sale.reference}-${index}`}>
-                  <TableCell
-                    sx={{
-                      borderRight: "1px solid #e0e0e0",
-                      borderBottom: "1px solid #e0e0e0",
-                      color: "white",
-                    }}
-                  >
-                    {recette.recette}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderRight: "1px solid #e0e0e0",
-                      borderBottom: "1px solid #e0e0e0",
-                      color: "white",
-                    }}
-                  >
-                    {recette.quantite_vnt}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderRight: "1px solid #e0e0e0",
-                      borderBottom: "1px solid #e0e0e0",
-                      color: "white",
-                    }}
-                  >
-                    {recette.prix_unitaire_vnt.toLocaleString()}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderRight: "1px solid #e0e0e0",
-                      borderBottom: "1px solid #e0e0e0",
-                      color: "white",
-                    }}
-                  >
-                    {recette.prix_total_vnt.toLocaleString()}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+            {data.map((recette, index) => (
+              <TableRow key={index}>
+                <TableCell
+                  sx={{
+                    borderRight: "1px solid #e0e0e0",
+                    borderBottom: "1px solid #e0e0e0",
+                    color: "white",
+                  }}
+                >
+                  {recette.recette || "N/A"}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    borderRight: "1px solid #e0e0e0",
+                    borderBottom: "1px solid #e0e0e0",
+                    color: "white",
+                  }}
+                >
+                  {recette.quantite_vnt || 0}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    borderRight: "1px solid #e0e0e0",
+                    borderBottom: "1px solid #e0e0e0",
+                    color: "white",
+                  }}
+                >
+                  {(recette.prix_unitaire_vnt || 0).toLocaleString()}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    borderRight: "1px solid #e0e0e0",
+                    borderBottom: "1px solid #e0e0e0",
+                    color: "white",
+                  }}
+                >
+                  {(recette.prix_total_vnt || 0).toLocaleString()}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
