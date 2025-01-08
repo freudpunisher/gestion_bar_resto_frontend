@@ -48,6 +48,8 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { createSvgIcon } from "@mui/material/utils";
 import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 // import ReactToPrint from 'react-to-print';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 const LisEntreCuisine = () => {
@@ -279,6 +281,64 @@ const LisEntreCuisine = () => {
     PrixTotal: row.prix_total,
     // Include other columns as needed
   }));
+
+  // export in pdf
+
+  const handleExportToPDF = () => {
+    // Get current date
+    const currentDate = new Date();
+    const formattedDate = formatDate(currentDate);
+
+    // Create new PDF document
+    const doc = new jsPDF();
+
+    // Add title
+    doc.setFontSize(16);
+    doc.text(`Approvisionnement ${formattedDate}`, 14, 15);
+
+    // Define columns for the table
+    const columns = ["Produit", "Quantite", "Prix Unitaire", "Prix Total"];
+
+    // Convert tableData to array format expected by autoTable
+    const rows = tableData.map((item) => [
+      item.Produit,
+      item.Quantite,
+      item.PrixUnitaire,
+      item.PrixTotal,
+    ]);
+
+    // Add table to PDF
+    doc.autoTable({
+      head: [columns],
+      body: rows,
+      startY: 25,
+      styles: {
+        fontSize: 10,
+        cellPadding: 3,
+        textColor: [0, 0, 0],
+      },
+      headStyles: {
+        fillColor: [66, 139, 202],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
+
+    // Generate blob URL instead of data URI
+    const pdfBlob = new Blob([doc.output("blob")], { type: "application/pdf" });
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    // Open in new window with specific target
+    window.open(blobUrl, "_blank", "width=1000,height=1000");
+
+    // Clean up the blob URL after a delay to ensure it's loaded
+    setTimeout(() => {
+      URL.revokeObjectURL(blobUrl);
+    }, 1000);
+  };
 
   const handleExportToExcel = () => {
     // Obtenir la date actuelle
@@ -1153,7 +1213,7 @@ const LisEntreCuisine = () => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleExportToExcel}
+              onClick={handleExportToPDF}
               sx={{ marginLeft: 2 }}
             >
               excel

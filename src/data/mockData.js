@@ -488,7 +488,7 @@ export const mockPieData = [
 export const mockLineData = [
   {
     id: "Cuisine",
-    color: tokens("dark").greenAccent[500],
+    // color: tokens("dark").greenAccent[500],
     data: [
       {
         x: "JA",
@@ -759,7 +759,6 @@ export const mockLineDataCommande = [
       },
     ],
   },
-  
 ];
 
 export const mockGeographyData = [

@@ -52,6 +52,8 @@ import CommandeCuisine from "./scenes/commande/CommandeCuisine.jsx";
 import ListFactureCuisine from "./scenes/Facture/ListFactureCuisine.jsx";
 import SignIn from "./scenes/signinForm/index.jsx";
 import ListFactureBar1 from "../src/scenes/ListFactureBar1.jsx";
+import RapportCusine from "./scenes/rapport/cuisine/index.js";
+import AuthCheck from "./Auth.js";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -62,73 +64,273 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          <AuthCheck>
+            <Sidebar isSidebar={isSidebar} />
+          </AuthCheck>
           <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
+            <AuthCheck>
+              <Topbar setIsSidebar={setIsSidebar} />
+            </AuthCheck>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/team" element={<ListFactureBar />} />
-              <Route path="/contacts" element={<Contacts />} />
-              <Route path="/invoices" element={<Invoices />} />
-              <Route path="/list/avenant" element={<ListAvenant />} />
+              <Route
+                path="/"
+                element={
+                  <AuthCheck>
+                    <Dashboard />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/team"
+                element={
+                  <AuthCheck>
+                    <ListFactureBar />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/contacts"
+                element={
+                  <AuthCheck>
+                    <Contacts />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/invoices"
+                element={
+                  <AuthCheck>
+                    <Invoices />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/list/avenant"
+                element={
+                  <AuthCheck>
+                    <ListAvenant />
+                  </AuthCheck>
+                }
+              />
               <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/unite" element={<Unite />} />
-              <Route path="/famille" element={<Settings />} />
-              <Route path="/produit" element={<Product />} />
-              <Route path="/cuisinemenu" element={<MenuCuisine />} />
-              <Route path="/Fournisseur" element={<Fournisseur />} />
-              <Route path="/entre/bar" element={<LisCommandeBar />} />
-              <Route path="/entre/cuisine" element={<LisEntreCuisine />} />
+              <Route
+                path="/bar"
+                element={
+                  <AuthCheck>
+                    <Bar />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/unite"
+                element={
+                  <AuthCheck>
+                    <Unite />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/famille"
+                element={
+                  <AuthCheck>
+                    <Settings />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/produit"
+                element={
+                  <AuthCheck>
+                    <Product />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/cuisinemenu"
+                element={
+                  <AuthCheck>
+                    <MenuCuisine />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/Fournisseur"
+                element={
+                  <AuthCheck>
+                    <Fournisseur />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/entre/bar"
+                element={
+                  <AuthCheck>
+                    <LisCommandeBar />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/entre/cuisine"
+                element={
+                  <AuthCheck>
+                    <LisEntreCuisine />
+                  </AuthCheck>
+                }
+              />
               <Route
                 path="/entre/bar/commande"
-                element={<CommandeBarEntre />}
+                element={
+                  <AuthCheck>
+                    <CommandeBarEntre />
+                  </AuthCheck>
+                }
               />
               <Route
                 path="/entre/cuisine/commande"
-                element={<EntreCuisine />}
+                element={
+                  <AuthCheck>
+                    <EntreCuisine />
+                  </AuthCheck>
+                }
               />
-              <Route path="/entre/commande/bar" element={<CommandeBar />} />
+              <Route
+                path="/entre/commande/bar"
+                element={
+                  <AuthCheck>
+                    <CommandeBar />
+                  </AuthCheck>
+                }
+              />
               <Route
                 path="/entre/commande/cuisine"
-                element={<CommandeCuisine />}
+                element={
+                  <AuthCheck>
+                    <CommandeCuisine />
+                  </AuthCheck>
+                }
               />
-              <Route path="/sortie/bar" element={<ListSortieBar />} />
-              <Route path="/facture/bar" element={<ListFactureBar1 />} />
-              <Route path="/facture/cuisine" element={<Example />} />
-              <Route path="/client" element={<Client />} />
-              <Route path="/stockinitial" element={<StockInitial />} />
-              <Route path="/inventiarebar" element={<InventaireBar />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/line" element={<Line />} />
+              <Route
+                path="/sortie/bar"
+                element={
+                  <AuthCheck>
+                    <ListSortieBar />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/facture/bar"
+                element={
+                  <AuthCheck>
+                    <ListFactureBar1 />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/facture/cuisine"
+                element={
+                  <AuthCheck>
+                    <Example />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/client"
+                element={
+                  <AuthCheck>
+                    <Client />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/stockinitial"
+                element={
+                  <AuthCheck>
+                    <StockInitial />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/inventiarebar"
+                element={
+                  <AuthCheck>
+                    <InventaireBar />
+                  </AuthCheck>
+                }
+              />
+              {/* <Route path="/pie" element={<Pie />} />
+              <Route path="/line" element={<Line />} /> */}
               <Route path="/login" element={<SignIn />} />
-              <Route path="/faq" element={<FAQ />} />
+              {/* <Route path="/faq" element={<FAQ />} /> */}
               {/* <Route path="/calendar" element={<Calendar />} /> */}
-              <Route path="/geography" element={<Geography />} />
+              {/* <Route path="/geography" element={<Geography />} /> */}
 
               {/* stock initial route */}
-              <Route path="/stockinitial/bar" element={<StockInitialBar />} />
+              <Route
+                path="/stockinitial/bar"
+                element={
+                  <AuthCheck>
+                    <StockInitialBar />
+                  </AuthCheck>
+                }
+              />
               <Route
                 path="/stockinitial/cuisine"
                 element={<StockInitialCuisne />}
               />
 
               {/* Invantaires produits */}
-              <Route path="/invantaire/bar" element={<InvantaireBar />} />
+              <Route
+                path="/invantaire/bar"
+                element={
+                  <AuthCheck>
+                    <InvantaireBar />
+                  </AuthCheck>
+                }
+              />
               <Route
                 path="/invantaire/cuisine"
-                element={<InvantaireCuisine />}
+                element={
+                  <AuthCheck>
+                    <InvantaireCuisine />
+                  </AuthCheck>
+                }
               />
 
               {/* sortie stock cuisine */}
-              <Route path="/sortie/cuisine" element={<SortieStockCuisine />} />
+              <Route
+                path="/sortie/cuisine"
+                element={
+                  <AuthCheck>
+                    <SortieStockCuisine />
+                  </AuthCheck>
+                }
+              />
               <Route
                 path="/sortie/produit"
-                element={<SortieProduitCuisine />}
+                element={
+                  <AuthCheck>
+                    <SortieProduitCuisine />
+                  </AuthCheck>
+                }
               />
 
               {/* rapport bar-resto*/}
-              <Route path="/rapport" element={<Rapport />} />
+              <Route
+                path="/rapport"
+                element={
+                  <AuthCheck>
+                    <Rapport />
+                  </AuthCheck>
+                }
+              />
+              <Route
+                path="/rapport/cuisine"
+                element={
+                  <AuthCheck>
+                    <RapportCusine />
+                  </AuthCheck>
+                }
+              />
             </Routes>
           </main>
         </div>

@@ -387,9 +387,10 @@ const CommandeCuisine = () => {
                       ml: 2,
                       flex: 1,
                       border: 1,
-                      width: "20%",
+                      width: 400,
                       borderRadius: 2,
                       paddingLeft: 2,
+                      marginBottom: 2,
                     }}
                     placeholder="Search"
                     value={searchTerm}
@@ -404,7 +405,7 @@ const CommandeCuisine = () => {
                   </IconButton>
                 </Box>
 
-                <Select
+                {/* <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Age"
@@ -432,7 +433,7 @@ const CommandeCuisine = () => {
                       {item.first_name} {item.last_name}
                     </MenuItem>
                   ))}
-                </Select>
+                </Select> */}
               </Box>
               <CardContent>
                 <div>
@@ -443,7 +444,8 @@ const CommandeCuisine = () => {
                           variant="outlined"
                           sx={{
                             backgroundColor: colors.greenAccent[700],
-                            maxWidth: 200,
+                            maxWidth: 400,
+                            maxHeight: 400,
 
                             display: "flex",
                             flexDirection: "column",
@@ -458,10 +460,10 @@ const CommandeCuisine = () => {
                           <CardContent>
                             <Typography
                               gutterBottom
-                              variant="h5"
+                              variant="h1"
                               component="div"
                               sx={{
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: "bold",
                                 paddingTop: "10px",
                               }}
@@ -588,7 +590,7 @@ const CommandeCuisine = () => {
                         <TableHead sx={{ backgroundColor: "transparent" }}>
                           <TableRow>
                             <TableCell sx={{ fontSize: 20 }}>Name</TableCell>
-                            <TableCell sx={{ fontSize: 20 }}>unite</TableCell>
+
                             <TableCell align="right" sx={{ fontSize: 20 }}>
                               Quantity
                             </TableCell>
@@ -609,9 +611,7 @@ const CommandeCuisine = () => {
                               <TableCell sx={{ fontSize: 20 }}>
                                 {item.nom}
                               </TableCell>
-                              <TableCell sx={{ fontSize: 20 }}>
-                                {item.unite}
-                              </TableCell>
+
                               <TableCell align="right">
                                 <Box
                                   sx={{

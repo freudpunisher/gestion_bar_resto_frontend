@@ -563,7 +563,10 @@ function Rapport() {
 
   // let sort some data
 
-  const filteredData = data.filter((item) => item.produits.length !== 0);
+  const filteredData = data.filter(
+    (item) => Array.isArray(item.produits) && item.produits.length !== 0
+  );
+
   const sortedData = dataTest.forEach((item) => console.log(item, "dfvgrecc"));
 
   const hasMultipleSorties = (filteredData) =>
@@ -1002,7 +1005,7 @@ function Rapport() {
               }}
             >
               <Typography variant="h3" sx={{ padding: "4px" }}>
-                Liste rapport stock
+                Rapport Bar
               </Typography>
               {/* <MaterialReactTable table={table} /> */}
               {/* <DataGrid

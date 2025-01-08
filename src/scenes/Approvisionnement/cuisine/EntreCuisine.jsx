@@ -173,7 +173,7 @@ const EntreCuisine = () => {
               <Typography
                 padding={2}
                 sx={{
-                  fontSize: 20,
+                  fontSize: 35,
                   fontWeight: "bold",
                 }}
               >
@@ -185,6 +185,7 @@ const EntreCuisine = () => {
                 sx={{
                   ml: 2,
                   flex: 1,
+                  width: 400,
                   border: 1,
                   borderRadius: 2,
                   paddingLeft: 2,
@@ -205,7 +206,7 @@ const EntreCuisine = () => {
                           variant="outlined"
                           sx={{
                             backgroundColor: colors.greenAccent[700],
-                            maxWidth: 200,
+                            maxWidth: 400,
                             height: 100,
                             display: "flex",
                             flexDirection: "column",
@@ -226,9 +227,9 @@ const EntreCuisine = () => {
                           <CardContent>
                             <Typography
                               gutterBottom
-                              variant="h5"
+                              variant="h1"
                               component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold" }}
+                              sx={{ fontSize: 35, fontWeight: "bold" }}
                             >
                               {item.nom}
                             </Typography>
@@ -247,7 +248,15 @@ const EntreCuisine = () => {
             <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
                 title={"liste approvisionnement " + reference}
-                sx={{ backgroundColor: colors.blueAccent[700], padding: 1 }}
+                sx={{
+                  backgroundColor: colors.blueAccent[700],
+                  "& .MuiCardHeader-title": {
+                    // Add this to target the title specifically
+                    fontSize: 30, // Increase font size (you can adjust this value)
+                    fontWeight: "bold", // Optionally make it bold
+                  },
+                  padding: 1,
+                }}
               />
               <CardContent>
                 {secondTableData.length !== 0 && ( // Only display invoice details if a product is selected
@@ -319,7 +328,7 @@ const EntreCuisine = () => {
                       color="secondary"
                       sx={{
                         margin: 1,
-                        marginTop: 2,
+                        marginTop: 5,
                       }}
                       onClick={createEntre}
                     >

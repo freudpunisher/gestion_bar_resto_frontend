@@ -173,7 +173,7 @@ const CommandeBarEntre = () => {
               <Typography
                 padding={2}
                 sx={{
-                  fontSize: 20,
+                  fontSize: 30,
                   fontWeight: "bold",
                 }}
               >
@@ -185,9 +185,11 @@ const CommandeBarEntre = () => {
                 sx={{
                   ml: 2,
                   flex: 1,
+                  width: 400,
                   border: 1,
                   borderRadius: 2,
                   paddingLeft: 2,
+                  pa: 2,
                 }}
                 placeholder="Search"
                 value={searchTerm}
@@ -205,7 +207,8 @@ const CommandeBarEntre = () => {
                           variant="outlined"
                           sx={{
                             backgroundColor: colors.greenAccent[700],
-                            maxWidth: 200,
+                            maxWidth: 400,
+                            maxWidth: 400,
                             height: 100,
                             display: "flex",
                             flexDirection: "column",
@@ -226,9 +229,9 @@ const CommandeBarEntre = () => {
                           <CardContent>
                             <Typography
                               gutterBottom
-                              variant="h5"
+                              variant="h1"
                               component="div"
-                              sx={{ fontSize: 16, fontWeight: "bold" }}
+                              sx={{ fontSize: 40, fontWeight: "bold" }}
                             >
                               {item.nom}
                             </Typography>
@@ -247,13 +250,17 @@ const CommandeBarEntre = () => {
             <Card sx={{ backgroundColor: "transparent" }}>
               <CardHeader
                 title={"Liste approvisionnement " + reference}
-                // style={{ display: "flex", width: "100%" }} // Inline style
                 sx={{
                   backgroundColor: colors.blueAccent[700],
                   padding: 1,
                   margin: 0,
                   display: "flex",
                   width: "100%",
+                  "& .MuiCardHeader-title": {
+                    // Add this to target the title specifically
+                    fontSize: 30, // Increase font size (you can adjust this value)
+                    fontWeight: "bold", // Optionally make it bold
+                  },
                 }}
               />
               <CardContent>

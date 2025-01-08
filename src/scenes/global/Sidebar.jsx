@@ -453,8 +453,15 @@ const Sidebar = () => {
               <Divider component="li" />
               <AccordionDetails sx={{ width: "250px", paddingLeft: "1px" }}>
                 <Item
-                  title={!isCollapsed ? "Finance" : "RFN"}
+                  title={!isCollapsed ? "Bar" : "BR"}
                   to="/rapport"
+                  icon={!isCollapsed ? <TrendingFlatIcon /> : null}
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+                <Item
+                  title={!isCollapsed ? "Cusine" : "RC"}
+                  to="/rapport/cuisine"
                   icon={!isCollapsed ? <TrendingFlatIcon /> : null}
                   selected={selected}
                   setSelected={setSelected}
