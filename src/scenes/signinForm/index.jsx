@@ -50,6 +50,7 @@ export default function SignIn() {
       .then((res) => {
         navigate("/");
         sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("groupe", res.data.group);
       });
     console.log({
       email: data.get("email"),

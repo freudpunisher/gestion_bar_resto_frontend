@@ -58,6 +58,7 @@ import AuthCheck from "./Auth.js";
 function App() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const groupe = sessionStorage.getItem("groupe");
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -72,22 +73,26 @@ function App() {
               <Topbar setIsSidebar={setIsSidebar} />
             </AuthCheck>
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <AuthCheck>
-                    <Dashboard />
-                  </AuthCheck>
-                }
-              />
-              <Route
-                path="/team"
-                element={
-                  <AuthCheck>
-                    <ListFactureBar />
-                  </AuthCheck>
-                }
-              />
+              {groupe === "gerant" && (
+                <Route
+                  path="/"
+                  element={
+                    <AuthCheck>
+                      <Dashboard />
+                    </AuthCheck>
+                  }
+                />
+              )}
+              {groupe === "gerant" && (
+                <Route
+                  path="/team"
+                  element={
+                    <AuthCheck>
+                      <ListFactureBar />
+                    </AuthCheck>
+                  }
+                />
+              )}
               <Route
                 path="/contacts"
                 element={
