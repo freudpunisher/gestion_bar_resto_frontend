@@ -11,6 +11,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import logo from "../../assets/Dodoma_Park_Logo.png";
+import axios from "axios";
+import { API_URL } from "../../data/Api";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -35,9 +38,20 @@ function Copyright(props) {
 // const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    axios
+      .post(API_URL + "login/", {
+        username: data.get("email"),
+        password: data.get("password"),
+      })
+      .then((res) => {
+        navigate("/");
+        sessionStorage.setItem("token", res.data.token);
+        sessionStorage.setItem("groupe", res.data.group);
+      });
     console.log({
       email: data.get("email"),
       password: data.get("password"),

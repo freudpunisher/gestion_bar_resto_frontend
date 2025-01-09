@@ -516,12 +516,13 @@ const CommandeBar = () => {
                 <div>
                   <Grid container xs={12} spacing={2}>
                     {product.map((item) => (
-                      <Grid item sm={12} md={6} lg={3} key={item.nom}>
+                      <Grid item xs={12} sm={6} md={4} lg={3} key={item.nom}>
                         <Card
                           variant="outlined"
                           sx={{
                             backgroundColor: colors.greenAccent[700],
-                            maxWidth: 200,
+                            maxWidth: 400,
+                            maxHeight: 400,
 
                             display: "flex",
                             // flexDirection: "column",
@@ -536,10 +537,10 @@ const CommandeBar = () => {
                           <CardContent>
                             <Typography
                               gutterBottom
-                              variant="h5"
+                              variant="h3"
                               component="div"
                               sx={{
-                                fontSize: 16,
+                                fontSize: 30,
                                 fontWeight: "bold",
                                 paddingTop: "10px",
                               }}
